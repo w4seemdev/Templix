@@ -1,0 +1,61 @@
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import HomePage from './pages/HomePage';
+import TemplatesPage from './pages/TemplatesPage';
+import TemplateDetailPage from './pages/TemplateDetailPage';
+import CategoriesPage from './pages/CategoriesPage';
+import PricingPage from './pages/PricingPage';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import LuminarySaasPreview      from './pages/previews/LuminarySaasPreview';
+import FolioPortfolioPreview    from './pages/previews/FolioPortfolioPreview';
+import ShopDropEcommercePreview from './pages/previews/ShopDropEcommercePreview';
+import BloomBlogPreview         from './pages/previews/BloomBlogPreview';
+import AgencyProPreview         from './pages/previews/AgencyProPreview';
+import LaunchPadPreview         from './pages/previews/LaunchPadPreview';
+import DashifyPreview           from './pages/previews/DashifyPreview';
+import SaveurRestaurantPreview  from './pages/previews/SaveurRestaurantPreview';
+import NexusCorporatePreview    from './pages/previews/NexusCorporatePreview';
+
+// Hide navbar/footer on login and preview pages
+function Layout() {
+  const { pathname } = useLocation();
+  const isShell = pathname === '/login' || pathname.startsWith('/preview/');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#020617' }}>
+      {!isShell && <Navbar />}
+      <main style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/"                      element={<HomePage />}                  />
+          <Route path="/templates"             element={<TemplatesPage />}             />
+          <Route path="/templates/:id"         element={<TemplateDetailPage />}        />
+          <Route path="/categories"            element={<CategoriesPage />}            />
+          <Route path="/pricing"               element={<PricingPage />}               />
+          <Route path="/login"                 element={<LoginPage />}                 />
+          {/* ── Template previews ── */}
+          <Route path="/preview/luminary"      element={<LuminarySaasPreview />}       />
+          <Route path="/preview/folio"         element={<FolioPortfolioPreview />}     />
+          <Route path="/preview/shopdrop"      element={<ShopDropEcommercePreview />}  />
+          <Route path="/preview/bloom"         element={<BloomBlogPreview />}          />
+          <Route path="/preview/agency-pro"    element={<AgencyProPreview />}          />
+          <Route path="/preview/launchpad"     element={<LaunchPadPreview />}          />
+          <Route path="/preview/dashify"       element={<DashifyPreview />}            />
+          <Route path="/preview/saveur"        element={<SaveurRestaurantPreview />}   />
+          <Route path="/preview/nexus"         element={<NexusCorporatePreview />}     />
+          <Route path="*"                      element={<NotFoundPage />}              />
+        </Routes>
+      </main>
+      {!isShell && <Footer />}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
+}
