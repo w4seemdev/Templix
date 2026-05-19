@@ -7,5 +7,9 @@
       "Glob",
       "Grep"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
   }
 }

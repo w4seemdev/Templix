@@ -7,7 +7,6 @@ import HomePage from './pages/HomePage';
 import TemplatesPage from './pages/TemplatesPage';
 import TemplateDetailPage from './pages/TemplateDetailPage';
 import CategoriesPage from './pages/CategoriesPage';
-import PricingPage from './pages/PricingPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
@@ -41,7 +40,6 @@ function Layout() {
           <Route path="/templates"          element={<TemplatesPage />}                                         />
           <Route path="/templates/:id"      element={<TemplateDetailPage />}                                    />
           <Route path="/categories"         element={<CategoriesPage />}                                        />
-          <Route path="/pricing"            element={<PricingPage />}                                           />
           <Route path="/login"              element={<LoginPage />}                                             />
           <Route path="/purchase-success"   element={<PurchaseSuccessPage />}                                   />
           <Route path="/dashboard"          element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}        />

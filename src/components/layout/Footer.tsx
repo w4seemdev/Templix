@@ -4,7 +4,6 @@ const links = {
   Product: [
     { label: 'Browse Templates', to: '/templates' },
     { label: 'Categories',       to: '/categories' },
-    { label: 'Pricing',          to: '/pricing'    },
     { label: 'Wishlist',         to: '/wishlist'   },
   ],
   Company: [

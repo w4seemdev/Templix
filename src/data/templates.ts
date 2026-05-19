@@ -14,7 +14,7 @@ export const templates: Template[] = [
     isPremium: true,
     demoUrl: '/preview/luminary',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    pages: ['Home', 'Pricing', 'Features', 'Login', 'Dashboard'],
+    pages: ['Home', 'Features', 'Login', 'Dashboard'],
   },
   {
     id: '2',
@@ -89,7 +89,7 @@ export const templates: Template[] = [
     isPremium: false,
     demoUrl: '/preview/luminary',
     techStack: ['React', 'TypeScript', 'Tailwind CSS'],
-    pages: ['Home', 'Features', 'Pricing', 'Contact'],
+    pages: ['Home', 'Features', 'Contact'],
   },
   {
     id: '7',
