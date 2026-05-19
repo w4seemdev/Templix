@@ -15,6 +15,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import WishlistPage from './pages/WishlistPage';
+import AboutPage from './pages/AboutPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import LuminarySaasPreview      from './pages/previews/LuminarySaasPreview';
 import FolioPortfolioPreview    from './pages/previews/FolioPortfolioPreview';
 import ShopDropEcommercePreview from './pages/previews/ShopDropEcommercePreview';
@@ -28,7 +30,7 @@ import NexusCorporatePreview    from './pages/previews/NexusCorporatePreview';
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
   const { pathname } = useLocation();
-  const isShell = pathname === '/login' || pathname.startsWith('/preview/') || pathname === '/purchase-success';
+  const isShell = pathname === '/login' || pathname === '/reset-password' || pathname.startsWith('/preview/') || pathname === '/purchase-success';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#020617' }}>
@@ -44,8 +46,10 @@ function Layout() {
           <Route path="/purchase-success"   element={<PurchaseSuccessPage />}                                   />
           <Route path="/dashboard"          element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}        />
           <Route path="/wishlist"           element={<WishlistPage />}                                          />
+          <Route path="/about"             element={<AboutPage />}                                             />
           <Route path="/terms"              element={<TermsPage />}                                             />
           <Route path="/privacy"            element={<PrivacyPage />}                                           />
+          <Route path="/reset-password"     element={<ResetPasswordPage />}                                     />
           {/* ── Template previews ── */}
           <Route path="/preview/luminary"   element={<LuminarySaasPreview />}      />
           <Route path="/preview/folio"      element={<FolioPortfolioPreview />}    />

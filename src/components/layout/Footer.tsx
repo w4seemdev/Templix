@@ -8,6 +8,7 @@ const links = {
     { label: 'Wishlist',         to: '/wishlist'   },
   ],
   Company: [
+    { label: 'About',     to: '/about'     },
     { label: 'Dashboard', to: '/dashboard' },
     { label: 'Sign in',   to: '/login'     },
   ],

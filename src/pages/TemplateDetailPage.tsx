@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Check, Monitor } from 'lucide-react';
 import { templates } from '../data/templates';
 import Container from '../components/ui/Container';
+import TemplateCard from '../components/ui/TemplateCard';
 import { useAuth } from '../context/AuthContext';
 import { usePurchases } from '../hooks/usePurchases';
 import { supabase } from '../lib/supabase';
@@ -353,6 +354,41 @@ export default function TemplateDetailPage() {
 
         </div>
       </Container>
+
+      {/* Related Templates */}
+      <RelatedTemplates currentId={template.id} category={template.category} />
     </div>
+  );
+}
+
+function RelatedTemplates({ currentId, category }: { currentId: string; category: string }) {
+  const related = templates
+    .filter(t => t.id !== currentId && t.category === category)
+    .slice(0, 3);
+
+  // If not enough in same category, fill with others
+  const fill = templates
+    .filter(t => t.id !== currentId && t.category !== category)
+    .slice(0, 3 - related.length);
+
+  const items = [...related, ...fill];
+  if (items.length === 0) return null;
+
+  return (
+    <section style={{ borderTop: '1px solid #1e293b', background: '#020617' }}>
+      <Container style={{ paddingTop: '3.5rem', paddingBottom: '4rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+            You might also like
+          </h2>
+          <Link to="/templates" style={{ fontSize: '14px', color: '#38bdf8', textDecoration: 'none', fontWeight: 500 }}>
+            View all templates →
+          </Link>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+          {items.map(t => <TemplateCard key={t.id} template={t} />)}
+        </div>
+      </Container>
+    </section>
   );
 }
