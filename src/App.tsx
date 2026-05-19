@@ -37,6 +37,23 @@ import EventPreview             from './pages/previews/EventPreview';
 import WeddingPreview           from './pages/previews/WeddingPreview';
 import MusicPreview             from './pages/previews/MusicPreview';
 import PhotographyPreview       from './pages/previews/PhotographyPreview';
+import HotelPreview             from './pages/previews/HotelPreview';
+import TravelBlogPreview        from './pages/previews/TravelBlogPreview';
+import BeautySpaPreview         from './pages/previews/BeautySpaPreview';
+import Web3Preview              from './pages/previews/Web3Preview';
+import LegalPreview             from './pages/previews/LegalPreview';
+import ArchitecturePreview      from './pages/previews/ArchitecturePreview';
+import ConstructionPreview      from './pages/previews/ConstructionPreview';
+import JobBoardPreview          from './pages/previews/JobBoardPreview';
+import FinanceDashboardPreview  from './pages/previews/FinanceDashboardPreview';
+import HealthcarePreview        from './pages/previews/HealthcarePreview';
+import EmailMarketingPreview    from './pages/previews/EmailMarketingPreview';
+import VaultFinancePreview      from './pages/previews/VaultFinancePreview';
+import CreativeStudioPreview    from './pages/previews/CreativeStudioPreview';
+import BookstorePreview         from './pages/previews/BookstorePreview';
+import FloristPreview           from './pages/previews/FloristPreview';
+import NewsletterPreview        from './pages/previews/NewsletterPreview';
+import ProductivityPreview      from './pages/previews/ProductivityPreview';
 
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
@@ -81,7 +98,24 @@ function Layout() {
           <Route path="/preview/event"        element={<EventPreview />}             />
           <Route path="/preview/wedding"      element={<WeddingPreview />}           />
           <Route path="/preview/music"        element={<MusicPreview />}             />
-          <Route path="/preview/photography"  element={<PhotographyPreview />}       />
+          <Route path="/preview/photography"    element={<PhotographyPreview />}       />
+          <Route path="/preview/hotel"         element={<HotelPreview />}             />
+          <Route path="/preview/travel-blog"   element={<TravelBlogPreview />}        />
+          <Route path="/preview/beauty-spa"    element={<BeautySpaPreview />}         />
+          <Route path="/preview/web3"          element={<Web3Preview />}              />
+          <Route path="/preview/legal"         element={<LegalPreview />}             />
+          <Route path="/preview/architecture"  element={<ArchitecturePreview />}      />
+          <Route path="/preview/construction"  element={<ConstructionPreview />}      />
+          <Route path="/preview/job-board"     element={<JobBoardPreview />}          />
+          <Route path="/preview/finance-dashboard" element={<FinanceDashboardPreview />} />
+          <Route path="/preview/healthcare"    element={<HealthcarePreview />}        />
+          <Route path="/preview/email-marketing" element={<EmailMarketingPreview />}  />
+          <Route path="/preview/vault-finance" element={<VaultFinancePreview />}      />
+          <Route path="/preview/creative-studio" element={<CreativeStudioPreview />}  />
+          <Route path="/preview/bookstore"     element={<BookstorePreview />}         />
+          <Route path="/preview/florist"       element={<FloristPreview />}           />
+          <Route path="/preview/newsletter"    element={<NewsletterPreview />}        />
+          <Route path="/preview/productivity"  element={<ProductivityPreview />}      />
           <Route path="*"                   element={<NotFoundPage />}             />
         </Routes>
       </main>
