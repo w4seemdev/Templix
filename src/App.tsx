@@ -25,6 +25,11 @@ import LaunchPadPreview         from './pages/previews/LaunchPadPreview';
 import DashifyPreview           from './pages/previews/DashifyPreview';
 import SaveurRestaurantPreview  from './pages/previews/SaveurRestaurantPreview';
 import NexusCorporatePreview    from './pages/previews/NexusCorporatePreview';
+import CRMDashboardPreview      from './pages/previews/CRMDashboardPreview';
+import FashionStorePreview      from './pages/previews/FashionStorePreview';
+import AppLandingPreview        from './pages/previews/AppLandingPreview';
+import CoffeeShopPreview        from './pages/previews/CoffeeShopPreview';
+import TechBlogPreview          from './pages/previews/TechBlogPreview';
 
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
@@ -57,7 +62,12 @@ function Layout() {
           <Route path="/preview/launchpad"  element={<LaunchPadPreview />}         />
           <Route path="/preview/dashify"    element={<DashifyPreview />}           />
           <Route path="/preview/saveur"     element={<SaveurRestaurantPreview />}  />
-          <Route path="/preview/nexus"      element={<NexusCorporatePreview />}    />
+          <Route path="/preview/nexus"        element={<NexusCorporatePreview />}    />
+          <Route path="/preview/crm"          element={<CRMDashboardPreview />}      />
+          <Route path="/preview/fashion"      element={<FashionStorePreview />}      />
+          <Route path="/preview/app-landing"  element={<AppLandingPreview />}        />
+          <Route path="/preview/coffee"       element={<CoffeeShopPreview />}        />
+          <Route path="/preview/techblog"     element={<TechBlogPreview />}          />
           <Route path="*"                   element={<NotFoundPage />}             />
         </Routes>
       </main>
