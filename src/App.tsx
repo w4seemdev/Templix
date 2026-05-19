@@ -30,6 +30,13 @@ import FashionStorePreview      from './pages/previews/FashionStorePreview';
 import AppLandingPreview        from './pages/previews/AppLandingPreview';
 import CoffeeShopPreview        from './pages/previews/CoffeeShopPreview';
 import TechBlogPreview          from './pages/previews/TechBlogPreview';
+import RealEstatePreview        from './pages/previews/RealEstatePreview';
+import FitnessPreview           from './pages/previews/FitnessPreview';
+import PodcastPreview           from './pages/previews/PodcastPreview';
+import EventPreview             from './pages/previews/EventPreview';
+import WeddingPreview           from './pages/previews/WeddingPreview';
+import MusicPreview             from './pages/previews/MusicPreview';
+import PhotographyPreview       from './pages/previews/PhotographyPreview';
 
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
@@ -68,6 +75,13 @@ function Layout() {
           <Route path="/preview/app-landing"  element={<AppLandingPreview />}        />
           <Route path="/preview/coffee"       element={<CoffeeShopPreview />}        />
           <Route path="/preview/techblog"     element={<TechBlogPreview />}          />
+          <Route path="/preview/real-estate"  element={<RealEstatePreview />}        />
+          <Route path="/preview/fitness"      element={<FitnessPreview />}           />
+          <Route path="/preview/podcast"      element={<PodcastPreview />}           />
+          <Route path="/preview/event"        element={<EventPreview />}             />
+          <Route path="/preview/wedding"      element={<WeddingPreview />}           />
+          <Route path="/preview/music"        element={<MusicPreview />}             />
+          <Route path="/preview/photography"  element={<PhotographyPreview />}       />
           <Route path="*"                   element={<NotFoundPage />}             />
         </Routes>
       </main>
