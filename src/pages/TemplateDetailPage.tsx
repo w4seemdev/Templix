@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Check, Monitor } from 'lucide-react';
 import { templates } from '../data/templates';
 import Container from '../components/ui/Container';
+import { useAuth } from '../context/AuthContext';
+import { usePurchases } from '../hooks/usePurchases';
+import { supabase } from '../lib/supabase';
 
 const included = [
   'Full source code',
@@ -17,7 +20,35 @@ export default function TemplateDetailPage() {
   const { id } = useParams<{ id: string }>();
   const template = templates.find(t => t.id === id);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [buying, setBuying]           = useState(false);
   const hasLivePreview = template?.demoUrl && template.demoUrl !== '#';
+  const { user }         = useAuth();
+  const { hasPurchased } = usePurchases();
+  const navigate         = useNavigate();
+  const alreadyOwned     = template ? (template.isFree || hasPurchased(template.id)) : false;
+
+  const handleBuy = async () => {
+    if (!template) return;
+    if (!user) { navigate('/login'); return; }
+    if (template.isFree) { navigate('/dashboard'); return; }
+
+    setBuying(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
+          templateId:    template.id,
+          templateTitle: template.title,
+          price:         template.price,
+          userId:        user.id,
+        },
+      });
+      if (error || !data?.url) throw new Error(error?.message ?? 'Failed to create checkout');
+      window.location.href = data.url;
+    } catch (err) {
+      alert((err as Error).message);
+      setBuying(false);
+    }
+  };
 
   if (!template) {
     return (
@@ -163,6 +194,53 @@ export default function TemplateDetailPage() {
                   </span>
                 ))}
               </div>
+
+              {/* Tech Stack */}
+              {template.techStack && template.techStack.length > 0 && (
+                <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #1e293b' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem' }}>
+                    Tech Stack
+                  </h3>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {template.techStack.map(tech => (
+                      <span key={tech} style={{
+                        borderRadius: '8px',
+                        border: '1px solid rgba(56,189,248,0.25)',
+                        background: 'rgba(56,189,248,0.07)',
+                        padding: '5px 12px',
+                        fontSize: '13px', fontWeight: 500, color: '#38bdf8',
+                      }}>
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Pages included */}
+              {template.pages && template.pages.length > 0 && (
+                <div style={{ marginTop: '1.75rem', paddingTop: '1.75rem', borderTop: '1px solid #1e293b' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem' }}>
+                    Pages Included
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '8px' }}>
+                    {template.pages.map(page => (
+                      <div key={page} style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        borderRadius: '8px', border: '1px solid #1e293b',
+                        background: '#0f172a', padding: '8px 12px',
+                        fontSize: '13px', color: '#94a3b8',
+                      }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2">
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <path d="M3 9h18" />
+                        </svg>
+                        {page}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -197,14 +275,28 @@ export default function TemplateDetailPage() {
                 )}
               </div>
 
-              {/* Buy */}
-              <button style={{
-                width: '100%', borderRadius: '12px', background: '#38bdf8',
-                padding: '14px', fontSize: '15px', fontWeight: 600,
-                color: '#020617', border: 'none', cursor: 'pointer',
-              }}>
-                {template.isFree ? 'Download for free' : `Buy for $${template.price}`}
-              </button>
+              {/* Buy / Download */}
+              {alreadyOwned ? (
+                <Link to="/dashboard" style={{
+                  display: 'block', textAlign: 'center',
+                  width: '100%', boxSizing: 'border-box',
+                  borderRadius: '12px', background: '#10b981',
+                  padding: '14px', fontSize: '15px', fontWeight: 600,
+                  color: '#ffffff', textDecoration: 'none',
+                }}>
+                  {template.isFree ? 'Download for free' : 'Download — Go to Dashboard'}
+                </Link>
+              ) : (
+                <button onClick={handleBuy} disabled={buying} style={{
+                  width: '100%', borderRadius: '12px',
+                  background: buying ? '#1e293b' : '#38bdf8',
+                  padding: '14px', fontSize: '15px', fontWeight: 600,
+                  color: buying ? '#64748b' : '#020617',
+                  border: 'none', cursor: buying ? 'not-allowed' : 'pointer',
+                }}>
+                  {buying ? 'Redirecting to checkout...' : template.isFree ? 'Get for free' : `Buy for $${template.price}`}
+                </button>
+              )}
 
               {/* Preview button */}
               {hasLivePreview ? (

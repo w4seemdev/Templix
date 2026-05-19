@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { templates } from '../data/templates';
 import TemplateCard from '../components/ui/TemplateCard';
@@ -7,8 +8,10 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection />
+      <StatsSection />
       <FeaturedSection />
       <FeaturesSection />
+      <NewsletterSection />
     </div>
   );
 }
@@ -89,6 +92,40 @@ function HeroSection() {
           </Link>
         </div>
 
+      </Container>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   STATS
+───────────────────────────────────────────── */
+const stats = [
+  { value: `${templates.length}+`, label: 'Templates' },
+  { value: '3',                    label: 'Frameworks' },
+  { value: '2',                    label: 'Free templates' },
+  { value: '1×',                   label: 'Pay once, use forever' },
+];
+
+function StatsSection() {
+  return (
+    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
+      <Container style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+          gap: '2rem',
+          textAlign: 'center',
+        }}>
+          {stats.map(s => (
+            <div key={s.label}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#38bdf8', margin: '0 0 4px', letterSpacing: '-0.03em' }}>
+                {s.value}
+              </p>
+              <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
       </Container>
     </section>
   );
@@ -176,7 +213,7 @@ const features = [
 
 function FeaturesSection() {
   return (
-    <section style={{ background: '#0a1628', borderTop: '1px solid #1e293b', borderBottom: '1px solid #1e293b' }}>
+    <section style={{ background: '#0a1628', borderTop: '1px solid #1e293b' }}>
       <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
 
         {/* Header */}
@@ -226,3 +263,88 @@ function FeaturesSection() {
   );
 }
 
+/* ─────────────────────────────────────────────
+   NEWSLETTER
+───────────────────────────────────────────── */
+function NewsletterSection() {
+  const [email, setEmail]         = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setSubmitted(true);
+  };
+
+  return (
+    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
+      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+        <div style={{
+          borderRadius: '24px',
+          border: '1px solid #1e293b',
+          background: 'linear-gradient(135deg, #0f172a 0%, #0c1a2e 100%)',
+          padding: '3.5rem 2.5rem',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Glow */}
+          <div style={{
+            position: 'absolute', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+            width: '500px', height: '200px',
+            background: 'rgba(56,189,248,0.06)', borderRadius: '9999px',
+            filter: 'blur(60px)', pointerEvents: 'none',
+          }} />
+
+          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '0.75rem' }}>
+            Stay in the loop
+          </p>
+          <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+            New templates every month
+          </h2>
+          <p style={{ fontSize: '15px', color: '#64748b', maxWidth: '440px', margin: '0 auto 2rem', lineHeight: 1.65 }}>
+            Subscribe and be the first to know when new templates drop. No spam, ever.
+          </p>
+
+          {submitted ? (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '10px',
+              borderRadius: '12px', background: 'rgba(16,185,129,0.1)',
+              border: '1px solid rgba(16,185,129,0.25)',
+              padding: '14px 28px', fontSize: '15px', fontWeight: 500, color: '#34d399',
+            }}>
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              You're on the list!
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="email"
+                required
+                placeholder="you@example.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={{
+                  borderRadius: '12px', border: '1px solid #334155',
+                  background: '#020617', padding: '12px 18px',
+                  fontSize: '14px', color: '#ffffff', outline: 'none',
+                  minWidth: '260px',
+                }}
+              />
+              <button type="submit" style={{
+                borderRadius: '12px', background: '#38bdf8',
+                border: 'none', padding: '12px 24px',
+                fontSize: '14px', fontWeight: 600, color: '#020617',
+                cursor: 'pointer',
+              }}>
+                Subscribe
+              </button>
+            </form>
+          )}
+        </div>
+      </Container>
+    </section>
+  );
+}

@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import type { Template } from '../../types';
+import { useWishlist } from '../../hooks/useWishlist';
 
 interface Props {
   template: Template;
 }
 
 export default function TemplateCard({ template }: Props) {
+  const { toggle, isWishlisted } = useWishlist();
+  const wishlisted = isWishlisted(template.id);
+
   return (
     <Link
       to={`/templates/${template.id}`}
@@ -55,6 +59,28 @@ export default function TemplateCard({ template }: Props) {
             </span>
           )}
         </div>
+
+        {/* Wishlist button */}
+        <button
+          onClick={e => { e.preventDefault(); toggle(template.id); }}
+          title={wishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+          style={{
+            position: 'absolute', top: '10px', right: '10px',
+            width: '32px', height: '32px', borderRadius: '50%',
+            border: 'none', cursor: 'pointer',
+            background: wishlisted ? '#ef4444' : 'rgba(15,23,42,0.7)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.2s, transform 0.15s',
+            flexShrink: 0,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.transform = 'scale(1.15)'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.transform = 'scale(1)'}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill={wishlisted ? '#ffffff' : 'none'} stroke={wishlisted ? '#ffffff' : '#94a3b8'} strokeWidth="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        </button>
       </div>
 
       {/* ── Content ── */}

@@ -10,4 +10,6 @@ export interface Template {
   isFeatured: boolean;
   isPremium: boolean;
   demoUrl: string;
+  techStack?: string[];
+  pages?: string[];
 }
