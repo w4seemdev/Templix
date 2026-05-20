@@ -189,21 +189,28 @@ function DownloadButton({ templateId, templateTitle }: { templateId: string; tem
 
   const handleDownload = async () => {
     setDownloading(true);
+    const fileName = `${templateTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
+
     try {
-      // Generate a signed URL from Supabase Storage
+      // 1️⃣  Try Supabase Storage first (production signed URL)
       const { data, error } = await supabase.storage
         .from('templates')
-        .createSignedUrl(`${templateId}.zip`, 60); // 60 seconds expiry
+        .createSignedUrl(`${templateId}.zip`, 60);
 
-      if (error || !data) {
-        alert('Download not available yet. The template file will be uploaded soon.');
+      if (!error && data?.signedUrl) {
+        triggerDownload(data.signedUrl, fileName);
         return;
       }
-      // Trigger download
-      const a = document.createElement('a');
-      a.href = data.signedUrl;
-      a.download = `${templateTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
-      a.click();
+
+      // 2️⃣  Fall back to the static zip bundled in public/templates/
+      const staticUrl = `/templates/${templateId}.zip`;
+      const res = await fetch(staticUrl, { method: 'HEAD' });
+      if (res.ok) {
+        triggerDownload(staticUrl, fileName);
+        return;
+      }
+
+      alert('Download not available. Please contact support.');
     } catch {
       alert('Something went wrong. Please try again.');
     } finally {
@@ -214,10 +221,38 @@ function DownloadButton({ templateId, templateTitle }: { templateId: string; tem
   return (
     <button onClick={handleDownload} disabled={downloading} style={{
       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-      background: '#38bdf8', border: 'none', borderRadius: '8px', padding: '8px',
-      fontSize: '13px', fontWeight: 600, color: '#020617', cursor: 'pointer',
+      background: downloading ? '#0e7490' : '#38bdf8',
+      border: 'none', borderRadius: '8px', padding: '8px',
+      fontSize: '13px', fontWeight: 600, color: '#020617',
+      cursor: downloading ? 'wait' : 'pointer',
+      transition: 'background 0.2s',
     }}>
-      {downloading ? 'Preparing...' : 'Download'}
+      {downloading ? (
+        <>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Preparing…
+        </>
+      ) : (
+        <>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </>
+      )}
     </button>
   );
+}
+
+function triggerDownload(url: string, filename: string) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
