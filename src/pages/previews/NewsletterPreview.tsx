@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const issues = [
-  { num: 48, title: 'The Attention Economy is Broken (Here\'s What Comes Next)', date: 'May 12', reads: '18K', preview: 'We've been fed a lie about productivity. This week, I dig into why the tools meant to help us focus are making things worse...' },
+  { num: 48, title: "The Attention Economy is Broken (Here's What Comes Next)", date: 'May 12', reads: '18K', preview: "We've been fed a lie about productivity. This week, I dig into why the tools meant to help us focus are making things worse..." },
   { num: 47, title: '7 Mental Models That Changed How I Think About Business', date: 'May 5', reads: '24K', preview: 'From Charlie Munger to Shane Parrish — the frameworks that separate good decisions from lucky ones...' },
   { num: 46, title: 'The Startup That Grew 0→$1M ARR in 11 Months (With No VC)', date: 'Apr 28', reads: '31K', preview: 'I sat down with the founder of a bootstrapped SaaS that hit seven figures through one very boring channel...' },
 ];
