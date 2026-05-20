@@ -20,18 +20,54 @@ const included = [
 export default function TemplateDetailPage() {
   const { id } = useParams<{ id: string }>();
   const template = templates.find(t => t.id === id);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [buying, setBuying]           = useState(false);
+  const [previewOpen,  setPreviewOpen]  = useState(false);
+  const [buying,       setBuying]       = useState(false);
+  const [downloading,  setDownloading]  = useState(false);
   const hasLivePreview = template?.demoUrl && template.demoUrl !== '#';
   const { user }         = useAuth();
   const { hasPurchased } = usePurchases();
   const navigate         = useNavigate();
   const alreadyOwned     = template ? (template.isFree || hasPurchased(template.id)) : false;
 
+  /** Trigger a direct browser download of the zip. */
+  const downloadZip = async (tpl: typeof template) => {
+    if (!tpl) return;
+    setDownloading(true);
+    const fileName = `${tpl.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
+
+    try {
+      // 1. Try Supabase Storage signed URL
+      const { data, error } = await supabase.storage
+        .from('templates')
+        .createSignedUrl(`${tpl.id}.zip`, 60);
+
+      const url = (!error && data?.signedUrl)
+        ? data.signedUrl
+        : `/templates/${tpl.id}.zip`;   // fallback: static public file
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {
+      // Last resort: just open the static file
+      window.open(`/templates/${tpl.id}.zip`, '_blank');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const handleBuy = async () => {
     if (!template) return;
     if (!user) { navigate('/login'); return; }
-    if (template.isFree) { navigate('/dashboard'); return; }
+
+    // Free template → download immediately
+    if (template.isFree) {
+      await downloadZip(template);
+      return;
+    }
 
     setBuying(true);
     try {
@@ -276,26 +312,79 @@ export default function TemplateDetailPage() {
                 )}
               </div>
 
-              {/* Buy / Download */}
+              {/* ── Buy / Download button ── */}
               {alreadyOwned ? (
-                <Link to="/dashboard" style={{
-                  display: 'block', textAlign: 'center',
-                  width: '100%', boxSizing: 'border-box',
-                  borderRadius: '12px', background: '#10b981',
-                  padding: '14px', fontSize: '15px', fontWeight: 600,
-                  color: '#ffffff', textDecoration: 'none',
-                }}>
-                  {template.isFree ? 'Download for free' : 'Download — Go to Dashboard'}
-                </Link>
+                /* Already owned (free or purchased) → direct download */
+                <button
+                  onClick={() => downloadZip(template)}
+                  disabled={downloading}
+                  style={{
+                    width: '100%', borderRadius: '12px',
+                    background: downloading ? '#065f46' : '#10b981',
+                    padding: '14px', fontSize: '15px', fontWeight: 600,
+                    color: '#ffffff', border: 'none',
+                    cursor: downloading ? 'wait' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                    transition: 'background 0.2s',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  {downloading ? (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                      </svg>
+                      Preparing download…
+                    </>
+                  ) : (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      {template.isFree ? 'Download for free' : 'Download template'}
+                    </>
+                  )}
+                </button>
               ) : (
-                <button onClick={handleBuy} disabled={buying} style={{
-                  width: '100%', borderRadius: '12px',
-                  background: buying ? '#1e293b' : '#38bdf8',
-                  padding: '14px', fontSize: '15px', fontWeight: 600,
-                  color: buying ? '#64748b' : '#020617',
-                  border: 'none', cursor: buying ? 'not-allowed' : 'pointer',
-                }}>
-                  {buying ? 'Redirecting to checkout...' : template.isFree ? 'Get for free' : `Buy for $${template.price}`}
+                /* Not yet owned → buy / get for free */
+                <button
+                  onClick={handleBuy}
+                  disabled={buying || downloading}
+                  style={{
+                    width: '100%', borderRadius: '12px',
+                    background: (buying || downloading) ? '#1e293b' : (template.isFree ? '#10b981' : '#38bdf8'),
+                    padding: '14px', fontSize: '15px', fontWeight: 600,
+                    color: (buying || downloading) ? '#64748b' : '#020617',
+                    border: 'none',
+                    cursor: (buying || downloading) ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                    transition: 'background 0.2s',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  {downloading ? (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                      </svg>
+                      Preparing download…
+                    </>
+                  ) : buying ? (
+                    'Redirecting to checkout…'
+                  ) : template.isFree ? (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      Download for free
+                    </>
+                  ) : (
+                    `Buy for $${template.price}`
+                  )}
                 </button>
               )}
 
