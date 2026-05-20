@@ -139,6 +139,54 @@ export default function AppLandingPreview() {
         </div>
       </section>
 
+      {/* How it works */}
+      <section style={{ padding: '5rem 2rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 3rem' }}>Up and running in seconds</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
+            {[{ num: '1', title: 'Download', desc: 'Get Floww from the App Store or Google Play. Takes 30 seconds.' }, { num: '2', title: 'Set up your space', desc: 'Add your tasks, notes, and projects. Import from other apps with one click.' }, { num: '3', title: 'Get in the flow', desc: 'Let our AI learn your patterns and help you focus on what matters most.' }].map(s => (
+              <div key={s.num} style={{ textAlign: 'center' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 800, color: '#fff', margin: '0 auto 1rem' }}>{s.num}</div>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>{s.title}</h3>
+                <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.7, margin: 0 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section style={{ padding: '5rem 2rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.75rem', textAlign: 'center' }}>Simple pricing</h2>
+          <p style={{ color: '#6b7280', textAlign: 'center', marginBottom: '3rem', fontSize: '1.0625rem' }}>Start free, upgrade when you need more.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
+            {[
+              { name: 'Free', price: '$0', period: 'forever', features: ['Up to 100 tasks', 'Basic AI suggestions', '1 workspace', 'Mobile apps'], highlight: false },
+              { name: 'Pro', price: '$9', period: '/month', features: ['Unlimited tasks', 'Advanced AI assistant', '5 workspaces', 'Priority support', 'Integrations'], highlight: true },
+              { name: 'Team', price: '$29', period: '/month', features: ['Everything in Pro', 'Shared workspaces', 'Admin controls', 'Analytics', 'SSO'], highlight: false },
+            ].map(plan => (
+              <div key={plan.name} style={{ borderRadius: '16px', border: plan.highlight ? '1px solid rgba(99,102,241,0.5)' : '1px solid rgba(255,255,255,0.06)', background: plan.highlight ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)', padding: '1.75rem', position: 'relative' }}>
+                {plan.highlight && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', borderRadius: '9999px', padding: '3px 14px', fontSize: '11px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>Most popular</div>}
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#fff', margin: '0 0 0.5rem' }}>{plan.name}</h3>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', marginBottom: '1.5rem' }}>
+                  <span style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.04em' }}>{plan.price}</span>
+                  <span style={{ fontSize: '13px', color: '#6b7280', paddingBottom: '4px' }}>{plan.period}</span>
+                </div>
+                <button style={{ width: '100%', background: plan.highlight ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : 'rgba(255,255,255,0.06)', border: 'none', borderRadius: '8px', padding: '10px', fontSize: '14px', fontWeight: 600, color: '#fff', cursor: 'pointer', marginBottom: '1.5rem' }}>Get started</button>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {plan.features.map(f => (
+                    <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#94a3b8' }}>
+                      <span style={{ color: '#6366f1', fontSize: '12px' }}>✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section style={{ padding: '5rem 2rem', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 1rem' }}>Start for free today</h2>

@@ -11,6 +11,7 @@ export default function LaunchPadPreview() {
       <SocialProof />
       <LaunchFeatures />
       <TestimonialsSection />
+      <PricingSection />
       <FaqSection />
       <LaunchCTA />
       <LaunchFooter />
@@ -160,6 +161,53 @@ function TestimonialsSection() {
                   <div style={{ fontSize: '12px', color: '#64748b' }}>{t.role}</div>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PricingSection() {
+  const plans = [
+    { name: 'Starter', price: '$29', period: '/mo', desc: 'For individuals getting started.', features: ['5 active pages', '10,000 visitors/mo', 'A/B testing (2 variants)', 'Basic analytics', 'Custom domain'], highlight: false, cta: 'Start free trial' },
+    { name: 'Growth', price: '$79', period: '/mo', desc: 'For growing marketing teams.', features: ['Unlimited pages', '200K visitors/mo', 'Unlimited A/B tests', 'Advanced analytics', 'All integrations', 'Smart targeting'], highlight: true, cta: 'Start free trial' },
+    { name: 'Scale', price: '$199', period: '/mo', desc: 'For high-volume campaigns.', features: ['Everything in Growth', '2M visitors/mo', 'Custom reporting', 'Dedicated manager', 'SLA uptime guarantee', 'White-label'], highlight: false, cta: 'Contact sales' },
+  ];
+  return (
+    <section style={{ padding: '6rem 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#f97316', marginBottom: '8px' }}>Pricing</p>
+          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#ffffff', margin: '0 0 1rem' }}>
+            Plans for every team
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '1.0625rem', maxWidth: '440px', margin: '0 auto' }}>
+            14-day free trial on all plans. No credit card required.
+          </p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+          {plans.map(plan => (
+            <div key={plan.name} style={{ borderRadius: '20px', border: plan.highlight ? '1px solid rgba(249,115,22,0.4)' : '1px solid rgba(255,255,255,0.06)', background: plan.highlight ? 'rgba(249,115,22,0.06)' : 'rgba(255,255,255,0.02)', padding: '2rem', position: 'relative' }}>
+              {plan.highlight && (
+                <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #f97316, #ec4899)', borderRadius: '9999px', padding: '4px 16px', fontSize: '11px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>Most popular</div>
+              )}
+              <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#fff', margin: '0 0 4px' }}>{plan.name}</h3>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 1.25rem' }}>{plan.desc}</p>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', marginBottom: '1.5rem' }}>
+                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.04em' }}>{plan.price}</span>
+                <span style={{ fontSize: '14px', color: '#64748b', paddingBottom: '6px' }}>{plan.period}</span>
+              </div>
+              <a href="#" style={{ display: 'block', textAlign: 'center', borderRadius: '10px', padding: '11px', fontSize: '14px', fontWeight: 600, color: '#fff', textDecoration: 'none', background: plan.highlight ? 'linear-gradient(135deg, #f97316, #ec4899)' : 'rgba(255,255,255,0.06)', marginBottom: '1.5rem' }}>{plan.cta}</a>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                {plan.features.map(f => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#94a3b8' }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    {f}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

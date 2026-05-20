@@ -11,6 +11,7 @@ export default function SaveurRestaurantPreview() {
       <AboutSection />
       <MenuSection />
       <GallerySection />
+      <ReviewsSection />
       <ReservationSection />
       <SaveurFooter />
     </div>
@@ -167,6 +168,38 @@ function GallerySection() {
             />
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ReviewsSection() {
+  const reviews = [
+    { text: "An extraordinary evening. Chef Beaumont's tasting menu was the finest meal I've had in Paris. Each course was a revelation.", author: 'Henri D.', source: 'TripAdvisor', stars: 5 },
+    { text: "Impeccable service, divine food, and an atmosphere that feels both intimate and grand. This is fine dining at its absolute best.", author: 'Sophie M.', source: 'Google', stars: 5 },
+    { text: "The sole meunière alone is worth the trip to Paris. We have been regulars for three years and it never disappoints.", author: 'James & Clara W.', source: 'Yelp', stars: 5 },
+  ];
+  return (
+    <section style={{ padding: '5rem 2rem', background: '#070502', borderTop: '1px solid rgba(212,163,80,0.1)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Guest reviews</p>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>What our guests say</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          {reviews.map(r => (
+            <div key={r.author} style={{ border: '1px solid rgba(212,163,80,0.12)', borderRadius: '4px', padding: '2rem', background: '#0a0703' }}>
+              <div style={{ display: 'flex', gap: '3px', marginBottom: '1.25rem' }}>
+                {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#d4a350', fontSize: '14px' }}>★</span>)}
+              </div>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#8c7a5a', lineHeight: 1.8, margin: '0 0 1.5rem', fontStyle: 'italic' }}>"{r.text}"</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#f5e6c8' }}>{r.author}</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#4a3c28', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{r.source}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -10,6 +10,8 @@ export default function BloomBlogPreview() {
       <BloomHero />
       <FeaturedPost />
       <PostsGrid />
+      <PopularSection />
+      <WritersSection />
       <NewsletterSection />
       <BloomFooter />
     </div>
@@ -128,6 +130,86 @@ function PostsGrid() {
                   <span>·</span>
                   <span>{post.time} read</span>
                 </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PopularSection() {
+  const popular = [
+    { rank: '01', title: 'Why silence is the new productivity hack', reads: '42K reads', category: 'Life' },
+    { rank: '02', title: 'The Figma features designers still sleep on', reads: '38K reads', category: 'Design' },
+    { rank: '03', title: 'GPT-4 changed how I write — here is what I learned', reads: '31K reads', category: 'Tech' },
+    { rank: '04', title: 'Finding slowness in a world obsessed with speed', reads: '27K reads', category: 'Culture' },
+    { rank: '05', title: "The city that made me fall in love with walking again", reads: '24K reads', category: 'Life' },
+  ];
+  return (
+    <section style={{ borderTop: '1px solid #e5e0d8', padding: '4rem 0' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
+          <div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#a8a29e', marginBottom: '1.5rem' }}>Most popular</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+              {popular.map((p, i) => (
+                <a key={p.rank} href="#" style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', padding: '1.25rem 0', borderBottom: i < popular.length - 1 ? '1px solid #e5e0d8' : 'none', textDecoration: 'none' }}>
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.5rem', fontWeight: 900, color: '#e5e0d8', letterSpacing: '-0.04em', lineHeight: 1, flexShrink: 0, width: '36px' }}>{p.rank}</span>
+                  <div>
+                    <span style={{ fontFamily: 'Inter, sans-serif', display: 'inline-block', background: '#fef9ec', color: '#d97706', borderRadius: '3px', padding: '1px 7px', fontSize: '10px', fontWeight: 600, marginBottom: '5px' }}>{p.category}</span>
+                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#1a1a1a', lineHeight: 1.35, margin: '0 0 4px', letterSpacing: '-0.01em' }}>{p.title}</h3>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#a8a29e', margin: 0 }}>{p.reads}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#a8a29e', marginBottom: '1.5rem' }}>Topics</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {[['Design', '#fef3c7', '#d97706'], ['Technology', '#eff6ff', '#3b82f6'], ['Life & Wellness', '#f0fdf4', '#22c55e'], ['Culture', '#fdf4ff', '#a855f7'], ['Travel', '#fff7ed', '#f97316'], ['Business', '#fefce8', '#ca8a04'], ['Creativity', '#fdf2f8', '#ec4899'], ['Philosophy', '#f8fafc', '#64748b']].map(([label, bg, color]) => (
+                <a key={label} href="#" style={{ fontFamily: 'Inter, sans-serif', display: 'inline-block', background: bg as string, color: color as string, borderRadius: '999px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>{label}</a>
+              ))}
+            </div>
+            <div style={{ marginTop: '2.5rem', borderRadius: '12px', background: '#1a1a1a', padding: '2rem' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#d97706', marginBottom: '0.75rem' }}>This week in Bloom</p>
+              <p style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.3, margin: '0 0 1rem' }}>
+                Why rest is the most rebellious act of our time
+              </p>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#78716c', lineHeight: 1.7, margin: 0 }}>
+                A personal essay on finding meaning in doing less, sleeping more, and saying no to the hustle.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WritersSection() {
+  const writers = [
+    { name: 'Sarah Winters', role: 'Design Editor', posts: 42, img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
+    { name: 'James Liu', role: 'Tech Correspondent', posts: 38, img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
+    { name: 'Kai Tanaka', role: 'Life & Culture', posts: 31, img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
+    { name: 'Nina Wolff', role: 'Photography', posts: 27, img: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&q=80' },
+  ];
+  return (
+    <section style={{ borderTop: '1px solid #e5e0d8', padding: '4rem 0' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem' }}>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#a8a29e', marginBottom: '2rem' }}>Our writers</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1.5rem' }}>
+          {writers.map(w => (
+            <a key={w.name} href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0 }}>
+                <img src={w.img} alt={w.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div>
+                <p style={{ fontSize: '14px', fontWeight: 700, color: '#1a1a1a', margin: '0 0 2px' }}>{w.name}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#a8a29e', margin: '0 0 2px' }}>{w.role}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#d97706', margin: 0 }}>{w.posts} articles</p>
               </div>
             </a>
           ))}

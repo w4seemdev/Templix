@@ -13,6 +13,8 @@ export default function ShopDropEcommercePreview() {
       <CategoriesStrip />
       <ProductsGrid />
       <PromoSection />
+      <CustomerReviews />
+      <TrendingSection />
       <FeaturesBar />
       <ShopFooter />
     </div>
@@ -176,6 +178,84 @@ function PromoSection() {
       <a href="#" style={{ display: 'inline-block', background: '#000000', borderRadius: '10px', padding: '13px 32px', fontSize: '14px', fontWeight: 700, color: '#ffffff', textDecoration: 'none' }}>
         Claim offer
       </a>
+    </section>
+  );
+}
+
+function CustomerReviews() {
+  const reviews = [
+    { text: "Literally the most comfortable hoodie I own. The quality is insane for the price.", author: 'Jordan K.', item: 'Arch Logo Hoodie', rating: 5 },
+    { text: "Fast shipping, perfect fit. The cargo pants are fire — everyone asks me where they're from.", author: 'Mia T.', item: 'Street Cargo Pants', rating: 5 },
+    { text: "ShopDrop has completely replaced my old go-to brands. Obsessed with everything I've ordered.", author: 'Alex R.', item: 'Air Runner 2.0', rating: 5 },
+  ];
+  return (
+    <section style={{ padding: '5rem 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 4px', letterSpacing: '-0.02em' }}>Customer reviews</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '2px' }}>{[1,2,3,4,5].map(s => <span key={s} style={{ color: '#f97316', fontSize: '14px' }}>★</span>)}</div>
+              <span style={{ fontSize: '13px', color: '#737373' }}>4.9 out of 5 · 2,847 reviews</span>
+            </div>
+          </div>
+          <a href="#" style={{ fontSize: '13px', color: '#f97316', textDecoration: 'none' }}>All reviews →</a>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+          {reviews.map(r => (
+            <div key={r.author} style={{ borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)', background: '#111111', padding: '1.5rem' }}>
+              <div style={{ display: 'flex', gap: '3px', marginBottom: '0.75rem' }}>
+                {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#f97316', fontSize: '13px' }}>★</span>)}
+              </div>
+              <p style={{ fontSize: '14px', color: '#a3a3a3', lineHeight: 1.7, margin: '0 0 1rem' }}>"{r.text}"</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff' }}>{r.author}</span>
+                <span style={{ fontSize: '11px', color: '#404040', background: '#1a1a1a', padding: '2px 8px', borderRadius: '4px' }}>{r.item}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const trending = [
+  { name: 'Vintage Wash Tee', price: 42, rating: 4.8, reviews: 312, img: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&q=80', hot: true },
+  { name: 'Track Jacket', price: 95, rating: 4.9, reviews: 204, img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4e8a?w=400&q=80', hot: false },
+  { name: 'Corduroy Cap', price: 35, rating: 4.7, reviews: 178, img: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&q=80', hot: false },
+  { name: 'High-Top Canvas', price: 120, rating: 4.9, reviews: 521, img: 'https://images.unsplash.com/photo-1605408499391-6368c628ef42?w=400&q=80', hot: true },
+];
+
+function TrendingSection() {
+  return (
+    <section style={{ padding: '2rem 0 5rem' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>🔥 Trending now</h2>
+          <a href="#" style={{ fontSize: '13px', color: '#f97316', textDecoration: 'none' }}>View all →</a>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.25rem' }}>
+          {trending.map(p => (
+            <div key={p.name} style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', background: '#111111' }}>
+              <div style={{ aspectRatio: '4/3', position: 'relative', overflow: 'hidden' }}>
+                <img src={p.img} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                {p.hot && <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#ef4444', borderRadius: '4px', padding: '3px 8px', fontSize: '11px', fontWeight: 700, color: '#fff' }}>Hot</span>}
+              </div>
+              <div style={{ padding: '1rem' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', margin: '0 0 6px' }}>{p.name}</h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '15px', fontWeight: 700 }}>${p.price}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ color: '#f97316', fontSize: '12px' }}>★ {p.rating}</span>
+                    <span style={{ fontSize: '11px', color: '#525252' }}>({p.reviews})</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

@@ -13,6 +13,7 @@ export default function LuminarySaasPreview() {
       <LogosSection />
       <FeaturesSection />
       <HowItWorksSection />
+      <TestimonialsSection />
       <PricingSection />
       <CtaSection />
       <LuminaryFooter />
@@ -401,6 +402,75 @@ function HowItWorksSection() {
                 {step.title}
               </h3>
               <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.75 }}>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── TESTIMONIALS ─── */
+const testimonials = [
+  {
+    quote: "Luminary cut our sprint planning time in half. Our team ships 3x faster and everyone finally knows what's going on.",
+    name: 'Sarah Chen', role: 'Engineering Lead', company: 'Vercel', avatar: 'SC',
+  },
+  {
+    quote: "We evaluated 6 tools before choosing Luminary. The analytics alone are worth the price — nothing else comes close.",
+    name: 'Marcus Webb', role: 'VP of Product', company: 'Linear', avatar: 'MW',
+  },
+  {
+    quote: "Onboarding took 10 minutes. Our entire 40-person org was fully migrated in a week. Incredible product.",
+    name: 'Priya Nair', role: 'Chief of Staff', company: 'Notion', avatar: 'PN',
+  },
+];
+
+function TestimonialsSection() {
+  return (
+    <section style={{ padding: '6rem 0', background: '#080b18', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6' }}>Testimonials</span>
+          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 0', color: '#ffffff' }}>
+            Loved by 10,000+ teams
+          </h2>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          {testimonials.map(t => (
+            <div key={t.name} style={{
+              borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(255,255,255,0.02)',
+              padding: '2rem',
+              display: 'flex', flexDirection: 'column', gap: '1.5rem',
+            }}>
+              {/* Stars */}
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[1,2,3,4,5].map(s => (
+                  <span key={s} style={{ color: '#f59e0b', fontSize: '14px' }}>★</span>
+                ))}
+              </div>
+              {/* Quote */}
+              <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.75, margin: 0, flex: 1 }}>
+                "{t.quote}"
+              </p>
+              {/* Author */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '13px', fontWeight: 700, color: '#ffffff', flexShrink: 0,
+                }}>
+                  {t.avatar}
+                </div>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', margin: 0 }}>{t.name}</p>
+                  <p style={{ fontSize: '12px', color: '#475569', margin: 0 }}>{t.role} · {t.company}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>

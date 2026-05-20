@@ -10,6 +10,7 @@ export default function FolioPortfolioPreview() {
       <FolioHero />
       <ProjectsSection />
       <SkillsSection />
+      <TestimonialsSection />
       <AboutSection />
       <ContactSection />
       <FolioFooter />
@@ -142,6 +143,35 @@ function SkillsSection() {
               </div>
               <div style={{ height: '4px', borderRadius: '9999px', background: 'rgba(255,255,255,0.06)' }}>
                 <div style={{ height: '100%', borderRadius: '9999px', background: '#ffffff', width: `${s.level}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  const t = [
+    { quote: "Alex delivered our entire product redesign in 3 weeks. The quality was exceptional — far beyond what we expected.", name: 'Rachel Kim', role: 'CEO, Lumify', avatar: 'RK' },
+    { quote: "One of the best developers I've worked with. Clean code, great communication, and an eye for design that's rare to find.", name: 'Tom Hendricks', role: 'CTO, ShopEasy', avatar: 'TH' },
+    { quote: "Alex turned our vague ideas into a beautiful, intuitive product. Would hire again in a heartbeat.", name: 'Priti Shah', role: 'Founder, Bloom Co.', avatar: 'PS' },
+  ];
+  return (
+    <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '5rem 0' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', marginBottom: '2.5rem' }}>Kind words</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
+          {t.map(item => (
+            <div key={item.name} style={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <p style={{ fontSize: '14px', color: '#737373', lineHeight: 1.75, margin: 0, flex: 1 }}>"{item.quote}"</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#0c0c0c', flexShrink: 0 }}>{item.avatar}</div>
+                <div>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff', margin: 0 }}>{item.name}</p>
+                  <p style={{ fontSize: '12px', color: '#525252', margin: 0 }}>{item.role}</p>
+                </div>
               </div>
             </div>
           ))}

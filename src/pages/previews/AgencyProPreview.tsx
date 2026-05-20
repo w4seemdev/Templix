@@ -10,7 +10,9 @@ export default function AgencyProPreview() {
       <AgencyHero />
       <ClientLogos />
       <ServicesSection />
+      <StatsBar />
       <WorkSection />
+      <TestimonialsAgency />
       <TeamSection />
       <AgencyCTA />
       <AgencyFooter />
@@ -107,10 +109,29 @@ function ServicesSection() {
   );
 }
 
+function StatsBar() {
+  const stats = [['150+', 'Projects Delivered'], ['8', 'Years in Business'], ['40+', 'Happy Clients'], ['12', 'Awards Won']];
+  return (
+    <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem 0', background: '#050505' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem', display: 'flex', justifyContent: 'center', gap: '5rem', flexWrap: 'wrap' }}>
+        {stats.map(([v, l]) => (
+          <div key={l} style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '2.25rem', fontWeight: 900, margin: '0 0 4px', letterSpacing: '-0.04em', color: '#3b82f6' }}>{v}</p>
+            <p style={{ fontSize: '12px', color: '#404040', margin: 0, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{l}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 const works = [
   { title: 'Aura — Brand Identity', type: 'Branding', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80' },
   { title: 'Crest — Web Design', type: 'Web', img: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&q=80' },
   { title: 'Meld — App UI', type: 'Product', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80' },
+  { title: 'Orca — E-Commerce', type: 'E-Commerce', img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80' },
+  { title: 'Grove — Campaign', type: 'Campaign', img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80' },
+  { title: 'Flux — Motion', type: 'Motion', img: 'https://images.unsplash.com/photo-1574717024453-354056afd6fc?w=600&q=80' },
 ];
 
 function WorkSection() {
@@ -133,6 +154,40 @@ function WorkSection() {
                 <span style={{ fontSize: '12px', background: 'rgba(59,130,246,0.2)', color: '#93c5fd', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '6px', padding: '3px 10px' }}>{w.type}</span>
               </div>
             </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsAgency() {
+  const testi = [
+    { quote: "Volt Studio transformed our brand completely. The new identity tripled our conversion rate in just two months.", name: 'Claire Fontaine', role: 'CEO, Aura', avatar: 'CF' },
+    { quote: "They delivered a world-class website in under 6 weeks. The attention to detail was extraordinary.", name: 'James Park', role: 'Founder, Crest', avatar: 'JP' },
+    { quote: "Best agency we've ever worked with. The team is brilliant, responsive, and genuinely passionate.", name: 'Nadia Osei', role: 'CMO, Grove', avatar: 'NO' },
+  ];
+  return (
+    <section style={{ padding: '6rem 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '3rem' }}>
+          What clients say
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1.5rem' }}>
+          {testi.map(t => (
+            <div key={t.name} style={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', background: '#050505', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', gap: '3px' }}>
+                {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#3b82f6', fontSize: '14px' }}>★</span>)}
+              </div>
+              <p style={{ fontSize: '15px', color: '#a3a3a3', lineHeight: 1.75, margin: 0, flex: 1 }}>"{t.quote}"</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#fff', flexShrink: 0 }}>{t.avatar}</div>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: 0 }}>{t.name}</p>
+                  <p style={{ fontSize: '12px', color: '#404040', margin: 0 }}>{t.role}</p>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
