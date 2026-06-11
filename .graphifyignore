@@ -1,0 +1,22 @@
+# Graphify: code files only — no docs, markdown, or images
+*.md
+*.mdx
+*.qmd
+docs/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.webp
+*.ico
+
+# Build artifacts and dependencies (mirrors .gitignore)
+node_modules/
+dist/
+dist-ssr/
+public/templates/
+graphify-out/
+*.log
+*.local
+*.zip
