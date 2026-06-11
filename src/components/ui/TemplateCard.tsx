@@ -1,60 +1,90 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Template } from '../../types';
 import { useWishlist } from '../../hooks/useWishlist';
 
 interface Props {
   template: Template;
+  /** Hide the "Live preview →" hover affordance on the image. Defaults to shown. */
+  hidePreviewHint?: boolean;
 }
 
-export default function TemplateCard({ template }: Props) {
+const MAX_VISIBLE_TAGS = 2;
+
+const badgeBaseStyle = {
+  borderRadius: '9999px',
+  padding: '4px 10px',
+  fontSize: '10px',
+  fontWeight: 700,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase' as const,
+  boxShadow: '0 2px 8px rgba(2,6,23,0.45)',
+};
+
+export default function TemplateCard({ template, hidePreviewHint = false }: Props) {
   const { toggle, isWishlisted } = useWishlist();
   const wishlisted = isWishlisted(template.id);
+  const [hovered, setHovered] = useState(false);
+
+  const visibleTags = template.tags.slice(0, MAX_VISIBLE_TAGS);
+  const extraTags = template.tags.length - visibleTags.length;
 
   return (
     <Link
       to={`/templates/${template.id}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '16px',
-        border: '1px solid #1e293b',
+        border: `1px solid ${hovered ? '#38bdf8' : '#1e293b'}`,
         background: '#0f172a',
         overflow: 'hidden',
         textDecoration: 'none',
+        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
         transition: 'border-color 0.2s, transform 0.2s',
       }}
-      onMouseEnter={e => {
-        (e.currentTarget as HTMLElement).style.borderColor = '#38bdf8';
-        (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-      }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLElement).style.borderColor = '#1e293b';
-        (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-      }}
     >
-      {/* ── Image ── */}
+      {/* ── Image (overflow-hidden wrapper enables the zoom) ── */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', background: '#1e293b' }}>
         <img
           src={template.image}
           alt={template.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          loading="lazy"
+          style={{
+            width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+            transform: hovered ? 'scale(1.06)' : 'scale(1)',
+            transition: 'transform 0.45s ease',
+          }}
         />
+
+        {/* Live preview affordance (visual hint — the whole card links to the detail page) */}
+        {!hidePreviewHint && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'flex-end',
+            padding: '12px 14px',
+            background: 'linear-gradient(to top, rgba(2,6,23,0.8), transparent 55%)',
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.25s ease',
+            pointerEvents: 'none',
+          }}>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#38bdf8' }}>
+              Live preview →
+            </span>
+          </div>
+        )}
 
         {/* Badges */}
         <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', gap: '6px' }}>
           {template.isFree && (
-            <span style={{
-              borderRadius: '9999px', background: '#10b981',
-              padding: '3px 10px', fontSize: '12px', fontWeight: 600, color: '#ffffff',
-            }}>
+            <span style={{ ...badgeBaseStyle, background: '#10b981', color: '#ffffff' }}>
               Free
             </span>
           )}
           {template.isPremium && (
-            <span style={{
-              borderRadius: '9999px', background: '#38bdf8',
-              padding: '3px 10px', fontSize: '12px', fontWeight: 600, color: '#020617',
-            }}>
+            <span style={{ ...badgeBaseStyle, background: '#38bdf8', color: '#020617' }}>
               Premium
             </span>
           )}
@@ -62,6 +92,7 @@ export default function TemplateCard({ template }: Props) {
 
         {/* Wishlist button */}
         <button
+          type="button"
           onClick={e => { e.preventDefault(); toggle(template.id); }}
           title={wishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
           style={{
@@ -111,7 +142,8 @@ export default function TemplateCard({ template }: Props) {
           </h3>
           <span style={{
             fontSize: '15px', fontWeight: 700,
-            color: '#ffffff', whiteSpace: 'nowrap', flexShrink: 0,
+            color: template.isFree ? '#10b981' : '#ffffff',
+            whiteSpace: 'nowrap', flexShrink: 0,
           }}>
             {template.isFree ? 'Free' : `$${template.price}`}
           </span>
@@ -129,9 +161,9 @@ export default function TemplateCard({ template }: Props) {
           {template.description}
         </p>
 
-        {/* Tags */}
+        {/* Tags (max 2 + overflow count) */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: 'auto' }}>
-          {template.tags.map(tag => (
+          {visibleTags.map(tag => (
             <span key={tag} style={{
               borderRadius: '6px', border: '1px solid #1e293b',
               background: '#020617', padding: '3px 10px',
@@ -140,6 +172,18 @@ export default function TemplateCard({ template }: Props) {
               {tag}
             </span>
           ))}
+          {extraTags > 0 && (
+            <span
+              title={template.tags.slice(MAX_VISIBLE_TAGS).join(', ')}
+              style={{
+                borderRadius: '6px', border: '1px dashed #1e293b',
+                background: 'transparent', padding: '3px 10px',
+                fontSize: '12px', color: '#475569',
+              }}
+            >
+              +{extraTags}
+            </span>
+          )}
         </div>
 
       </div>

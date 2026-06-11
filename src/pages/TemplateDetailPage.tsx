@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Check, Monitor } from 'lucide-react';
+import { ChevronRight, ExternalLink, Check, Monitor, Zap, RefreshCw, LifeBuoy, ShieldCheck } from 'lucide-react';
 import { templates } from '../data/templates';
 import Container from '../components/ui/Container';
 import TemplateCard from '../components/ui/TemplateCard';
@@ -160,14 +160,36 @@ export default function TemplateDetailPage() {
 
       <Container style={{ paddingTop: '3.5rem', paddingBottom: '4rem' }}>
 
-        {/* Back */}
-        <Link to="/templates" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '6px',
-          fontSize: '14px', color: '#64748b', textDecoration: 'none', marginBottom: '2.5rem',
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" style={{
+          display: 'flex', alignItems: 'center', gap: '8px',
+          fontSize: '14px', marginBottom: '2.5rem', flexWrap: 'wrap',
         }}>
-          <ArrowLeft size={16} />
-          Back to templates
-        </Link>
+          <Link
+            to="/"
+            style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#f8fafc'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
+          >
+            Home
+          </Link>
+          <ChevronRight size={14} style={{ color: '#334155', flexShrink: 0 }} />
+          <Link
+            to="/templates"
+            style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#f8fafc'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
+          >
+            Templates
+          </Link>
+          <ChevronRight size={14} style={{ color: '#334155', flexShrink: 0 }} />
+          <span style={{
+            color: '#f8fafc', fontWeight: 500,
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '360px',
+          }}>
+            {template.title}
+          </span>
+        </nav>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '3rem', alignItems: 'flex-start' }}>
 
@@ -278,6 +300,54 @@ export default function TemplateDetailPage() {
                   </div>
                 </div>
               )}
+
+              {/* License & support */}
+              <div style={{ marginTop: '1.75rem', paddingTop: '1.75rem', borderTop: '1px solid #1e293b' }}>
+                <h3 style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem',
+                }}>
+                  <ShieldCheck size={16} style={{ color: '#38bdf8' }} />
+                  License & support
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                  <div style={{
+                    borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.03)', padding: '1rem 1.125rem',
+                  }}>
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc', margin: '0 0 0.625rem' }}>
+                      Personal license
+                    </p>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {['Use in unlimited personal projects', 'Modify and customize freely', 'Lifetime access to the files'].map(item => (
+                        <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
+                          <Check size={13} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '3px' }} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div style={{
+                    borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.03)', padding: '1rem 1.125rem',
+                  }}>
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc', margin: '0 0 0.625rem' }}>
+                      Commercial license
+                    </p>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {['Use in client and commercial work', 'Ship as part of an end product', 'No attribution required'].map(item => (
+                        <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
+                          <Check size={13} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '3px' }} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <p style={{ marginTop: '12px', fontSize: '13px', color: '#64748b', lineHeight: 1.6 }}>
+                  Every purchase includes friendly email support and free updates. Reselling or redistributing the template itself is not permitted.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -416,6 +486,25 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
+              {/* Trust row */}
+              <div style={{
+                marginTop: '14px', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', gap: '14px', flexWrap: 'wrap',
+              }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
+                  <Zap size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                  Instant download
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
+                  <RefreshCw size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                  Free updates
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
+                  <LifeBuoy size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                  Support included
+                </span>
+              </div>
+
               {/* Included */}
               <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #1e293b' }}>
                 <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
@@ -445,22 +534,30 @@ export default function TemplateDetailPage() {
       </Container>
 
       {/* Related Templates */}
-      <RelatedTemplates currentId={template.id} category={template.category} />
+      <RelatedTemplates currentId={template.id} category={template.category} tags={template.tags} />
     </div>
   );
 }
 
-function RelatedTemplates({ currentId, category }: { currentId: string; category: string }) {
-  const related = templates
+function RelatedTemplates({ currentId, category, tags }: { currentId: string; category: string; tags?: string[] }) {
+  // Up to 4 templates from the same category
+  const sameCategory = templates
     .filter(t => t.id !== currentId && t.category === category)
-    .slice(0, 3);
+    .slice(0, 4);
 
-  // If not enough in same category, fill with others
-  const fill = templates
-    .filter(t => t.id !== currentId && t.category !== category)
-    .slice(0, 3 - related.length);
+  // If not enough in same category, fall back to templates sharing tags
+  const tagSet = new Set(tags ?? []);
+  const byTags = sameCategory.length < 4
+    ? templates
+        .filter(t =>
+          t.id !== currentId &&
+          t.category !== category &&
+          t.tags.some(tag => tagSet.has(tag)),
+        )
+        .slice(0, 4 - sameCategory.length)
+    : [];
 
-  const items = [...related, ...fill];
+  const items = [...sameCategory, ...byTags];
   if (items.length === 0) return null;
 
   return (
@@ -468,7 +565,7 @@ function RelatedTemplates({ currentId, category }: { currentId: string; category
       <Container style={{ paddingTop: '3.5rem', paddingBottom: '4rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
-            You might also like
+            Related templates
           </h2>
           <Link to="/templates" style={{ fontSize: '14px', color: '#38bdf8', textDecoration: 'none', fontWeight: 500 }}>
             View all templates →

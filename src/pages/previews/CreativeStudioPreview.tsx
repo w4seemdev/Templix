@@ -26,7 +26,7 @@ export default function CreativeStudioPreview() {
       {/* Hero */}
       <section style={{ paddingTop: '64px', minHeight: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 2rem 4rem' }}>
         <div style={{ display: 'inline-flex', gap: '8px', marginBottom: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {['Branding', 'Motion', 'UI/UX', 'Print', 'Web'].map((tag) => (
+          {['Branding', 'Motion', 'UI/UX', 'Print', 'Web'].map(tag => (
             <span key={tag} style={{ fontSize: '11px', padding: '5px 14px', borderRadius: '9999px', border: '1px solid rgba(255,255,255,0.12)', color: '#737373', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{tag}</span>
           ))}
         </div>

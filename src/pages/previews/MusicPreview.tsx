@@ -93,7 +93,7 @@ export default function MusicPreview() {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#737373', margin: '0 0 1.5rem' }}>Tour Dates</h2>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {tours.map((tour) => (
+            {tours.map(tour => (
               <div key={tour.city} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 0', borderBottom: '1px solid #111', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
                   <span style={{ fontSize: '13px', color: '#737373', minWidth: '100px', fontWeight: 500 }}>{tour.date}</span>

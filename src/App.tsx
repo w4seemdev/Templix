@@ -54,6 +54,29 @@ import BookstorePreview         from './pages/previews/BookstorePreview';
 import FloristPreview           from './pages/previews/FloristPreview';
 import NewsletterPreview        from './pages/previews/NewsletterPreview';
 import ProductivityPreview      from './pages/previews/ProductivityPreview';
+import StartKitStartupPreview   from './pages/previews/StartKitStartupPreview';
+import MedCareHealthcarePreview from './pages/previews/MedCareHealthcarePreview';
+import CoursifyEducationPreview from './pages/previews/CoursifyEducationPreview';
+import EstatlyRealEstatePreview from './pages/previews/EstatlyRealEstatePreview';
+import PulseAnalyticsPreview    from './pages/previews/PulseAnalyticsPreview';
+import AtlasMapSaasPreview      from './pages/previews/AtlasMapSaasPreview';
+import ForgeDevToolsPreview     from './pages/previews/ForgeDevToolsPreview';
+import VerdeEcoPreview          from './pages/previews/VerdeEcoPreview';
+import SwiftDeliveryPreview     from './pages/previews/SwiftDeliveryPreview';
+import IronPeakGymPreview       from './pages/previews/IronPeakGymPreview';
+import LaunchConfEventPreview   from './pages/previews/LaunchConfEventPreview';
+import AriaPhotographyPreview   from './pages/previews/AriaPhotographyPreview';
+import NomadRemoteJobsPreview   from './pages/previews/NomadRemoteJobsPreview';
+import VersePoetryPreview       from './pages/previews/VersePoetryPreview';
+import RoamRentalsPreview       from './pages/previews/RoamRentalsPreview';
+import PixelGameStudioPreview   from './pages/previews/PixelGameStudioPreview';
+import ScoutTalentPreview       from './pages/previews/ScoutTalentPreview';
+import HopeNonprofitPreview     from './pages/previews/HopeNonprofitPreview';
+import NeuronAiPreview          from './pages/previews/NeuronAiPreview';
+import VelocityAutoPreview      from './pages/previews/VelocityAutoPreview';
+import PawsPetCarePreview       from './pages/previews/PawsPetCarePreview';
+import HavenInteriorPreview     from './pages/previews/HavenInteriorPreview';
+import DailyNewsPreview         from './pages/previews/DailyNewsPreview';
 
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
@@ -116,6 +139,29 @@ function Layout() {
           <Route path="/preview/florist"       element={<FloristPreview />}           />
           <Route path="/preview/newsletter"    element={<NewsletterPreview />}        />
           <Route path="/preview/productivity"  element={<ProductivityPreview />}      />
+          <Route path="/preview/startkit"      element={<StartKitStartupPreview />}   />
+          <Route path="/preview/medcare"       element={<MedCareHealthcarePreview />} />
+          <Route path="/preview/coursify"      element={<CoursifyEducationPreview />} />
+          <Route path="/preview/estatly"       element={<EstatlyRealEstatePreview />} />
+          <Route path="/preview/pulse-analytics" element={<PulseAnalyticsPreview />}  />
+          <Route path="/preview/atlas-maps"    element={<AtlasMapSaasPreview />}      />
+          <Route path="/preview/forge-devtools" element={<ForgeDevToolsPreview />}    />
+          <Route path="/preview/verde-eco"     element={<VerdeEcoPreview />}          />
+          <Route path="/preview/swift-delivery" element={<SwiftDeliveryPreview />}    />
+          <Route path="/preview/ironpeak"      element={<IronPeakGymPreview />}       />
+          <Route path="/preview/launchconf"    element={<LaunchConfEventPreview />}   />
+          <Route path="/preview/aria-photography" element={<AriaPhotographyPreview />} />
+          <Route path="/preview/nomad-jobs"    element={<NomadRemoteJobsPreview />}   />
+          <Route path="/preview/verse-lit"     element={<VersePoetryPreview />}       />
+          <Route path="/preview/roam-rentals"  element={<RoamRentalsPreview />}       />
+          <Route path="/preview/pixel-games"   element={<PixelGameStudioPreview />}   />
+          <Route path="/preview/scout-talent"  element={<ScoutTalentPreview />}       />
+          <Route path="/preview/hope-nonprofit" element={<HopeNonprofitPreview />}    />
+          <Route path="/preview/neuron-ai"     element={<NeuronAiPreview />}          />
+          <Route path="/preview/velocity-auto" element={<VelocityAutoPreview />}      />
+          <Route path="/preview/paws-petcare"  element={<PawsPetCarePreview />}       />
+          <Route path="/preview/haven-interior" element={<HavenInteriorPreview />}    />
+          <Route path="/preview/daily-news"    element={<DailyNewsPreview />}         />
           <Route path="*"                   element={<NotFoundPage />}             />
         </Routes>
       </main>
