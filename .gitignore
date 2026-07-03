@@ -37,5 +37,8 @@ dist-ssr
 # Graphify generated artifacts
 graphify-out/
 
+# Nested standalone repo (has its own .git — not part of Templix)
+/idea-enhancer/
+
 # Local-only Claude notes
 .claude/CLAUDE.local.md

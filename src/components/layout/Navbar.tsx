@@ -40,8 +40,10 @@ export default function Navbar() {
 
   // Close any open menus when the route changes.
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- resetting transient menu state on navigation is intentional */
     setMenuOpen(false);
     setUserMenuOpen(false);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname]);
 
   // Keep the wishlist badge fresh: re-read on navigation, cross-tab storage

@@ -80,7 +80,7 @@ export default function TemplateDetailPage() {
         },
       });
       if (error || !data?.url) throw new Error(error?.message ?? 'Failed to create checkout');
-      window.location.href = data.url;
+      window.location.assign(data.url);
     } catch (err) {
       alert((err as Error).message);
       setBuying(false);

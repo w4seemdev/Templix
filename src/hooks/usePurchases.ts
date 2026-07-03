@@ -8,6 +8,7 @@ export function usePurchases() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset when the user signs out
     if (!user) { setPurchasedIds([]); setLoading(false); return; }
 
     supabase
