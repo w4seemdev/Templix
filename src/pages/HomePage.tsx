@@ -1,9 +1,30 @@
 import { useState } from 'react';
+import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Download, Eye, MonitorPlay, Search, Sparkles, Star } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  Download,
+  Eye,
+  FileArchive,
+  MonitorPlay,
+  PenTool,
+  RefreshCw,
+  Search,
+  Sparkles,
+  Star,
+} from 'lucide-react';
+import type { Template } from '../types';
 import { templates, categories } from '../data/templates';
 import TemplateCard from '../components/ui/TemplateCard';
 import Container from '../components/ui/Container';
+import { useReveal } from '../hooks/useReveal';
+
+/* Section rhythm — 96px desktop collapsing to 64px mobile (spec) */
+const sectionPad: CSSProperties = {
+  paddingTop: 'clamp(64px, 9vw, 96px)',
+  paddingBottom: 'clamp(64px, 9vw, 96px)',
+};
 
 /* Derived, data-driven numbers — update automatically as templates.ts grows */
 const freeCount     = templates.filter(t => t.isFree).length;
@@ -11,15 +32,33 @@ const categoryCount = categories.filter(c => c.id !== 'all').length;
 const countFor      = (id: string) =>
   id === 'all' ? templates.length : templates.filter(t => t.category === id).length;
 
+const featured = templates.filter(t => t.isFeatured);
+
+/* tnum for every price/stat numeral */
+const tnum: CSSProperties = { fontFeatureSettings: '"tnum"' };
+
+/* Hero entrance helper — tmx-rise keyframe lives in App.css */
+const rise = (delay: number): CSSProperties => ({
+  animation: 'tmx-rise 600ms var(--ease-out-quint) both',
+  animationDelay: `${delay}ms`,
+});
+
+/* Bento cursor spotlight — .bento-tile::after reads --spot-x / --spot-y */
+function spotlight(e: ReactPointerEvent<HTMLDivElement>) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+}
+
 export default function HomePage() {
   return (
-    <div>
+    <div className="bg-canvas">
       <HeroSection />
-      <StatsSection />
-      <CategoryStrip />
+      <MarqueeSection />
+      <BentoSection />
       <FeaturedSection />
       <HowItWorksSection />
-      <FeaturesSection />
+      <CategorySection />
       <TestimonialsSection />
       <NewsletterSection />
     </div>
@@ -27,7 +66,8 @@ export default function HomePage() {
 }
 
 /* ─────────────────────────────────────────────
-   HERO
+   MEGA HERO — aurora + grain, white-fade headline,
+   browser-frame showcase with floor reflection
 ───────────────────────────────────────────── */
 const trustBadges = [
   { icon: <Download size={14} />,    label: '12,000+ downloads' },
@@ -36,178 +76,166 @@ const trustBadges = [
 ];
 
 function HeroSection() {
-  return (
-    <section style={{ position: 'relative', overflow: 'hidden', background: '#020617' }}>
+  const shots = (featured.length >= 3 ? featured : templates).slice(0, 3);
 
-      {/* Keyframes for the subtle animated gradient accents */}
+  return (
+    <section className="aurora grain relative overflow-hidden">
+      {/* Reduced-motion: swap entrance rises for simple fades */}
       <style>{`
-        @keyframes tmxHeroDrift {
-          0%   { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.75; }
-          50%  { transform: translateX(-46%) translateY(-18px) scale(1.06); opacity: 1; }
-          100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.75; }
-        }
-        @keyframes tmxHeroDrift2 {
-          0%   { transform: translateY(0) scale(1); opacity: 0.5; }
-          50%  { transform: translateY(20px) scale(1.1); opacity: 0.9; }
-          100% { transform: translateY(0) scale(1); opacity: 0.5; }
-        }
-        @keyframes tmxPulseDot {
-          0%, 100% { opacity: 1; }
-          50%      { opacity: 0.35; }
+        @media (prefers-reduced-motion: reduce) {
+          [data-rise] { animation: tmx-fade 200ms ease-out both !important; }
         }
       `}</style>
 
-      {/* Grid background */}
-      <div style={{
-        position: 'absolute', inset: 0, opacity: 0.07,
-        backgroundImage: 'linear-gradient(#38bdf8 1px, transparent 1px), linear-gradient(90deg, #38bdf8 1px, transparent 1px)',
-        backgroundSize: '72px 72px', pointerEvents: 'none',
-      }} />
+      <Container className="flex flex-col items-center text-center" style={{ paddingTop: 'clamp(96px, 14vw, 128px)', paddingBottom: '64px' }}>
 
-      {/* Glow — slow drifting accent */}
-      <div style={{
-        position: 'absolute', top: 0, left: '50%',
-        width: '700px', height: '400px',
-        background: 'rgba(14,165,233,0.1)', borderRadius: '9999px',
-        filter: 'blur(80px)', pointerEvents: 'none',
-        animation: 'tmxHeroDrift 9s ease-in-out infinite',
-      }} />
-
-      {/* Secondary glow — faint counter-drift, bottom left */}
-      <div style={{
-        position: 'absolute', bottom: '-120px', left: '-80px',
-        width: '420px', height: '320px',
-        background: 'rgba(56,189,248,0.06)', borderRadius: '9999px',
-        filter: 'blur(90px)', pointerEvents: 'none',
-        animation: 'tmxHeroDrift2 12s ease-in-out infinite',
-      }} />
-
-      <Container style={{
-        position: 'relative',
-        paddingTop: '7rem', paddingBottom: '7rem',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', textAlign: 'center',
-      }}>
-
-        {/* Eyebrow badge */}
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          borderRadius: '9999px',
-          border: '1px solid rgba(56,189,248,0.25)',
-          background: 'rgba(56,189,248,0.08)',
-          padding: '6px 14px', marginBottom: '1.75rem',
-          fontSize: '13px', fontWeight: 500, color: '#7dd3fc',
-        }}>
-          <span style={{
-            width: '7px', height: '7px', borderRadius: '9999px',
-            background: '#38bdf8', flexShrink: 0,
-            animation: 'tmxPulseDot 2.2s ease-in-out infinite',
-          }} />
-          New templates added every week
+        {/* Eyebrow — glass pill with pulsing cyan live dot */}
+        <div
+          data-rise
+          style={rise(0)}
+          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-border-default bg-[rgba(14,16,20,0.64)] px-4 py-2 backdrop-blur-md"
+        >
+          <span className="tmx-pulse h-1.5 w-1.5 shrink-0 rounded-full bg-accent-2" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-secondary" style={tnum}>
+            {templates.length}+ templates · new drops weekly
+          </span>
         </div>
 
-        {/* Headline */}
-        <h1 style={{
-          maxWidth: '900px',
-          fontSize: 'clamp(2.8rem, 6vw, 5rem)',
-          fontWeight: 900, letterSpacing: '-0.03em',
-          lineHeight: 1.08, color: '#ffffff', margin: 0,
-        }}>
-          The best templates to{' '}
-          <span style={{
-            backgroundImage: 'linear-gradient(100deg, #7dd3fc 0%, #38bdf8 45%, #0ea5e9 100%)',
-            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-          }}>launch your</span>{' '}
-          next project
+        {/* Headline — white fade with one gradient moment */}
+        <h1
+          data-rise
+          style={rise(100)}
+          className="max-w-[880px] text-[clamp(44px,6vw,68px)] font-semibold leading-[1.05] tracking-[-0.035em]"
+        >
+          <span className="headline-fade">Beautifully engineered templates for your </span>
+          <span className="text-gradient-brand">next launch</span>
         </h1>
 
-        {/* Subtitle */}
-        <p style={{
-          marginTop: '1.75rem', maxWidth: '600px',
-          fontSize: '1.125rem', color: '#94a3b8', lineHeight: 1.7,
-        }}>
-          Browse our library of professionally designed website templates.
-          Pick one, customize it, and ship in minutes.
+        {/* Subcopy */}
+        <p
+          data-rise
+          style={rise(200)}
+          className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-text-secondary"
+        >
+          Browse a curated library of production-ready website templates.
+          Preview live, download instantly, and ship in minutes — not weeks.
         </p>
 
-        {/* CTA Buttons */}
-        <div style={{ marginTop: '2.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
-          <Link to="/templates" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            borderRadius: '12px', background: '#38bdf8',
-            padding: '14px 28px', fontSize: '15px', fontWeight: 600,
-            color: '#020617', textDecoration: 'none',
-            boxShadow: '0 0 32px rgba(56,189,248,0.35)',
-          }}>
+        {/* CTA row */}
+        <div data-rise style={rise(300)} className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Link to="/templates" className="btn btn-primary btn-lg">
             Browse templates
             <ArrowRight size={16} strokeWidth={2.5} />
           </Link>
-
-          <Link to="/templates?filter=free" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            borderRadius: '12px', border: '1px solid #334155',
-            background: 'rgba(30,41,59,0.6)',
-            padding: '14px 28px', fontSize: '15px', fontWeight: 600,
-            color: '#ffffff', textDecoration: 'none',
-          }}>
+          <Link to="/templates?filter=free" className="btn btn-ghost btn-lg">
             View free templates
+            <ArrowRight size={16} strokeWidth={2} />
           </Link>
         </div>
 
-        {/* Trust badges */}
-        <div style={{
-          marginTop: '3rem',
-          display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-          gap: '0.75rem',
-        }}>
+        {/* Trust pills */}
+        <div data-rise style={rise(350)} className="mt-10 flex flex-wrap justify-center gap-3">
           {trustBadges.map(b => (
-            <span key={b.label} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              borderRadius: '9999px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(255,255,255,0.03)',
-              padding: '8px 16px',
-              fontSize: '13px', fontWeight: 500, color: '#94a3b8',
-            }}>
-              <span style={{ color: '#38bdf8', display: 'inline-flex' }}>{b.icon}</span>
+            <span
+              key={b.label}
+              className="inline-flex items-center gap-2 rounded-full border border-border-subtle bg-white/[0.03] px-4 py-2 text-[13px] font-medium text-text-secondary"
+              style={tnum}
+            >
+              <span className="inline-flex text-accent">{b.icon}</span>
               {b.label}
             </span>
           ))}
         </div>
 
+        {/* Product showcase — browser frame + masked floor reflection */}
+        <div data-rise style={rise(400)} className="relative mt-16 w-full max-w-[1080px]">
+          <ShowcaseFrame shots={shots} />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 right-0 top-full h-40 select-none overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(180deg, rgba(0,0,0,0.25), transparent 70%)',
+              WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0.25), transparent 70%)',
+            }}
+          >
+            <div style={{ transform: 'scaleY(-1)' }}>
+              <ShowcaseFrame shots={shots} />
+            </div>
+          </div>
+        </div>
+
       </Container>
+      {/* breathing room for the reflection */}
+      <div className="h-24" aria-hidden />
     </section>
   );
 }
 
+function ShowcaseFrame({ shots }: { shots: Template[] }) {
+  return (
+    <div className="sheen overflow-hidden rounded-3xl border border-border-strong bg-surface-1 shadow-lg">
+      {/* Browser chrome bar */}
+      <div className="flex items-center gap-2 border-b border-border-subtle px-5 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+        <span className="ml-3 hidden rounded-md border border-border-subtle bg-surface-2 px-3 py-1 font-mono text-[11px] text-text-tertiary sm:inline-block">
+          templix.market
+        </span>
+      </div>
+      {/* 3-up staggered collage — center card larger + glowing */}
+      <div className="flex items-end justify-center gap-3 p-4 sm:gap-5 sm:p-7">
+        {shots.map((t, i) => {
+          const isCenter = i === 1;
+          return (
+            <div
+              key={t.id}
+              className={
+                isCenter
+                  ? 'glow-card z-10 w-[40%] -translate-y-2 overflow-hidden rounded-xl border border-border-subtle bg-surface-2'
+                  : 'w-[30%] overflow-hidden rounded-lg border border-border-subtle bg-surface-2 opacity-80'
+              }
+            >
+              <img
+                src={t.image}
+                alt={t.title}
+                loading="lazy"
+                className="block aspect-[16/10] w-full object-cover shadow-thumb-frame"
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────────
-   STATS
+   SOCIAL PROOF — grayscale wordmark marquee
 ───────────────────────────────────────────── */
-const stats = [
-  { value: `${templates.length}+`, label: 'Templates' },
-  { value: `${categoryCount}`,     label: 'Categories' },
-  { value: `${freeCount}`,         label: 'Free templates' },
-  { value: '1×',                   label: 'Pay once, use forever' },
+const marqueeBrands = [
+  'Northbeam', 'Hexlab', 'Quantify', 'Vantage', 'Arclight',
+  'Polygon Studio', 'Driftwood', 'Lumen&Co', 'Basecoat', 'Fathom',
 ];
 
-function StatsSection() {
+function MarqueeSection() {
   return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: '2rem',
-          textAlign: 'center',
-        }}>
-          {stats.map(s => (
-            <div key={s.label}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#38bdf8', margin: '0 0 4px', letterSpacing: '-0.03em' }}>
-                {s.value}
-              </p>
-              <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>{s.label}</p>
-            </div>
-          ))}
+    <section className="border-y border-border-subtle bg-canvas-raised">
+      <Container style={{ paddingTop: '40px', paddingBottom: '40px' }}>
+        <p className="mb-6 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+          Trusted by teams shipping with Templix
+        </p>
+        <div className="tmx-marquee">
+          <div className="tmx-marquee-track items-center gap-16 pr-16">
+            {[...marqueeBrands, ...marqueeBrands].map((name, i) => (
+              <span
+                key={`${name}-${i}`}
+                className="whitespace-nowrap text-[15px] font-semibold tracking-[0.02em] text-text-primary opacity-40 transition-opacity duration-150 hover:opacity-80"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
@@ -215,59 +243,154 @@ function StatsSection() {
 }
 
 /* ─────────────────────────────────────────────
-   CATEGORY QUICK-BROWSE STRIP
+   BENTO FEATURES — 12-col grid, cursor spotlight
 ───────────────────────────────────────────── */
-function CategoryStrip() {
-  return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+function BentoSection() {
+  const heroShot = (featured.length > 0 ? featured : templates)[0];
+  const [headingRef, headingCls] = useReveal<HTMLDivElement>();
+  const [gridRef, gridCls] = useReveal<HTMLDivElement>();
 
-        <div style={{
-          display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem',
-        }}>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
-            Browse by category
+  return (
+    <section>
+      <Container style={sectionPad}>
+
+        <div ref={headingRef} className={`reveal mb-12 max-w-[560px] ${headingCls}`}>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Why Templix</p>
+          <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
+            Everything you need to ship faster
           </h2>
-          <p style={{ fontSize: '13px', color: '#475569', margin: 0 }}>
-            {templates.length} templates across {categoryCount} categories
+          <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
+            No subscriptions, no lock-in. Pay once, own it forever — with the files, license, and support to back it up.
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {categories.map(cat => {
-            const count = countFor(cat.id);
-            const isAll = cat.id === 'all';
-            return (
-              <Link
-                key={cat.id}
-                to={isAll ? '/templates' : `/templates?category=${cat.id}`}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '8px',
-                  borderRadius: '9999px',
-                  border: isAll ? '1px solid rgba(56,189,248,0.3)' : '1px solid rgba(255,255,255,0.08)',
-                  background: isAll ? 'rgba(56,189,248,0.08)' : 'rgba(255,255,255,0.03)',
-                  padding: '9px 16px',
-                  fontSize: '14px', fontWeight: 500,
-                  color: isAll ? '#7dd3fc' : '#e2e8f0',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.15s, background 0.15s',
-                }}
-              >
-                {cat.label}
-                <span style={{
-                  fontSize: '12px', fontWeight: 600,
-                  color: isAll ? '#38bdf8' : '#64748b',
-                  background: 'rgba(255,255,255,0.05)',
-                  borderRadius: '9999px', padding: '2px 8px',
-                }}>
-                  {count}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
+        <div ref={gridRef} className={`reveal-group grid gap-6 lg:grid-cols-12 ${gridCls}`}>
 
+          {/* Hero tile — live preview (8 cols) */}
+          <div className="bento-tile p-7 lg:col-span-8" onPointerMove={spotlight}>
+            <div className="grid items-center gap-8 sm:grid-cols-2">
+              <div>
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Try before you buy</p>
+                <h3 className="text-2xl font-semibold tracking-[-0.015em] text-text-primary">
+                  Preview live before you buy
+                </h3>
+                <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
+                  Every template ships with a full live demo. Click through real pages,
+                  test the responsive layout, and know exactly what you are getting.
+                </p>
+                <Link to="/templates" className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover">
+                  Explore the library
+                  <ArrowRight size={15} strokeWidth={2.5} />
+                </Link>
+              </div>
+              <div className="relative overflow-hidden rounded-xl border border-border-subtle bg-surface-2">
+                <div className="flex items-center gap-1.5 border-b border-border-subtle px-3 py-2">
+                  <span className="h-2 w-2 rounded-full bg-white/10" />
+                  <span className="h-2 w-2 rounded-full bg-white/10" />
+                  <span className="h-2 w-2 rounded-full bg-white/10" />
+                </div>
+                {heroShot && (
+                  <img
+                    src={heroShot.image}
+                    alt={heroShot.title}
+                    loading="lazy"
+                    className="block aspect-[16/10] w-full object-cover shadow-thumb-frame"
+                  />
+                )}
+                <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full border border-border-default bg-[rgba(7,8,10,0.72)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-primary backdrop-blur-md">
+                  <span className="tmx-pulse h-1.5 w-1.5 rounded-full bg-accent-2" />
+                  Live preview
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Stat tile — rating (4 cols) */}
+          <div className="bento-tile flex flex-col justify-between p-7 lg:col-span-4" onPointerMove={spotlight}>
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Rated by builders</p>
+              <p className="text-gradient-brand font-mono text-[64px] font-semibold leading-none" style={tnum}>4.9</p>
+              <div className="mt-3 flex gap-1" aria-label="4.9 out of 5 stars">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} size={16} fill="#F5A623" color="#F5A623" strokeWidth={1} />
+                ))}
+              </div>
+              <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
+                Average rating across the entire library.
+              </p>
+            </div>
+            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-border-subtle pt-5">
+              <div>
+                <p className="font-mono text-xl font-semibold text-text-primary" style={tnum}>{templates.length}+</p>
+                <p className="text-[13px] font-medium text-text-tertiary">Templates</p>
+              </div>
+              <div>
+                <p className="font-mono text-xl font-semibold text-text-primary" style={tnum}>{categoryCount}</p>
+                <p className="text-[13px] font-medium text-text-tertiary">Categories</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Instant download */}
+          <div className="bento-tile p-7 lg:col-span-4" onPointerMove={spotlight}>
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
+              <FileArchive size={20} />
+            </div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Zero waiting</p>
+            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Instant download</h3>
+            <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
+              Your files are ready the second checkout clears. Grab the zip and start building.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['.zip', '.tsx', '.css', '.fig'].map(ext => (
+                <span key={ext} className="rounded-md border border-border-default bg-surface-2 px-2.5 py-1 font-mono text-[11px] text-text-tertiary">
+                  {ext}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Lifetime updates */}
+          <div className="bento-tile p-7 lg:col-span-4" onPointerMove={spotlight}>
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
+              <RefreshCw size={20} />
+            </div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Buy once</p>
+            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Lifetime updates</h3>
+            <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
+              Every improvement ships to you free — forever. No renewals, no subscription.
+            </p>
+            <div className="mt-5 space-y-2">
+              {[
+                { v: 'v2.1', note: 'New dashboard pages' },
+                { v: 'v2.0', note: 'Dark mode + a11y pass' },
+              ].map(r => (
+                <div key={r.v} className="flex items-center gap-3 text-[13px]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                  <span className="font-mono font-medium text-text-primary" style={tnum}>{r.v}</span>
+                  <span className="text-text-tertiary">{r.note}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Figma + code */}
+          <div className="bento-tile p-7 lg:col-span-4" onPointerMove={spotlight}>
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
+              <PenTool size={20} />
+            </div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Design + build</p>
+            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Figma & clean code</h3>
+            <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
+              Source design files alongside modern React, Next.js, and HTML — easy to read, easy to extend.
+            </p>
+            <div className="mt-5 grid grid-cols-2 gap-2">
+              <span className="rounded-md border border-border-default bg-surface-2 px-3 py-2 text-center text-[13px] font-medium text-text-secondary">Figma</span>
+              <span className="rounded-md border border-border-default bg-surface-2 px-3 py-2 text-center font-mono text-[13px] text-text-secondary">{'<code />'}</span>
+            </div>
+          </div>
+
+        </div>
       </Container>
     </section>
   );
@@ -277,37 +400,40 @@ function CategoryStrip() {
    FEATURED TEMPLATES
 ───────────────────────────────────────────── */
 function FeaturedSection() {
-  const featured = templates.filter(t => t.isFeatured);
+  const [headingRef, headingCls] = useReveal<HTMLDivElement>();
+  const [gridRef, gridCls] = useReveal<HTMLDivElement>();
 
   return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+    <section className="border-t border-border-subtle bg-canvas-raised">
+      <Container style={sectionPad}>
 
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div ref={headingRef} className={`reveal mb-10 flex flex-wrap items-end justify-between gap-4 ${headingCls}`}>
           <div>
-            <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '8px' }}>
-              Featured
-            </p>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Featured</p>
+            <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
               Handpicked templates
             </h2>
-            <p style={{ marginTop: '8px', color: '#94a3b8', fontSize: '15px' }}>
+            <p className="mt-3 text-[15px] text-text-secondary">
               Carefully selected for quality and design.
             </p>
           </div>
-          <Link to="/templates" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            fontSize: '14px', fontWeight: 500, color: '#38bdf8', textDecoration: 'none',
-          }}>
+          <Link
+            to="/templates"
+            className="inline-flex items-center gap-1.5 text-[14px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+            style={tnum}
+          >
             View all {templates.length} templates
             <ArrowRight size={16} strokeWidth={2.5} />
           </Link>
         </div>
 
-        {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-          {featured.map(t => <TemplateCard key={t.id} template={t} />)}
+        <div ref={gridRef} className={`reveal-group grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${gridCls}`}>
+          {/* wrapper divs take the reveal transition — TemplateCard keeps its own inline hover transitions */}
+          {featured.map(t => (
+            <div key={t.id} className="[&>a]:h-full">
+              <TemplateCard template={t} />
+            </div>
+          ))}
         </div>
 
       </Container>
@@ -316,80 +442,55 @@ function FeaturedSection() {
 }
 
 /* ─────────────────────────────────────────────
-   HOW IT WORKS
+   HOW IT WORKS — slim 3-step strip
 ───────────────────────────────────────────── */
 const steps = [
   {
     n: '01',
-    icon: <Search size={20} />,
+    icon: <Search size={18} />,
     title: 'Browse the library',
     desc: 'Filter by category, price, or tech stack to find the perfect starting point for your project.',
   },
   {
     n: '02',
-    icon: <Eye size={20} />,
+    icon: <Eye size={18} />,
     title: 'Preview the live demo',
     desc: 'Every template ships with a full live preview. Click through real pages before you commit.',
   },
   {
     n: '03',
-    icon: <Download size={20} />,
+    icon: <Download size={18} />,
     title: 'Download & ship',
     desc: 'Grab the zip, drop in your content, and deploy. You can be live in minutes, not weeks.',
   },
 ];
 
 function HowItWorksSection() {
-  return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+  const [headingRef, headingCls] = useReveal<HTMLDivElement>();
+  const [gridRef, gridCls] = useReveal<HTMLDivElement>();
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '8px' }}>
-            How it works
-          </p>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+  return (
+    <section className="border-t border-border-subtle">
+      <Container style={sectionPad}>
+
+        <div ref={headingRef} className={`reveal mb-12 text-center ${headingCls}`}>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">How it works</p>
+          <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
             From browsing to live in three steps
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.0625rem', maxWidth: '520px', margin: '1rem auto 0' }}>
-            No subscriptions, no lock-in. Find a template you love and make it yours.
-          </p>
         </div>
 
-        {/* Steps */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+        <div ref={gridRef} className={`reveal-group grid gap-6 md:grid-cols-3 ${gridCls}`}>
           {steps.map(s => (
-            <div key={s.n} style={{
-              position: 'relative',
-              borderRadius: '16px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(255,255,255,0.03)',
-              padding: '1.75rem',
-            }}>
-              <span style={{
-                position: 'absolute', top: '1.25rem', right: '1.5rem',
-                fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.03em',
-                color: 'rgba(56,189,248,0.18)',
-              }}>
+            <div key={s.n} className="sheen relative rounded-2xl border border-border-subtle bg-surface-1 p-7">
+              <span className="text-gradient-brand absolute right-6 top-5 font-mono text-[28px] font-semibold opacity-60" style={tnum}>
                 {s.n}
               </span>
-              <div style={{
-                width: '44px', height: '44px',
-                background: 'rgba(56,189,248,0.1)',
-                border: '1px solid rgba(56,189,248,0.2)',
-                borderRadius: '12px', color: '#38bdf8',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '1.25rem',
-              }}>
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
                 {s.icon}
               </div>
-              <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#ffffff', margin: '0 0 6px' }}>
-                {s.title}
-              </h3>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.65, margin: 0 }}>
-                {s.desc}
-              </p>
+              <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">{s.title}</h3>
+              <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -400,95 +501,54 @@ function HowItWorksSection() {
 }
 
 /* ─────────────────────────────────────────────
-   FEATURES / WHY US
+   CATEGORY SHOWCASE — chip row
 ───────────────────────────────────────────── */
-const features = [
-  {
-    emoji: '⚡',
-    title: 'Ready to use',
-    desc: 'Every template is production-ready. Download, customize, and go live in minutes.',
-  },
-  {
-    emoji: '🎨',
-    title: 'Beautiful design',
-    desc: 'Crafted by professional designers with pixel-perfect attention to detail.',
-  },
-  {
-    emoji: '📦',
-    title: 'Clean code',
-    desc: 'Built with modern tech — React, Next.js, HTML/CSS. Easy to read and extend.',
-  },
-  {
-    emoji: '🔄',
-    title: 'Free updates',
-    desc: 'Buy once and receive all future updates and improvements for free.',
-  },
-  {
-    emoji: '🛡️',
-    title: 'Commercial license',
-    desc: 'Use any template for client projects or your own business without restrictions.',
-  },
-  {
-    emoji: '💬',
-    title: 'Support included',
-    desc: 'Got a question? Our team is ready to help you set up and customize your template.',
-  },
-];
+function CategorySection() {
+  const [blockRef, blockCls] = useReveal<HTMLDivElement>();
 
-function FeaturesSection() {
   return (
-    <section style={{ background: '#0a1628', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+    <section className="border-t border-border-subtle bg-canvas-raised">
+      <Container style={{ paddingTop: '64px', paddingBottom: '64px' }}>
+        <div ref={blockRef} className={`reveal ${blockCls}`}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '8px' }}>
-            Why Templix
-          </p>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
-            Everything you need to ship faster
-          </h2>
-          <p style={{ marginTop: '1rem', color: '#94a3b8', fontSize: '1.0625rem', maxWidth: '520px', margin: '1rem auto 0' }}>
-            Our templates come packed with everything to get your project live quickly.
+        <div className="mb-8 flex flex-wrap items-baseline justify-between gap-3">
+          <div>
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Browse by category</p>
+            <h2 className="text-2xl font-semibold tracking-[-0.015em] text-text-primary">
+              Find your starting point
+            </h2>
+          </div>
+          <p className="text-[13px] text-text-tertiary" style={tnum}>
+            {templates.length} templates across {categoryCount} categories
           </p>
         </div>
 
-        {/* Feature cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
-          {features.map(f => (
-            <div key={f.title} style={{
-              borderRadius: '16px',
-              border: '1px solid #1e293b',
-              background: '#020617',
-              padding: '1.5rem',
-            }}>
-              <div style={{
-                width: '44px', height: '44px',
-                background: 'rgba(56,189,248,0.1)',
-                border: '1px solid rgba(56,189,248,0.2)',
-                borderRadius: '12px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '20px', marginBottom: '1rem',
-              }}>
-                {f.emoji}
-              </div>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '6px' }}>
-                {f.title}
-              </h3>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.65 }}>
-                {f.desc}
-              </p>
-            </div>
-          ))}
+        <div className="flex flex-wrap gap-2.5">
+          {categories.map(cat => {
+            const isAll = cat.id === 'all';
+            return (
+              <Link
+                key={cat.id}
+                to={isAll ? '/templates' : `/templates?category=${cat.id}`}
+                className={isAll ? 'chip is-active' : 'chip'}
+              >
+                {cat.label}
+                <span className="font-mono text-[11px] text-text-tertiary" style={tnum}>
+                  {countFor(cat.id)}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
+        </div>
       </Container>
     </section>
   );
 }
 
 /* ─────────────────────────────────────────────
-   TESTIMONIALS / SOCIAL PROOF
+   TESTIMONIALS
 ───────────────────────────────────────────── */
 const testimonials = [
   {
@@ -512,59 +572,46 @@ const testimonials = [
 ];
 
 function TestimonialsSection() {
-  return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+  const [headingRef, headingCls] = useReveal<HTMLDivElement>();
+  const [gridRef, gridCls] = useReveal<HTMLDivElement>();
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '8px' }}>
-            Social proof
-          </p>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+  return (
+    <section className="border-t border-border-subtle">
+      <Container style={sectionPad}>
+
+        <div ref={headingRef} className={`reveal mb-12 text-center ${headingCls}`}>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Social proof</p>
+          <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
             Loved by builders worldwide
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.0625rem', maxWidth: '520px', margin: '1rem auto 0' }}>
+          <p className="mx-auto mt-3 max-w-[520px] text-[15px] leading-[1.6] text-text-secondary">
             Developers, founders, and designers ship faster with Templix.
           </p>
         </div>
 
-        {/* Quote cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+        <div ref={gridRef} className={`reveal-group grid gap-6 md:grid-cols-3 ${gridCls}`}>
           {testimonials.map(t => (
-            <figure key={t.name} style={{
-              display: 'flex', flexDirection: 'column',
-              borderRadius: '16px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(255,255,255,0.03)',
-              padding: '1.75rem', margin: 0,
-            }}>
-              {/* Stars */}
-              <div style={{ display: 'flex', gap: '3px', marginBottom: '1rem' }}>
+            <figure key={t.name} className="sheen relative m-0 flex flex-col rounded-2xl border border-border-subtle bg-surface-1 p-7">
+              <div className="mb-4 flex gap-1">
                 {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={15} fill="#fbbf24" color="#fbbf24" strokeWidth={1} />
+                  <Star key={i} size={14} fill="#F5A623" color="#F5A623" strokeWidth={1} />
                 ))}
               </div>
-
-              <blockquote style={{ flex: 1, margin: 0, fontSize: '14.5px', color: '#cbd5e1', lineHeight: 1.7 }}>
+              <blockquote className="m-0 flex-1 text-[15px] leading-[1.7] text-text-secondary">
                 “{t.quote}”
               </blockquote>
-
-              <figcaption style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '1.5rem' }}>
+              <figcaption className="mt-6 flex items-center gap-3">
                 <img
                   src={t.avatar}
                   alt={t.name}
                   width={40}
                   height={40}
                   loading="lazy"
-                  style={{
-                    width: '40px', height: '40px', borderRadius: '9999px',
-                    objectFit: 'cover', border: '1px solid rgba(56,189,248,0.3)',
-                  }}
+                  className="h-10 w-10 rounded-full border border-border-default object-cover"
                 />
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#f8fafc', margin: 0 }}>{t.name}</p>
-                  <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0' }}>{t.role}</p>
+                  <p className="m-0 text-[14px] font-semibold text-text-primary">{t.name}</p>
+                  <p className="m-0 mt-0.5 text-[13px] text-text-tertiary">{t.role}</p>
                 </div>
               </figcaption>
             </figure>
@@ -577,85 +624,66 @@ function TestimonialsSection() {
 }
 
 /* ─────────────────────────────────────────────
-   NEWSLETTER
+   CTA BAND + NEWSLETTER
 ───────────────────────────────────────────── */
 function NewsletterSection() {
   const [email, setEmail]         = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [panelRef, panelCls] = useReveal<HTMLDivElement>();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubmitted(true);
   };
 
   return (
-    <section style={{ background: '#020617', borderTop: '1px solid #1e293b' }}>
-      <Container style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
-        <div style={{
-          borderRadius: '24px',
-          border: '1px solid #1e293b',
-          background: 'linear-gradient(135deg, #0f172a 0%, #0c1a2e 100%)',
-          padding: '3.5rem 2.5rem',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          {/* Glow */}
-          <div style={{
-            position: 'absolute', top: '-60px', left: '50%', transform: 'translateX(-50%)',
-            width: '500px', height: '200px',
-            background: 'rgba(56,189,248,0.06)', borderRadius: '9999px',
-            filter: 'blur(60px)', pointerEvents: 'none',
-          }} />
+    <section className="border-t border-border-subtle">
+      <Container style={sectionPad}>
+        <div
+          ref={panelRef}
+          className={`reveal aurora aurora--dim grain relative overflow-hidden rounded-3xl border border-border-subtle bg-canvas-raised px-6 py-16 text-center sm:px-12 ${panelCls}`}
+        >
 
-          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '0.75rem' }}>
-            Stay in the loop
-          </p>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Stay in the loop</p>
+          <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
             New templates every month
           </h2>
-          <p style={{ fontSize: '15px', color: '#64748b', maxWidth: '440px', margin: '0 auto 2rem', lineHeight: 1.65 }}>
+          <p className="mx-auto mt-3 max-w-[440px] text-[15px] leading-[1.6] text-text-secondary">
             Subscribe and be the first to know when new templates drop. No spam, ever.
           </p>
 
-          {submitted ? (
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '10px',
-              borderRadius: '12px', background: 'rgba(16,185,129,0.1)',
-              border: '1px solid rgba(16,185,129,0.25)',
-              padding: '14px 28px', fontSize: '15px', fontWeight: 500, color: '#34d399',
-            }}>
-              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              You're on the list!
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <input
-                type="email"
-                required
-                placeholder="you@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                style={{
-                  borderRadius: '12px', border: '1px solid #334155',
-                  background: '#020617', padding: '12px 18px',
-                  fontSize: '14px', color: '#ffffff', outline: 'none',
-                  minWidth: '260px',
-                }}
-              />
-              <button type="submit" style={{
-                borderRadius: '12px', background: '#38bdf8',
-                border: 'none', padding: '12px 24px',
-                fontSize: '14px', fontWeight: 600, color: '#020617',
-                cursor: 'pointer',
-              }}>
-                Subscribe
-              </button>
-            </form>
-          )}
+          <div className="mt-8">
+            {submitted ? (
+              <div className="inline-flex items-center gap-2.5 rounded-lg border border-success-soft-border bg-success-soft px-6 py-3 text-[15px] font-medium text-success">
+                <Check size={18} strokeWidth={2.5} />
+                You're on the list!
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-wrap items-center justify-center gap-3">
+                <input
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="h-11 min-w-[260px] rounded-lg border border-border-default bg-surface-2 px-4 text-[15px] text-text-primary outline-none transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)]"
+                />
+                <button type="submit" className="btn btn-primary h-11">
+                  Subscribe
+                </button>
+              </form>
+            )}
+          </div>
+
+          <div className="mt-10">
+            <div className="hairline mx-auto mb-8 max-w-[480px]" />
+            <Link to="/templates" className="btn btn-secondary">
+              Browse all {templates.length} templates
+              <ArrowRight size={15} strokeWidth={2.5} />
+            </Link>
+          </div>
+
         </div>
       </Container>
     </section>

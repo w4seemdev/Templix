@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { templates } from '../data/templates';
 import type { Template } from '../types';
 import Container from '../components/ui/Container';
+import { useWishlist } from '../hooks/useWishlist';
 
 interface Purchase {
   id: string;
@@ -13,9 +14,17 @@ interface Purchase {
   created_at: string;
 }
 
+interface OwnedItem {
+  purchase: Purchase;
+  template: Template;
+}
+
+const mono = { fontFeatureSettings: '"tnum"' } as const;
+
 export default function DashboardPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { wishlist } = useWishlist();
   const [purchases, setPurchases]   = useState<Purchase[]>([]);
   const [loading, setLoading]       = useState(true);
   const [activeTab, setActiveTab]   = useState<'purchases' | 'settings'>('purchases');
@@ -38,50 +47,80 @@ export default function DashboardPage() {
     navigate('/');
   };
 
-  const purchasedTemplates: Template[] = purchases
-    .map(p => templates.find(t => t.id === p.template_id))
-    .filter(Boolean) as Template[];
+  // Pair each purchase with its template so rows never desync
+  const owned: OwnedItem[] = purchases.flatMap(p => {
+    const template = templates.find(t => t.id === p.template_id);
+    return template ? [{ purchase: p, template }] : [];
+  });
 
-  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
-  const initials    = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  const libraryValue = owned.reduce((sum, o) => sum + o.template.price, 0);
+  const displayName  = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials     = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  const memberSince  = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+    : '—';
+
+  const stats = [
+    { label: 'Templates owned', value: String(owned.length) },
+    { label: 'Library value', value: `$${libraryValue}` },
+    { label: 'Wishlist saves', value: String(wishlist.length) },
+    { label: 'Member since', value: memberSince },
+  ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020617' }}>
-      <Container style={{ paddingTop: '3rem', paddingBottom: '4rem' }}>
+    <div className="min-h-screen bg-canvas">
+      <Container style={{ paddingTop: '3rem', paddingBottom: '6rem' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #38bdf8, #0891b2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, color: '#020617' }}>
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-full text-base font-semibold text-white"
+              style={{ background: 'var(--gradient-brand)' }}
+              aria-hidden="true"
+            >
               {initials}
             </div>
             <div>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>
+              <h1 className="m-0 text-2xl font-semibold tracking-[-0.02em] text-text-primary">
                 Welcome back, {displayName.split(' ')[0]}
               </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{user?.email}</p>
+              <p className="m-0 text-[13px] text-text-tertiary">{user?.email}</p>
             </div>
           </div>
-          <button onClick={handleSignOut} style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            background: 'transparent', border: '1px solid #334155',
-            borderRadius: '8px', padding: '8px 16px',
-            fontSize: '13px', color: '#64748b', cursor: 'pointer',
-          }}>
+          <button onClick={handleSignOut} className="btn btn-ghost btn-sm">
             Sign out
           </button>
         </div>
 
+        {/* Stat cards */}
+        <div className="mb-10 grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+          {stats.map(s => (
+            <div key={s.label} className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
+              <p className="m-0 mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+                {s.label}
+              </p>
+              <p className="m-0 font-mono text-[28px] font-semibold leading-none text-text-primary" style={mono}>
+                {s.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
         {/* Tabs */}
-        <div style={{ display: 'flex', borderBottom: '1px solid #1e293b', marginBottom: '2rem', gap: '2rem' }}>
+        <div className="mb-8 flex gap-7 border-b border-border-subtle" role="tablist">
           {(['purchases', 'settings'] as const).map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: '14px', fontWeight: 500, paddingBottom: '12px',
-              borderBottom: activeTab === tab ? '2px solid #38bdf8' : '2px solid transparent',
-              color: activeTab === tab ? '#ffffff' : '#64748b',
-              textTransform: 'capitalize',
-            }}>
+            <button
+              key={tab}
+              role="tab"
+              aria-selected={activeTab === tab}
+              onClick={() => setActiveTab(tab)}
+              className={`-mb-px cursor-pointer border-0 border-b-2 border-solid bg-transparent pb-3 text-sm font-medium capitalize transition-colors duration-150 ${
+                activeTab === tab
+                  ? 'border-b-accent text-text-primary'
+                  : 'border-b-transparent text-text-tertiary hover:text-text-secondary'
+              }`}
+            >
               {tab}
             </button>
           ))}
@@ -91,40 +130,55 @@ export default function DashboardPage() {
         {activeTab === 'purchases' && (
           <div>
             {loading ? (
-              <div style={{ textAlign: 'center', padding: '4rem', color: '#475569' }}>Loading your purchases...</div>
-            ) : purchasedTemplates.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '5rem 2rem', borderRadius: '16px', border: '1px dashed #1e293b' }}>
-                <div style={{ fontSize: '40px', marginBottom: '1rem' }}>🛍️</div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.5rem' }}>No purchases yet</h2>
-                <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '1.5rem' }}>Browse our templates and find the perfect one for your project.</p>
-                <Link to="/templates" style={{ background: '#38bdf8', borderRadius: '10px', padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: '#020617', textDecoration: 'none' }}>
+              <div className="py-16 text-center text-sm text-text-tertiary">Loading your purchases...</div>
+            ) : owned.length === 0 ? (
+              <div className="mx-auto max-w-[420px] rounded-2xl border border-dashed border-border-default px-8 py-16 text-center">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-accent-soft-border bg-accent-soft">
+                  <svg width="22" height="22" fill="none" stroke="var(--color-accent)" strokeWidth="1.75" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg>
+                </div>
+                <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-text-primary">No purchases yet</h2>
+                <p className="mb-6 text-sm leading-relaxed text-text-secondary">
+                  Browse our templates and find the perfect one for your project.
+                </p>
+                <Link to="/templates" className="btn btn-primary glow-cta">
                   Browse templates
                 </Link>
               </div>
             ) : (
               <div>
-                <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '1.5rem' }}>
-                  You have <strong style={{ color: '#ffffff' }}>{purchasedTemplates.length}</strong> template{purchasedTemplates.length !== 1 ? 's' : ''}
+                <p className="mb-6 text-sm text-text-tertiary">
+                  You have <strong className="font-semibold text-text-primary">{owned.length}</strong> template{owned.length !== 1 ? 's' : ''}
                 </p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
-                  {purchasedTemplates.map((template, i) => (
-                    <div key={template.id} style={{ borderRadius: '16px', border: '1px solid #1e293b', background: '#0f172a', overflow: 'hidden' }}>
-                      <div style={{ aspectRatio: '16/10', overflow: 'hidden', background: '#1e293b' }}>
-                        <img src={template.image} alt={template.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
+                  {owned.map(({ purchase, template }) => (
+                    <div
+                      key={template.id}
+                      className="group overflow-hidden rounded-xl border border-border-subtle bg-surface-1 transition-[border-color,transform,box-shadow] duration-250 hover:border-border-strong"
+                    >
+                      <div className="aspect-[16/10] overflow-hidden bg-surface-2 shadow-thumb-frame">
+                        <img
+                          src={template.image}
+                          alt={template.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-[600ms] group-hover:scale-[1.04]"
+                          style={{ transitionTimingFunction: 'var(--ease-smooth)' }}
+                        />
                       </div>
-                      <div style={{ padding: '1.25rem' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#38bdf8' }}>{template.category}</span>
-                        <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', margin: '4px 0 8px' }}>{template.title}</h3>
-                        <p style={{ fontSize: '12px', color: '#475569', marginBottom: '1rem' }}>
-                          Purchased {new Date(purchases[i]?.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      <div className="p-4">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">
+                          {template.category}
+                        </span>
+                        <h3 className="mb-1 mt-1 truncate text-[15px] font-semibold text-text-primary">{template.title}</h3>
+                        <p className="mb-4 font-mono text-xs text-text-tertiary" style={mono}>
+                          Purchased {new Date(purchase.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                         </p>
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <div className="flex gap-2">
                           <DownloadButton templateId={template.id} templateTitle={template.title} />
-                          <Link to={`/templates/${template.id}`} style={{
-                            flex: 1, textAlign: 'center', borderRadius: '8px',
-                            border: '1px solid #334155', padding: '8px',
-                            fontSize: '13px', color: '#94a3b8', textDecoration: 'none',
-                          }}>
+                          <Link to={`/templates/${template.id}`} className="btn btn-secondary btn-sm flex-1">
                             View details
                           </Link>
                         </div>
@@ -139,39 +193,37 @@ export default function DashboardPage() {
 
         {/* Settings tab */}
         {activeTab === 'settings' && (
-          <div style={{ maxWidth: '520px' }}>
-            <div style={{ borderRadius: '16px', border: '1px solid #1e293b', background: '#0f172a', padding: '1.75rem', marginBottom: '1.25rem' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '1.25rem' }}>Account information</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="max-w-[520px]">
+            <div className="sheen mb-5 rounded-2xl border border-border-subtle bg-surface-1 p-7">
+              <h3 className="mb-5 text-[15px] font-semibold text-text-primary">Account information</h3>
+              <div className="flex flex-col gap-4">
                 <div>
-                  <label style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '4px' }}>Full name</label>
-                  <div style={{ fontSize: '14px', color: '#94a3b8', background: '#020617', borderRadius: '8px', padding: '10px 14px', border: '1px solid #1e293b' }}>
+                  <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">Full name</span>
+                  <div className="rounded-lg border border-border-subtle bg-surface-2 px-3.5 py-2.5 text-sm text-text-secondary">
                     {user?.user_metadata?.full_name || 'Not set'}
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '4px' }}>Email address</label>
-                  <div style={{ fontSize: '14px', color: '#94a3b8', background: '#020617', borderRadius: '8px', padding: '10px 14px', border: '1px solid #1e293b' }}>
+                  <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">Email address</span>
+                  <div className="rounded-lg border border-border-subtle bg-surface-2 px-3.5 py-2.5 text-sm text-text-secondary">
                     {user?.email}
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '4px' }}>Member since</label>
-                  <div style={{ fontSize: '14px', color: '#94a3b8', background: '#020617', borderRadius: '8px', padding: '10px 14px', border: '1px solid #1e293b' }}>
+                  <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">Member since</span>
+                  <div className="rounded-lg border border-border-subtle bg-surface-2 px-3.5 py-2.5 text-sm text-text-secondary">
                     {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown'}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div style={{ borderRadius: '16px', border: '1px solid rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.04)', padding: '1.75rem' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#fca5a5', marginBottom: '0.5rem' }}>Danger zone</h3>
-              <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '1.25rem' }}>Once you sign out, you'll need your credentials to sign back in.</p>
-              <button onClick={handleSignOut} style={{
-                background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-                borderRadius: '8px', padding: '9px 20px', fontSize: '13px',
-                fontWeight: 600, color: '#fca5a5', cursor: 'pointer',
-              }}>
+            <div className="rounded-2xl border border-danger-soft-border bg-danger-soft/40 p-7">
+              <h3 className="mb-2 text-[15px] font-semibold text-danger">Danger zone</h3>
+              <p className="mb-5 text-[13px] leading-relaxed text-text-tertiary">
+                Once you sign out, you'll need your credentials to sign back in.
+              </p>
+              <button onClick={handleSignOut} className="btn btn-danger btn-sm">
                 Sign out of account
               </button>
             </div>
@@ -219,24 +271,22 @@ function DownloadButton({ templateId, templateTitle }: { templateId: string; tem
   };
 
   return (
-    <button onClick={handleDownload} disabled={downloading} style={{
-      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-      background: downloading ? '#0e7490' : '#38bdf8',
-      border: 'none', borderRadius: '8px', padding: '8px',
-      fontSize: '13px', fontWeight: 600, color: '#020617',
-      cursor: downloading ? 'wait' : 'pointer',
-      transition: 'background 0.2s',
-    }}>
+    <button
+      onClick={handleDownload}
+      disabled={downloading}
+      className="btn btn-primary btn-sm flex-1"
+      style={downloading ? { cursor: 'wait' } : undefined}
+    >
       {downloading ? (
         <>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }} aria-hidden="true">
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           </svg>
           Preparing…
         </>
       ) : (
         <>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
             <line x1="12" y1="15" x2="12" y2="3"/>

@@ -84,9 +84,9 @@ function Layout() {
   const isShell = pathname === '/login' || pathname === '/reset-password' || pathname.startsWith('/preview/') || pathname === '/purchase-success';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#020617' }}>
+    <div className="flex min-h-screen flex-col bg-canvas text-text-primary">
       {!isShell && <Navbar />}
-      <main style={{ flex: 1 }}>
+      <main className="flex-1">
         <Routes>
           <Route path="/"                   element={<HomePage />}                                              />
           <Route path="/templates"          element={<TemplatesPage />}                                         />

@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useSEO } from '../hooks/useSEO';
 
+const inputClass =
+  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)] focus:outline-none';
+
 export default function ResetPasswordPage() {
   useSEO({ title: 'Reset Password' });
 
@@ -45,116 +48,103 @@ export default function ResetPasswordPage() {
     }
   };
 
-  const inputStyle = {
-    width: '100%', boxSizing: 'border-box' as const,
-    borderRadius: '10px', border: '1px solid #334155',
-    background: '#020617', padding: '10px 14px',
-    fontSize: '14px', color: '#ffffff', outline: 'none',
-  };
-
   return (
-    <div style={{
-      minHeight: '100vh', background: '#020617',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '2rem',
-    }}>
-      <div style={{ width: '100%', maxWidth: '420px' }}>
+    <div className="aurora aurora--dim grain flex min-h-screen items-center justify-center bg-canvas px-4 py-12">
+      <div className="w-full max-w-[420px]">
 
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginBottom: '2.5rem' }}>
-          <div style={{ width: '32px', height: '32px', background: '#38bdf8', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="16" height="16" fill="#020617" viewBox="0 0 24 24">
+        <Link to="/" className="mb-10 flex items-center justify-center gap-2.5 no-underline">
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-lg"
+            style={{ background: 'var(--gradient-brand)', boxShadow: 'var(--shadow-glow-cta)' }}
+          >
+            <svg width="15" height="15" fill="#FFFFFF" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
             </svg>
-          </div>
-          <span style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff' }}>Templix</span>
-        </div>
+          </span>
+          <span className="text-base font-semibold tracking-[-0.01em] text-text-primary">Templix</span>
+        </Link>
 
-        <div style={{ borderRadius: '20px', border: '1px solid #1e293b', background: '#0f172a', padding: '2rem' }}>
+        {/* Card */}
+        <div className="glass p-8 max-sm:p-6">
 
           {success ? (
-            <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '50%',
-                background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 1rem',
-              }}>
-                <svg width="22" height="22" fill="none" stroke="#10b981" strokeWidth="2.5" viewBox="0 0 24 24">
+            <div className="py-4 text-center">
+              <div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border border-success-soft-border bg-success-soft">
+                <svg width="22" height="22" fill="none" stroke="var(--color-success)" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.5rem' }}>
+              <h2 className="mb-2 text-xl font-semibold tracking-[-0.015em] text-text-primary">
                 Password updated!
               </h2>
-              <p style={{ fontSize: '14px', color: '#64748b' }}>Redirecting you to the dashboard…</p>
+              <p className="text-sm text-text-tertiary">Redirecting you to the dashboard…</p>
             </div>
           ) : !validSession ? (
-            <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.75rem' }}>
+            <div className="py-4 text-center">
+              <div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border border-warning-soft-border bg-warning-soft">
+                <svg width="22" height="22" fill="none" stroke="var(--color-warning)" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <h2 className="mb-3 text-xl font-semibold tracking-[-0.015em] text-text-primary">
                 Link expired
               </h2>
-              <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '1.5rem' }}>
+              <p className="mb-6 text-sm leading-relaxed text-text-tertiary">
                 This password reset link is invalid or has expired.
               </p>
-              <Link to="/login" style={{
-                display: 'inline-flex', borderRadius: '10px', background: '#38bdf8',
-                padding: '10px 20px', fontSize: '14px', fontWeight: 600,
-                color: '#020617', textDecoration: 'none',
-              }}>
+              <Link to="/login" className="btn btn-primary glow-cta">
                 Back to sign in
               </Link>
             </div>
           ) : (
             <>
-              <h1 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.35rem' }}>
+              <h1 className="mb-1 text-2xl font-semibold tracking-[-0.015em] text-text-primary">
                 Set new password
               </h1>
-              <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 1.5rem' }}>
+              <p className="mb-6 text-[13px] text-text-tertiary">
                 Choose a strong password for your account.
               </p>
 
               {error && (
-                <div style={{ borderRadius: '8px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', padding: '10px 14px', marginBottom: '1rem', fontSize: '13px', color: '#fca5a5' }}>
+                <div className="mb-4 rounded-lg border border-danger-soft-border bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">
                   {error}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                  <label htmlFor="tmx-new-password" className="mb-1.5 block text-[13px] font-medium text-text-secondary">
                     New password
                   </label>
                   <input
+                    id="tmx-new-password"
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
                     required
-                    style={inputStyle}
+                    className={inputClass}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                  <label htmlFor="tmx-confirm-password" className="mb-1.5 block text-[13px] font-medium text-text-secondary">
                     Confirm password
                   </label>
                   <input
+                    id="tmx-confirm-password"
                     type="password"
                     value={confirm}
                     onChange={e => setConfirm(e.target.value)}
                     placeholder="Repeat your password"
                     required
-                    style={inputStyle}
+                    className={inputClass}
                   />
                 </div>
 
-                <button type="submit" disabled={loading} style={{
-                  width: '100%', borderRadius: '10px',
-                  background: loading ? '#1e293b' : '#38bdf8',
-                  border: 'none', padding: '12px', fontSize: '15px',
-                  fontWeight: 600, color: loading ? '#64748b' : '#020617',
-                  cursor: loading ? 'not-allowed' : 'pointer', marginTop: '0.25rem',
-                }}>
+                <button type="submit" disabled={loading} className="btn btn-primary glow-cta mt-2 h-11 w-full">
                   {loading ? 'Updating…' : 'Update password'}
                 </button>
               </form>
@@ -162,8 +152,10 @@ export default function ResetPasswordPage() {
           )}
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '13px' }}>
-          <Link to="/login" style={{ color: '#64748b', textDecoration: 'none' }}>← Back to sign in</Link>
+        <p className="mt-6 text-center text-[13px]">
+          <Link to="/login" className="text-text-tertiary no-underline transition-colors duration-150 hover:text-text-secondary">
+            ← Back to sign in
+          </Link>
         </p>
       </div>
     </div>

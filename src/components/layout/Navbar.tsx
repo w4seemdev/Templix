@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { CSSProperties } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Menu, X } from 'lucide-react';
+import { ChevronDown, Heart, Menu, Search, X } from 'lucide-react';
+import clsx from 'clsx';
 import { useAuth } from '../../context/AuthContext';
 import { useWishlist } from '../../hooks/useWishlist';
 
@@ -17,11 +17,33 @@ const WISHLIST_STORAGE_KEY = 'templix_wishlist';
 
 const MOBILE_BREAKPOINT = '(max-width: 860px)';
 
+/* Shared logomark: violet gradient tile + wordmark */
+function Logo({ compact = false }: { compact?: boolean }) {
+  return (
+    <Link to="/" className="inline-flex shrink-0 items-center gap-2.5 no-underline">
+      <div
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+        style={{ background: 'var(--gradient-brand)', boxShadow: '0 0 12px -2px rgba(124,92,252,0.5)' }}
+      >
+        <svg width="13" height="13" fill="#FFFFFF" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
+        </svg>
+      </div>
+      {!compact && (
+        <span className="text-base font-semibold tracking-[-0.02em] text-text-primary">Templix</span>
+      )}
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen]         = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isMobile, setIsMobile]         = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia(MOBILE_BREAKPOINT).matches : false,
+  );
+  const [scrolled, setScrolled] = useState(() =>
+    typeof window !== 'undefined' ? window.scrollY > 24 : false,
   );
   const { pathname } = useLocation();
   const { user, signOut } = useAuth();
@@ -38,6 +60,13 @@ export default function Navbar() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
+  // Nav glass fades in once scrollY > 24 (spec: transparent at top of page).
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Close any open menus when the route changes.
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect -- resetting transient menu state on navigation is intentional */
@@ -45,6 +74,29 @@ export default function Navbar() {
     setUserMenuOpen(false);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname]);
+
+  // A11y: Escape closes the mobile sheet / user dropdown.
+  useEffect(() => {
+    if (!menuOpen && !userMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        setUserMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen, userMenuOpen]);
+
+  // Lock body scroll while the mobile sheet is open.
+  useEffect(() => {
+    if (!(isMobile && menuOpen)) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobile, menuOpen]);
 
   // Keep the wishlist badge fresh: re-read on navigation, cross-tab storage
   // events, and window focus (useWishlist state is local to each consumer).
@@ -72,51 +124,30 @@ export default function Navbar() {
   const handleSignOut = async () => {
     await signOut();
     setUserMenuOpen(false);
+    setMenuOpen(false);
     navigate('/');
   };
 
   const isActive = (to: string) => pathname === to || pathname.startsWith(`${to}/`);
-
-  const navLinkStyle = (active: boolean): CSSProperties => ({
-    fontSize: '14px',
-    fontWeight: 500,
-    padding: '6px 12px',
-    borderRadius: '8px',
-    color: active ? '#38bdf8' : '#94a3b8',
-    background: active ? 'rgba(56,189,248,0.1)' : 'transparent',
-    textDecoration: 'none',
-    transition: 'color 0.15s, background 0.15s',
-  });
-
   const wishlistActive = isActive('/wishlist');
 
   const wishlistButton = (
     <Link
       to="/wishlist"
       aria-label={`Wishlist (${wishlistCount} item${wishlistCount === 1 ? '' : 's'})`}
-      style={{
-        position: 'relative',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        width: '36px', height: '36px',
-        borderRadius: '10px',
-        border: '1px solid rgba(255,255,255,0.08)',
-        background: wishlistActive ? 'rgba(56,189,248,0.1)' : 'rgba(255,255,255,0.03)',
-        color: wishlistActive ? '#38bdf8' : '#94a3b8',
-        textDecoration: 'none',
-        transition: 'color 0.15s, background 0.15s',
-      }}
+      className={clsx(
+        'relative flex h-9 w-9 items-center justify-center rounded-lg border no-underline transition-colors duration-150',
+        wishlistActive
+          ? 'border-accent-soft-border bg-accent-soft text-accent-text'
+          : 'border-border-default bg-surface-2 text-text-secondary hover:border-border-strong hover:text-text-primary',
+      )}
     >
-      <Heart size={17} fill={wishlistActive ? 'currentColor' : 'none'} />
+      <Heart size={16} fill={wishlistActive ? 'currentColor' : 'none'} aria-hidden="true" />
       {wishlistCount > 0 && (
-        <span style={{
-          position: 'absolute', top: '-6px', right: '-6px',
-          minWidth: '17px', height: '17px', padding: '0 4px',
-          borderRadius: '999px',
-          background: '#38bdf8', color: '#020617',
-          fontSize: '10px', fontWeight: 700, lineHeight: '17px',
-          textAlign: 'center',
-          boxShadow: '0 0 0 2px #020617',
-        }}>
+        <span
+          className="absolute -right-1.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold leading-none text-white"
+          style={{ boxShadow: '0 0 0 2px var(--color-canvas)' }}
+        >
           {wishlistCount > 99 ? '99+' : wishlistCount}
         </span>
       )}
@@ -124,119 +155,125 @@ export default function Navbar() {
   );
 
   return (
-    <header style={{
-      position: 'sticky', top: 0, zIndex: 50, width: '100%',
-      borderBottom: '1px solid rgba(255,255,255,0.08)',
-      background: 'rgba(2,6,23,0.85)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-    }}>
-      <div style={{
-        maxWidth: '1280px', margin: '0 auto',
-        paddingLeft: isMobile ? '1.25rem' : '2rem',
-        paddingRight: isMobile ? '1.25rem' : '2rem',
-        height: '64px',
-        display: isMobile ? 'flex' : 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        justifyContent: isMobile ? 'space-between' : undefined,
-        alignItems: 'center',
-      }}>
+    <header
+      className={clsx(
+        'sticky top-0 z-50 w-full transition-all duration-200',
+        scrolled ? 'glass-nav' : 'border-b border-transparent bg-transparent',
+      )}
+    >
+      <div
+        className={clsx(
+          'mx-auto h-16 max-w-[1240px] items-center px-4 sm:px-6',
+          isMobile ? 'flex justify-between' : 'grid grid-cols-[1fr_auto_1fr]',
+        )}
+      >
 
         {/* ── Left: Logo ── */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-          <div style={{
-            width: '32px', height: '32px', background: '#38bdf8', borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-          }}>
-            <svg width="16" height="16" fill="#020617" viewBox="0 0 24 24">
-              <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
-            </svg>
-          </div>
-          <span style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em' }}>
-            Templix
-          </span>
-        </Link>
+        <div className="flex items-center">
+          <Logo />
+        </div>
 
         {/* ── Center: Nav links (desktop) ── */}
         {!isMobile && (
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} aria-label="Primary">
-            {navLinks.map(link => (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={isActive(link.to) ? 'page' : undefined}
-                style={navLinkStyle(isActive(link.to))}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="flex h-16 items-center gap-1" aria-label="Primary">
+            {navLinks.map(link => {
+              const active = isActive(link.to);
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={active ? 'page' : undefined}
+                  className={clsx(
+                    'relative flex h-16 items-center px-3 text-sm font-medium no-underline transition-colors duration-150',
+                    active ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary',
+                  )}
+                >
+                  {link.label}
+                  {active && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-3 bottom-0 h-0.5 rounded-full"
+                      style={{ background: 'var(--gradient-brand)' }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
         )}
 
-        {/* ── Right: wishlist + auth state ── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', justifyContent: 'flex-end' }}>
+        {/* ── Right: search affordance + wishlist + auth state ── */}
+        <div className="flex items-center justify-end gap-3">
+          {!isMobile && (
+            <Link
+              to="/templates"
+              aria-label="Search templates"
+              className="group flex h-9 w-[200px] items-center gap-2 rounded-lg border border-border-default bg-surface-2 px-3 no-underline transition-colors duration-150 hover:border-border-strong"
+            >
+              <Search size={14} className="shrink-0 text-text-tertiary" aria-hidden="true" />
+              <span className="flex-1 truncate text-[13px] text-text-tertiary group-hover:text-text-secondary">
+                Search templates
+              </span>
+              <kbd className="rounded border border-border-default bg-surface-3 px-1.5 py-px font-mono text-[11px] leading-4 text-text-tertiary">
+                ⌘K
+              </kbd>
+            </Link>
+          )}
+
           {wishlistButton}
 
           {!isMobile && (user ? (
             /* ── Logged in: avatar + dropdown ── */
-            <div style={{ position: 'relative' }}>
+            <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 aria-expanded={userMenuOpen}
                 aria-haspopup="menu"
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  background: 'none', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '10px', padding: '6px 10px',
-                  cursor: 'pointer',
-                }}
+                className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-default bg-surface-2 py-1 pl-1 pr-2.5 transition-colors duration-150 hover:border-border-strong"
               >
-                <div style={{
-                  width: '28px', height: '28px', borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #38bdf8, #0891b2)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '11px', fontWeight: 700, color: '#020617', flexShrink: 0,
-                }}>
+                <div
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white"
+                  style={{ background: 'var(--gradient-brand)' }}
+                >
                   {initials}
                 </div>
-                <span style={{ fontSize: '13px', color: '#94a3b8', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <span className="max-w-[120px] truncate text-[13px] text-text-secondary">
                   {displayName.split(' ')[0]}
                 </span>
-                <svg width="12" height="12" fill="none" stroke="#475569" strokeWidth="2" viewBox="0 0 24 24">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+                <ChevronDown
+                  size={13}
+                  className={clsx('shrink-0 text-text-tertiary transition-transform duration-150', userMenuOpen && 'rotate-180')}
+                  aria-hidden="true"
+                />
               </button>
 
               {/* Dropdown */}
               {userMenuOpen && (
-                <div style={{
-                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-                  minWidth: '180px', borderRadius: '12px',
-                  border: '1px solid #1e293b', background: '#0f172a',
-                  boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
-                  overflow: 'hidden', zIndex: 100,
-                }}>
-                  <div style={{ padding: '12px 14px', borderBottom: '1px solid #1e293b' }}>
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff', margin: 0 }}>{displayName}</p>
-                    <p style={{ fontSize: '11px', color: '#475569', margin: '2px 0 0' }}>{user.email}</p>
+                <div
+                  className="absolute right-0 top-[calc(100%+10px)] z-[100] min-w-[210px] overflow-hidden rounded-xl border border-border-subtle bg-surface-3 shadow-pop"
+                  style={{ animation: 'tmx-fade 150ms ease-out' }}
+                >
+                  <div className="border-b border-border-subtle px-3.5 py-3">
+                    <p className="m-0 truncate text-[13px] font-semibold text-text-primary">{displayName}</p>
+                    <p className="m-0 mt-0.5 truncate text-[11px] text-text-tertiary">{user.email}</p>
                   </div>
                   {[
                     { label: 'Dashboard', to: '/dashboard' },
                     { label: 'My purchases', to: '/dashboard' },
                   ].map(item => (
-                    <Link key={item.label} to={item.to} onClick={() => setUserMenuOpen(false)} style={{
-                      display: 'block', padding: '10px 14px',
-                      fontSize: '14px', color: '#94a3b8', textDecoration: 'none',
-                      borderBottom: '1px solid #1e293b',
-                    }}>
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block border-b border-border-subtle px-3.5 py-2.5 text-sm text-text-secondary no-underline transition-colors duration-150 hover:bg-white/[0.04] hover:text-text-primary"
+                    >
                       {item.label}
                     </Link>
                   ))}
-                  <button onClick={handleSignOut} style={{
-                    width: '100%', padding: '10px 14px', textAlign: 'left',
-                    background: 'none', border: 'none', fontSize: '14px',
-                    color: '#ef4444', cursor: 'pointer',
-                  }}>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full cursor-pointer border-0 bg-transparent px-3.5 py-2.5 text-left text-sm text-danger transition-colors duration-150 hover:bg-danger-soft"
+                  >
                     Sign out
                   </button>
                 </div>
@@ -245,17 +282,12 @@ export default function Navbar() {
           ) : (
             /* ── Logged out: Sign in + Get started ── */
             <>
-              <Link to="/login" style={{ fontSize: '14px', fontWeight: 500, color: '#94a3b8', textDecoration: 'none' }}>
+              <Link to="/login" className="btn btn-ghost btn-sm">
                 Sign in
               </Link>
-              <Link to="/login" style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                background: '#38bdf8', borderRadius: '10px',
-                padding: '8px 18px', fontSize: '14px', fontWeight: 600,
-                color: '#020617', textDecoration: 'none',
-              }}>
+              <Link to="/login" className="btn btn-primary btn-sm">
                 Get started
-                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
@@ -268,83 +300,124 @@ export default function Navbar() {
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '36px', height: '36px',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: '10px',
-                color: '#94a3b8', cursor: 'pointer', padding: 0,
-              }}
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border-default bg-surface-2 p-0 text-text-secondary transition-colors duration-150 hover:border-border-strong hover:text-text-primary"
             >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+              {menuOpen ? <X size={19} aria-hidden="true" /> : <Menu size={19} aria-hidden="true" />}
             </button>
           )}
         </div>
 
       </div>
 
-      {/* ── Mobile menu ── */}
+      {/* ── Mobile menu: glass sheet sliding from the right ── */}
       {isMobile && menuOpen && (
-        <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.08)', background: '#020617',
-          padding: '1rem 1.25rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.375rem',
-        }}>
-          {navLinks.map(link => (
-            <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)} style={{
-              fontSize: '15px', fontWeight: 500,
-              padding: '10px 12px', borderRadius: '10px',
-              color: isActive(link.to) ? '#38bdf8' : '#94a3b8',
-              background: isActive(link.to) ? 'rgba(56,189,248,0.1)' : 'transparent',
-              textDecoration: 'none',
-            }}>
-              {link.label}
-            </Link>
-          ))}
-          <Link to="/wishlist" onClick={() => setMenuOpen(false)} style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            fontSize: '15px', fontWeight: 500,
-            padding: '10px 12px', borderRadius: '10px',
-            color: wishlistActive ? '#38bdf8' : '#94a3b8',
-            background: wishlistActive ? 'rgba(56,189,248,0.1)' : 'transparent',
-            textDecoration: 'none',
-          }}>
-            Wishlist
-            {wishlistCount > 0 && (
-              <span style={{
-                minWidth: '20px', padding: '1px 7px', borderRadius: '999px',
-                background: 'rgba(56,189,248,0.15)', color: '#38bdf8',
-                fontSize: '12px', fontWeight: 700, textAlign: 'center',
-              }}>
-                {wishlistCount}
-              </span>
-            )}
-          </Link>
-          <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.08)', margin: '8px 0' }} />
-          {user ? (
-            <>
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)} style={{ fontSize: '15px', padding: '10px 12px', color: '#94a3b8', textDecoration: 'none' }}>
-                Dashboard
-              </Link>
-              <button onClick={handleSignOut} style={{ textAlign: 'left', background: 'none', border: 'none', fontSize: '15px', color: '#ef4444', cursor: 'pointer', padding: '10px 12px' }}>
-                Sign out
+        <>
+          <style>{'@keyframes tmx-sheet-in { from { transform: translateX(100%); } to { transform: translateX(0); } }'}</style>
+          <div
+            className="fixed inset-0 z-[60] bg-black/50"
+            style={{ animation: 'tmx-fade 200ms ease-out' }}
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            className="glass fixed right-0 top-0 z-[70] flex h-dvh w-[280px] flex-col gap-1 overflow-y-auto p-5"
+            style={{ borderRadius: 0, borderTop: 'none', borderBottom: 'none', borderRight: 'none', animation: 'tmx-sheet-in 320ms var(--ease-sheet)' }}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <Logo />
+              <button
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-border-default bg-surface-2 p-0 text-text-secondary hover:text-text-primary"
+              >
+                <X size={17} aria-hidden="true" />
               </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" onClick={() => setMenuOpen(false)} style={{ fontSize: '15px', padding: '10px 12px', color: '#94a3b8', textDecoration: 'none' }}>
-                Sign in
+            </div>
+
+            {navLinks.map(link => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMenuOpen(false)}
+                aria-current={isActive(link.to) ? 'page' : undefined}
+                className={clsx(
+                  'rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
+                  isActive(link.to)
+                    ? 'bg-accent-soft text-accent-text'
+                    : 'text-text-secondary hover:bg-white/[0.05] hover:text-text-primary',
+                )}
+              >
+                {link.label}
               </Link>
-              <Link to="/login" onClick={() => setMenuOpen(false)} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                background: '#38bdf8', borderRadius: '10px', padding: '10px 18px', marginTop: '4px',
-                fontSize: '14px', fontWeight: 600, color: '#020617', textDecoration: 'none',
-              }}>
-                Get started →
-              </Link>
-            </>
-          )}
-        </div>
+            ))}
+
+            <Link
+              to="/wishlist"
+              onClick={() => setMenuOpen(false)}
+              className={clsx(
+                'flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
+                wishlistActive
+                  ? 'bg-accent-soft text-accent-text'
+                  : 'text-text-secondary hover:bg-white/[0.05] hover:text-text-primary',
+              )}
+            >
+              Wishlist
+              {wishlistCount > 0 && (
+                <span className="min-w-[20px] rounded-full border border-accent-soft-border bg-accent-soft px-2 py-px text-center text-xs font-semibold text-accent-text">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+
+            <div className="hairline my-3" />
+
+            {user ? (
+              <>
+                <div className="mb-1 flex items-center gap-2.5 px-3">
+                  <div
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white"
+                    style={{ background: 'var(--gradient-brand)' }}
+                  >
+                    {initials}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="m-0 truncate text-[13px] font-semibold text-text-primary">{displayName}</p>
+                    <p className="m-0 truncate text-[11px] text-text-tertiary">{user.email}</p>
+                  </div>
+                </div>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-[15px] font-medium text-text-secondary no-underline transition-colors duration-150 hover:bg-white/[0.05] hover:text-text-primary"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2.5 text-left text-[15px] font-medium text-danger transition-colors duration-150 hover:bg-danger-soft"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-[15px] font-medium text-text-secondary no-underline transition-colors duration-150 hover:bg-white/[0.05] hover:text-text-primary"
+                >
+                  Sign in
+                </Link>
+                <Link to="/login" onClick={() => setMenuOpen(false)} className="btn btn-primary mt-2 w-full">
+                  Get started →
+                </Link>
+              </>
+            )}
+          </div>
+        </>
       )}
     </header>
   );

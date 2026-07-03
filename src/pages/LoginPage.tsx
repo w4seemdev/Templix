@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const inputClass =
+  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)] focus:outline-none';
+
 export default function LoginPage() {
   const [mode, setMode]         = useState<'login' | 'register'>('login');
   const [email, setEmail]       = useState('');
@@ -13,13 +16,6 @@ export default function LoginPage() {
 
   const { signIn, signUp, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
-
-  const inputStyle = {
-    width: '100%', boxSizing: 'border-box' as const,
-    borderRadius: '10px', border: '1px solid #334155',
-    background: '#020617', padding: '10px 14px',
-    fontSize: '14px', color: '#ffffff', outline: 'none',
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,57 +42,63 @@ export default function LoginPage() {
     if (error) setError(error);
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) { setError('Enter your email first.'); return; }
+    const { error } = await import('../lib/supabase').then(m =>
+      m.supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` })
+    );
+    if (error) setError(error.message);
+    else setSuccess('Password reset email sent!');
+  };
+
   return (
-    <div style={{
-      minHeight: '100vh', background: '#020617',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '2rem',
-    }}>
-      <div style={{ width: '100%', maxWidth: '420px' }}>
+    <div className="aurora aurora--dim grain flex min-h-screen items-center justify-center bg-canvas px-4 py-12">
+      <div className="w-full max-w-[420px]">
 
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginBottom: '2.5rem' }}>
-          <div style={{ width: '32px', height: '32px', background: '#38bdf8', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="16" height="16" fill="#020617" viewBox="0 0 24 24">
+        <Link to="/" className="mb-10 flex items-center justify-center gap-2.5 no-underline">
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-lg"
+            style={{ background: 'var(--gradient-brand)', boxShadow: 'var(--shadow-glow-cta)' }}
+          >
+            <svg width="15" height="15" fill="#FFFFFF" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
             </svg>
-          </div>
-          <span style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff' }}>Templix</span>
-        </div>
+          </span>
+          <span className="text-base font-semibold tracking-[-0.01em] text-text-primary">Templix</span>
+        </Link>
 
-        {/* Card */}
-        <div style={{ borderRadius: '20px', border: '1px solid #1e293b', background: '#0f172a', padding: '2rem' }}>
+        {/* Auth card */}
+        <div className="glass p-8 max-sm:p-6">
 
-          {/* Tabs */}
-          <div style={{ display: 'flex', borderRadius: '10px', background: '#020617', padding: '4px', marginBottom: '1.75rem' }}>
+          {/* Mode tabs */}
+          <div className="mb-7 flex rounded-lg border border-border-subtle bg-surface-2 p-1">
             {(['login', 'register'] as const).map(m => (
-              <button key={m} onClick={() => { setMode(m); setError(''); setSuccess(''); }} style={{
-                flex: 1, padding: '8px', borderRadius: '7px',
-                fontSize: '14px', fontWeight: 500, cursor: 'pointer', border: 'none',
-                background: mode === m ? '#1e293b' : 'transparent',
-                color: mode === m ? '#ffffff' : '#64748b',
-                transition: 'all 0.15s',
-              }}>
+              <button
+                key={m}
+                onClick={() => { setMode(m); setError(''); setSuccess(''); }}
+                aria-pressed={mode === m}
+                className={`flex-1 cursor-pointer rounded-md border-0 py-2 text-sm font-medium transition-colors duration-150 ${
+                  mode === m
+                    ? 'bg-surface-3 text-text-primary shadow-sm'
+                    : 'bg-transparent text-text-tertiary hover:text-text-secondary'
+                }`}
+              >
                 {m === 'login' ? 'Sign in' : 'Sign up'}
               </button>
             ))}
           </div>
 
-          <h1 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.35rem' }}>
+          <h1 className="mb-1 text-2xl font-semibold tracking-[-0.015em] text-text-primary">
             {mode === 'login' ? 'Welcome back' : 'Create your account'}
           </h1>
-          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 1.5rem' }}>
+          <p className="mb-6 text-[13px] text-text-tertiary">
             {mode === 'login' ? 'Sign in to access your templates and purchases.' : 'Start browsing and buying templates today.'}
           </p>
 
-          {/* Google button */}
-          <button onClick={handleGoogle} style={{
-            width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            borderRadius: '10px', border: '1px solid #334155', background: '#0f172a',
-            padding: '10px', fontSize: '14px', fontWeight: 500, color: '#ffffff', cursor: 'pointer',
-            marginBottom: '1.25rem',
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24">
+          {/* OAuth first */}
+          <button onClick={handleGoogle} className="btn btn-secondary mb-5 h-11 w-full">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -106,75 +108,72 @@ export default function LoginPage() {
           </button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
-            <div style={{ flex: 1, height: '1px', background: '#1e293b' }} />
-            <span style={{ fontSize: '12px', color: '#475569' }}>or continue with email</span>
-            <div style={{ flex: 1, height: '1px', background: '#1e293b' }} />
+          <div className="mb-5 flex items-center gap-4">
+            <div className="hairline flex-1" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">or</span>
+            <div className="hairline flex-1" />
           </div>
 
-          {/* Error / Success */}
+          {/* Banners */}
           {error && (
-            <div style={{ borderRadius: '8px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', padding: '10px 14px', marginBottom: '1rem', fontSize: '13px', color: '#fca5a5' }}>
+            <div className="mb-4 rounded-lg border border-danger-soft-border bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">
               {error}
             </div>
           )}
           {success && (
-            <div style={{ borderRadius: '8px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', padding: '10px 14px', marginBottom: '1rem', fontSize: '13px', color: '#6ee7b7' }}>
+            <div className="mb-4 rounded-lg border border-success-soft-border bg-success-soft px-3.5 py-2.5 text-[13px] text-success">
               {success}
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {mode === 'register' && (
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>Full name</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" required style={inputStyle} />
+                <label htmlFor="tmx-name" className="mb-1.5 block text-[13px] font-medium text-text-secondary">Full name</label>
+                <input id="tmx-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" required className={inputClass} />
               </div>
             )}
             <div>
-              <label style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>Email address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required style={inputStyle} />
+              <label htmlFor="tmx-email" className="mb-1.5 block text-[13px] font-medium text-text-secondary">Email address</label>
+              <input id="tmx-email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required className={inputClass} />
             </div>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8' }}>Password</label>
+              <div className="mb-1.5 flex items-center justify-between">
+                <label htmlFor="tmx-password" className="text-[13px] font-medium text-text-secondary">Password</label>
                 {mode === 'login' && (
-                  <button type="button" onClick={async () => {
-                    if (!email) { setError('Enter your email first.'); return; }
-                    const { error } = await import('../lib/supabase').then(m => m.supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` }));
-                    if (error) setError(error.message);
-                    else setSuccess('Password reset email sent!');
-                  }} style={{ fontSize: '13px', color: '#38bdf8', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover hover:underline"
+                  >
                     Forgot password?
                   </button>
                 )}
               </div>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required style={inputStyle} />
+              <input id="tmx-password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className={inputClass} />
             </div>
 
-            <button type="submit" disabled={loading} style={{
-              width: '100%', borderRadius: '10px',
-              background: loading ? '#1e293b' : '#38bdf8',
-              border: 'none', padding: '12px', fontSize: '15px',
-              fontWeight: 600, color: loading ? '#64748b' : '#020617',
-              cursor: loading ? 'not-allowed' : 'pointer', marginTop: '0.5rem',
-            }}>
+            <button type="submit" disabled={loading} className="btn btn-primary glow-cta mt-2 h-11 w-full">
               {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '13px', color: '#64748b' }}>
-            {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
-            <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess(''); }}
-              style={{ color: '#38bdf8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
-              {mode === 'login' ? 'Sign up' : 'Sign in'}
+          <p className="mt-5 text-center text-[13px] text-text-tertiary">
+            {mode === 'login' ? "New to Templix? " : 'Already have an account? '}
+            <button
+              onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess(''); }}
+              className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover hover:underline"
+            >
+              {mode === 'login' ? 'Create account' : 'Sign in'}
             </button>
           </p>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '13px' }}>
-          <Link to="/" style={{ color: '#64748b', textDecoration: 'none' }}>← Back to Templix</Link>
+        <p className="mt-6 text-center text-[13px]">
+          <Link to="/" className="text-text-tertiary no-underline transition-colors duration-150 hover:text-text-secondary">
+            ← Back to Templix
+          </Link>
         </p>
       </div>
     </div>

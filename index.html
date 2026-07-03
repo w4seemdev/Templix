@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07080A" />
     <title>Templix — Website Templates for Developers</title>
     <meta name="description" content="Browse professionally designed website templates built with React, Next.js, and HTML. Buy once, download forever." />
     <meta name="keywords" content="website templates, react templates, nextjs templates, html templates, buy templates, web design" />
@@ -20,10 +21,13 @@
     <meta name="twitter:title"       content="Templix — Website Templates" />
     <meta name="twitter:description" content="Browse professionally designed website templates. Buy once, use forever." />
 
-    <!-- Fonts -->
+    <!-- Fonts: Inter (UI/display, max weight 600) + JetBrains Mono (prices, stats, keys) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Prevent white flash before CSS loads -->
+    <style>html { background-color: #07080a; color-scheme: dark; }</style>
   </head>
   <body>
     <div id="root"></div>

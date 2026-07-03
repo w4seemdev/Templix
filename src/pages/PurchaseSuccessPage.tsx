@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Check, Download, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { templates } from '../data/templates';
+import { useSEO } from '../hooks/useSEO';
 
 export default function PurchaseSuccessPage() {
   const [searchParams]    = useSearchParams();
@@ -12,7 +14,10 @@ export default function PurchaseSuccessPage() {
   const didAutoDownload = useRef(false);
 
   const templateId = searchParams.get('template_id') ?? '';
+  const sessionId  = searchParams.get('session_id') ?? '';
   const template   = templates.find(t => t.id === templateId);
+
+  useSEO({ title: 'Payment successful' });
 
   /* ── Helper: trigger zip download ── */
   const triggerDownload = async () => {
@@ -58,11 +63,11 @@ export default function PurchaseSuccessPage() {
         .single();
 
       if (!existing) {
-        const sessionId = searchParams.get('session_id') ?? '';
+        const stripeSessionId = searchParams.get('session_id') ?? '';
         await supabase.from('purchases').insert({
           user_id:           user.id,
           template_id:       templateId,
-          stripe_session_id: sessionId,
+          stripe_session_id: stripeSessionId,
           amount:            template?.price ?? 0,
         });
       }
@@ -79,106 +84,96 @@ export default function PurchaseSuccessPage() {
   }, [user, templateId]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <div style={{ textAlign: 'center', maxWidth: '520px' }}>
+    <div className="aurora aurora--dim grain flex min-h-screen items-center justify-center bg-canvas p-6">
+      <div className="glass w-full max-w-[540px] p-8 text-center sm:p-12">
 
-        {/* Animated success icon */}
-        <div style={{
-          width: '88px', height: '88px', borderRadius: '50%',
-          background: 'rgba(16,185,129,0.12)', border: '2px solid rgba(16,185,129,0.3)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 2rem',
-        }}>
-          <svg width="40" height="40" fill="none" stroke="#10b981" strokeWidth="2.5" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+        {/* Success disc */}
+        <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-success-soft-border bg-success-soft">
+          <Check size={34} strokeWidth={2.5} className="text-success" aria-hidden="true" />
         </div>
 
-        <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em', margin: '0 0 0.75rem' }}>
+        <p className="m-0 mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-success">
+          Order confirmed
+        </p>
+        <h1 className="m-0 mb-3 text-[32px] leading-[1.15] font-semibold tracking-[-0.02em] text-text-primary">
           Payment successful!
         </h1>
 
         {template ? (
           <>
-            <p style={{ fontSize: '1.0625rem', color: '#64748b', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-              You now own <strong style={{ color: '#ffffff' }}>{template.title}</strong>.
+            <p className="m-0 mb-5 text-[15px] leading-[1.6] text-text-secondary">
+              You now own <strong className="font-semibold text-text-primary">{template.title}</strong>.
+              Your files are on their way.
             </p>
 
             {/* Download status pill */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              borderRadius: '9999px', padding: '6px 16px', marginBottom: '2.5rem',
-              background: downloading
-                ? 'rgba(56,189,248,0.08)'
-                : downloaded
-                  ? 'rgba(16,185,129,0.08)'
-                  : 'rgba(100,116,139,0.08)',
-              border: `1px solid ${downloading ? 'rgba(56,189,248,0.2)' : downloaded ? 'rgba(16,185,129,0.2)' : 'rgba(100,116,139,0.2)'}`,
-            }}>
+            <div
+              role="status"
+              aria-live="polite"
+              className={`mb-8 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 ${
+                downloading
+                  ? 'border-info-soft-border bg-info-soft'
+                  : downloaded
+                    ? 'border-success-soft-border bg-success-soft'
+                    : 'border-border-default bg-surface-2'
+              }`}
+            >
               {downloading ? (
                 <>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                  </svg>
-                  <span style={{ fontSize: '13px', color: '#38bdf8', fontWeight: 600 }}>Preparing your download…</span>
+                  <Loader2 size={13} className="shrink-0 text-info" style={{ animation: 'spin 1s linear infinite' }} />
+                  <span className="text-[13px] font-semibold text-info">Preparing your download…</span>
                 </>
               ) : downloaded ? (
                 <>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span style={{ fontSize: '13px', color: '#10b981', fontWeight: 600 }}>Download started!</span>
+                  <Check size={13} strokeWidth={2.5} className="shrink-0 text-success" />
+                  <span className="text-[13px] font-semibold text-success">Download started!</span>
                 </>
               ) : (
-                <span style={{ fontSize: '13px', color: '#64748b' }}>Download starting…</span>
+                <span className="text-[13px] text-text-tertiary">Download starting…</span>
               )}
             </div>
           </>
         ) : (
-          <p style={{ fontSize: '1.0625rem', color: '#64748b', lineHeight: 1.7, marginBottom: '2.5rem' }}>
+          <p className="m-0 mb-8 text-[15px] leading-[1.6] text-text-secondary">
             Your purchase is confirmed. Head to your dashboard to download it.
           </p>
         )}
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {/* Re-download button */}
+        {/* Actions */}
+        <div className="flex flex-wrap items-center justify-center gap-3">
           {template && (
             <button
               onClick={triggerDownload}
               disabled={downloading}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                background: downloading ? '#1e293b' : '#10b981',
-                borderRadius: '12px', padding: '13px 24px',
-                fontSize: '14px', fontWeight: 600,
-                color: downloading ? '#64748b' : '#ffffff',
-                border: 'none', cursor: downloading ? 'wait' : 'pointer',
-              }}
+              className="btn bg-success text-[#04150C] hover:brightness-110"
+              style={downloading ? { cursor: 'wait' } : undefined}
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
+              <Download size={15} />
               {downloading ? 'Downloading…' : 'Download again'}
             </button>
           )}
 
-          <Link to="/dashboard" style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            background: '#38bdf8', borderRadius: '12px',
-            padding: '13px 24px', fontSize: '14px', fontWeight: 600,
-            color: '#020617', textDecoration: 'none',
-          }}>
+          <Link to="/dashboard" className="btn btn-primary">
             My dashboard
           </Link>
 
-          <Link to="/templates" style={{
-            border: '1px solid #334155', borderRadius: '12px',
-            padding: '13px 24px', fontSize: '14px', fontWeight: 600,
-            color: '#94a3b8', textDecoration: 'none',
-          }}>
+          <Link to="/templates" className="btn btn-secondary">
             Browse more
           </Link>
         </div>
+
+        {sessionId && (
+          <>
+            <div className="hairline mt-8" />
+            <p
+              className="m-0 mt-4 truncate font-mono text-[11px] text-text-tertiary"
+              style={{ fontFeatureSettings: '"tnum"' }}
+              title={sessionId}
+            >
+              Ref: {sessionId}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

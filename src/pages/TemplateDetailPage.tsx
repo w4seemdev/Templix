@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, ExternalLink, Check, Monitor, Zap, RefreshCw, LifeBuoy, ShieldCheck } from 'lucide-react';
+import {
+  ChevronRight, ExternalLink, Check, Monitor, Zap, RefreshCw, LifeBuoy,
+  ShieldCheck, Download, X, Loader2, ArrowRight, FileCode2, Layers,
+} from 'lucide-react';
 import { templates } from '../data/templates';
 import Container from '../components/ui/Container';
 import TemplateCard from '../components/ui/TemplateCard';
 import { useAuth } from '../context/AuthContext';
 import { usePurchases } from '../hooks/usePurchases';
+import { useSEO } from '../hooks/useSEO';
 import { supabase } from '../lib/supabase';
 
 const included = [
@@ -16,6 +20,8 @@ const included = [
   'Documentation & setup guide',
   'Community support',
 ];
+
+const MONO_TNUM = { fontFeatureSettings: '"tnum"' } as const;
 
 export default function TemplateDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +34,23 @@ export default function TemplateDetailPage() {
   const { hasPurchased } = usePurchases();
   const navigate         = useNavigate();
   const alreadyOwned     = template ? (template.isFree || hasPurchased(template.id)) : false;
+
+  useSEO({ title: template?.title, description: template?.description });
+
+  // A11y: Escape closes the full-screen preview; lock body scroll while open.
+  useEffect(() => {
+    if (!previewOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [previewOpen]);
 
   /** Trigger a direct browser download of the zip. */
   const downloadZip = async (tpl: typeof template) => {
@@ -89,15 +112,16 @@ export default function TemplateDetailPage() {
 
   if (!template) {
     return (
-      <div style={{ minHeight: '100vh', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
-        <div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.75rem' }}>Template not found</h2>
-          <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>This template doesn't exist or was removed.</p>
-          <Link to="/templates" style={{
-            display: 'inline-flex', borderRadius: '12px', background: '#38bdf8',
-            padding: '12px 24px', fontSize: '14px', fontWeight: 600,
-            color: '#020617', textDecoration: 'none',
-          }}>
+      <div className="min-h-screen bg-canvas flex items-center justify-center p-8 text-center">
+        <div className="max-w-[420px]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary mb-4">Error 404</p>
+          <h2 className="text-[32px] leading-[1.15] font-semibold tracking-[-0.02em] text-text-primary mb-3">
+            Template not found
+          </h2>
+          <p className="text-[15px] leading-relaxed text-text-secondary mb-8">
+            This template doesn't exist or was removed from the catalog.
+          </p>
+          <Link to="/templates" className="btn btn-primary glow-cta">
             Back to templates
           </Link>
         </div>
@@ -106,149 +130,114 @@ export default function TemplateDetailPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020617' }}>
+    <div className="min-h-screen bg-canvas">
 
       {/* ── Full-screen iframe overlay ── */}
       {previewOpen && hasLivePreview && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 9999,
-          background: '#020617', display: 'flex', flexDirection: 'column',
-        }}>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${template.title} live preview`}
+          className="fixed inset-0 z-[9999] bg-canvas flex flex-col"
+        >
           {/* Preview bar */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '0 1.5rem', height: '52px', flexShrink: 0,
-            background: '#0f172a', borderBottom: '1px solid #1e293b',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Monitor size={16} style={{ color: '#38bdf8' }} />
-              <span style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff' }}>{template.title}</span>
-              <span style={{ fontSize: '12px', color: '#475569' }}>— Live Preview</span>
+          <div className="glass-nav flex items-center justify-between px-6 h-[56px] shrink-0">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-soft border border-accent-soft-border">
+                <Monitor size={14} className="text-accent-text" />
+              </span>
+              <span className="text-[13px] font-semibold text-text-primary truncate">{template.title}</span>
+              <span className="hidden sm:inline text-xs text-text-tertiary">— Live preview</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="flex items-center gap-2.5 shrink-0">
               <a
                 href={template.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  fontSize: '13px', color: '#64748b', textDecoration: 'none',
-                }}
+                className="hidden sm:inline-flex items-center gap-1.5 text-[13px] text-text-tertiary hover:text-text-primary transition-colors duration-150"
               >
                 <ExternalLink size={14} /> Open in new tab
               </a>
               <button
                 onClick={() => setPreviewOpen(false)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '6px',
-                  background: '#1e293b', border: '1px solid #334155',
-                  borderRadius: '8px', padding: '6px 14px',
-                  fontSize: '13px', fontWeight: 600, color: '#ffffff', cursor: 'pointer',
-                }}
+                className="btn btn-secondary btn-sm"
               >
-                ✕ Close preview
+                <X size={14} /> Close preview
               </button>
             </div>
           </div>
           <iframe
             src={template.demoUrl}
-            style={{ flex: 1, width: '100%', border: 'none' }}
+            className="flex-1 w-full border-none bg-white"
             title={`${template.title} preview`}
           />
         </div>
       )}
 
-      <Container style={{ paddingTop: '3.5rem', paddingBottom: '4rem' }}>
+      <Container style={{ paddingTop: '3rem', paddingBottom: '6rem' }}>
 
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          fontSize: '14px', marginBottom: '2.5rem', flexWrap: 'wrap',
-        }}>
-          <Link
-            to="/"
-            style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#f8fafc'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
-          >
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 flex-wrap text-[13px] mb-10">
+          <Link to="/" className="text-text-tertiary hover:text-text-primary transition-colors duration-150 no-underline">
             Home
           </Link>
-          <ChevronRight size={14} style={{ color: '#334155', flexShrink: 0 }} />
-          <Link
-            to="/templates"
-            style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#f8fafc'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#64748b'}
-          >
+          <ChevronRight size={13} className="text-text-disabled shrink-0" />
+          <Link to="/templates" className="text-text-tertiary hover:text-text-primary transition-colors duration-150 no-underline">
             Templates
           </Link>
-          <ChevronRight size={14} style={{ color: '#334155', flexShrink: 0 }} />
-          <span style={{
-            color: '#f8fafc', fontWeight: 500,
-            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '360px',
-          }}>
-            {template.title}
-          </span>
+          <ChevronRight size={13} className="text-text-disabled shrink-0" />
+          <span className="text-text-primary font-medium truncate max-w-[360px]">{template.title}</span>
         </nav>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '3rem', alignItems: 'flex-start' }}>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_380px] items-start">
 
-          {/* ── Left ── */}
-          <div>
-            {/* Image / Preview area */}
-            <div style={{
-              borderRadius: '16px', overflow: 'hidden',
-              border: '1px solid #1e293b',
-              aspectRatio: '16/10', background: '#0f172a',
-              position: 'relative',
-            }}>
-              <img src={template.image} alt={template.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          {/* ── Left: gallery + info ── */}
+          <div className="min-w-0">
+            {/* Preview frame */}
+            <div className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-border-subtle bg-surface-2 shadow-thumb-frame">
+              <img
+                src={template.image}
+                alt={template.title}
+                className="h-full w-full object-cover"
+              />
+              {/* sheen */}
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl" style={{ background: 'var(--gradient-sheen)' }} />
 
               {/* Hover overlay to open preview */}
               {hasLivePreview && (
-                <div
+                <button
+                  type="button"
                   onClick={() => setPreviewOpen(true)}
-                  style={{
-                    position: 'absolute', inset: 0,
-                    background: 'rgba(2,6,23,0.6)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    opacity: 0, cursor: 'pointer', transition: 'opacity 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0'}
+                  aria-label={`Launch live preview of ${template.title}`}
+                  className="absolute inset-0 flex cursor-pointer items-center justify-center border-none bg-[rgba(7,8,10,0.5)] opacity-0 transition-opacity duration-200 focus-visible:opacity-100 group-hover:opacity-100"
                 >
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    background: '#38bdf8', borderRadius: '12px',
-                    padding: '12px 24px', fontSize: '14px', fontWeight: 600, color: '#020617',
-                  }}>
-                    <Monitor size={16} />
+                  <span className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold text-text-primary">
+                    <Monitor size={15} className="text-accent-text" />
                     Launch live preview
-                  </div>
-                </div>
+                  </span>
+                </button>
               )}
             </div>
 
             {/* Info */}
-            <div style={{ marginTop: '2rem' }}>
-              <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8', marginBottom: '8px' }}>
+            <div className="mt-10">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">
                 {template.category}
               </p>
-              <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
+              <h1 className="m-0 mb-3 text-[32px] leading-[1.15] font-semibold tracking-[-0.02em] text-text-primary">
                 {template.title}
               </h1>
-              <p style={{ fontSize: '1.0625rem', color: '#94a3b8', lineHeight: 1.7 }}>
+              <p className="m-0 text-[17px] leading-[1.6] text-text-secondary">
                 {template.description}
               </p>
 
               {/* Tags */}
-              <div style={{ marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div className="mt-6 flex flex-wrap gap-2">
                 {template.tags.map(tag => (
-                  <span key={tag} style={{
-                    borderRadius: '8px', border: '1px solid #334155',
-                    background: '#0f172a', padding: '5px 12px',
-                    fontSize: '13px', color: '#94a3b8',
-                  }}>
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-full border border-border-default bg-surface-2 px-3.5 py-1.5 text-[13px] font-medium text-text-secondary"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -256,19 +245,18 @@ export default function TemplateDetailPage() {
 
               {/* Tech Stack */}
               {template.techStack && template.techStack.length > 0 && (
-                <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #1e293b' }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem' }}>
-                    Tech Stack
+                <div className="mt-10">
+                  <div className="hairline mb-8" />
+                  <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                    <FileCode2 size={16} className="text-accent-text" />
+                    Tech stack
                   </h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  <div className="flex flex-wrap gap-2">
                     {template.techStack.map(tech => (
-                      <span key={tech} style={{
-                        borderRadius: '8px',
-                        border: '1px solid rgba(56,189,248,0.25)',
-                        background: 'rgba(56,189,248,0.07)',
-                        padding: '5px 12px',
-                        fontSize: '13px', fontWeight: 500, color: '#38bdf8',
-                      }}>
+                      <span
+                        key={tech}
+                        className="inline-flex items-center rounded-full border border-accent-soft-border bg-accent-soft px-3.5 py-1.5 text-[13px] font-medium text-accent-text"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -278,22 +266,19 @@ export default function TemplateDetailPage() {
 
               {/* Pages included */}
               {template.pages && template.pages.length > 0 && (
-                <div style={{ marginTop: '1.75rem', paddingTop: '1.75rem', borderTop: '1px solid #1e293b' }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem' }}>
-                    Pages Included
+                <div className="mt-10">
+                  <div className="hairline mb-8" />
+                  <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                    <Layers size={16} className="text-accent-text" />
+                    Pages included
                   </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '8px' }}>
+                  <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
                     {template.pages.map(page => (
-                      <div key={page} style={{
-                        display: 'flex', alignItems: 'center', gap: '8px',
-                        borderRadius: '8px', border: '1px solid #1e293b',
-                        background: '#0f172a', padding: '8px 12px',
-                        fontSize: '13px', color: '#94a3b8',
-                      }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2">
-                          <rect x="3" y="3" width="18" height="18" rx="2" />
-                          <path d="M3 9h18" />
-                        </svg>
+                      <div
+                        key={page}
+                        className="flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-1 px-3 py-2 text-[13px] text-text-secondary"
+                      >
+                        <Check size={13} className="shrink-0 text-accent" />
                         {page}
                       </div>
                     ))}
@@ -302,85 +287,71 @@ export default function TemplateDetailPage() {
               )}
 
               {/* License & support */}
-              <div style={{ marginTop: '1.75rem', paddingTop: '1.75rem', borderTop: '1px solid #1e293b' }}>
-                <h3 style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '0.875rem',
-                }}>
-                  <ShieldCheck size={16} style={{ color: '#38bdf8' }} />
+              <div className="mt-10">
+                <div className="hairline mb-8" />
+                <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                  <ShieldCheck size={16} className="text-accent-text" />
                   License & support
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-                  <div style={{
-                    borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)',
-                    background: 'rgba(255,255,255,0.03)', padding: '1rem 1.125rem',
-                  }}>
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc', margin: '0 0 0.625rem' }}>
-                      Personal license
-                    </p>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
+                  <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
+                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">Personal license</p>
+                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
                       {['Use in unlimited personal projects', 'Modify and customize freely', 'Lifetime access to the files'].map(item => (
-                        <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
-                          <Check size={13} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '3px' }} />
+                        <li key={item} className="flex items-start gap-2 text-[13px] leading-normal text-text-secondary">
+                          <Check size={13} className="mt-[3px] shrink-0 text-accent" />
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div style={{
-                    borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)',
-                    background: 'rgba(255,255,255,0.03)', padding: '1rem 1.125rem',
-                  }}>
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc', margin: '0 0 0.625rem' }}>
-                      Commercial license
-                    </p>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
+                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">Commercial license</p>
+                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
                       {['Use in client and commercial work', 'Ship as part of an end product', 'No attribution required'].map(item => (
-                        <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
-                          <Check size={13} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '3px' }} />
+                        <li key={item} className="flex items-start gap-2 text-[13px] leading-normal text-text-secondary">
+                          <Check size={13} className="mt-[3px] shrink-0 text-accent" />
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
-                <p style={{ marginTop: '12px', fontSize: '13px', color: '#64748b', lineHeight: 1.6 }}>
+                <p className="m-0 mt-4 text-[13px] leading-[1.6] text-text-tertiary">
                   Every purchase includes friendly email support and free updates. Reselling or redistributing the template itself is not permitted.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* ── Right: Purchase card ── */}
-          <div style={{ position: 'sticky', top: '88px' }}>
-            <div style={{
-              borderRadius: '20px', border: '1px solid #1e293b',
-              background: '#0f172a', padding: '1.75rem',
-            }}>
+          {/* ── Right: sticky glass buy box ── */}
+          <div className="lg:sticky lg:top-[88px]">
+            <div className="glass p-6">
               {/* Price */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem' }}>
-                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff' }}>
+              <div className="mb-6 flex items-center gap-3">
+                <span
+                  className={`font-mono text-4xl font-semibold ${template.isFree ? 'text-success' : 'text-text-primary'}`}
+                  style={MONO_TNUM}
+                >
                   {template.isFree ? 'Free' : `$${template.price}`}
                 </span>
                 {template.isPremium && (
-                  <span style={{
-                    borderRadius: '9999px', border: '1px solid rgba(56,189,248,0.3)',
-                    background: 'rgba(56,189,248,0.1)', padding: '3px 12px',
-                    fontSize: '12px', fontWeight: 600, color: '#38bdf8',
-                  }}>
+                  <span className="inline-flex items-center rounded border border-accent-soft-border bg-accent-soft px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">
                     Premium
                   </span>
                 )}
                 {template.isFree && (
-                  <span style={{
-                    borderRadius: '9999px', border: '1px solid rgba(52,211,153,0.3)',
-                    background: 'rgba(52,211,153,0.1)', padding: '3px 12px',
-                    fontSize: '12px', fontWeight: 600, color: '#34d399',
-                  }}>
+                  <span className="inline-flex items-center rounded border border-success-soft-border bg-success-soft px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-success">
                     Free
                   </span>
                 )}
               </div>
+              {!template.isFree && (
+                <p className="-mt-4 mb-6 flex items-center gap-1.5 text-[13px] text-success">
+                  <Check size={13} className="shrink-0" />
+                  Lifetime updates included
+                </p>
+              )}
 
               {/* ── Buy / Download button ── */}
               {alreadyOwned ? (
@@ -388,32 +359,18 @@ export default function TemplateDetailPage() {
                 <button
                   onClick={() => downloadZip(template)}
                   disabled={downloading}
-                  style={{
-                    width: '100%', borderRadius: '12px',
-                    background: downloading ? '#065f46' : '#10b981',
-                    padding: '14px', fontSize: '15px', fontWeight: 600,
-                    color: '#ffffff', border: 'none',
-                    cursor: downloading ? 'wait' : 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    transition: 'background 0.2s',
-                    boxSizing: 'border-box',
-                  }}
+                  className="btn btn-lg w-full bg-success text-[#04150C] hover:brightness-110"
+                  style={downloading ? { cursor: 'wait' } : undefined}
                 >
                   {downloading ? (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
-                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                      </svg>
+                      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
                       Preparing download…
                     </>
                   ) : (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                      </svg>
-                      {template.isFree ? 'Download for free' : 'Download template'}
+                      <Download size={16} />
+                      {template.isFree ? 'Download free' : 'Download template'}
                     </>
                   )}
                 </button>
@@ -422,38 +379,25 @@ export default function TemplateDetailPage() {
                 <button
                   onClick={handleBuy}
                   disabled={buying || downloading}
-                  style={{
-                    width: '100%', borderRadius: '12px',
-                    background: (buying || downloading) ? '#1e293b' : (template.isFree ? '#10b981' : '#38bdf8'),
-                    padding: '14px', fontSize: '15px', fontWeight: 600,
-                    color: (buying || downloading) ? '#64748b' : '#020617',
-                    border: 'none',
-                    cursor: (buying || downloading) ? 'not-allowed' : 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    transition: 'background 0.2s',
-                    boxSizing: 'border-box',
-                  }}
+                  className={`btn btn-lg w-full ${template.isFree ? 'bg-success text-[#04150C] hover:brightness-110' : 'btn-primary'}`}
                 >
                   {downloading ? (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
-                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                      </svg>
+                      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
                       Preparing download…
                     </>
                   ) : buying ? (
                     'Redirecting to checkout…'
                   ) : template.isFree ? (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                      </svg>
-                      Download for free
+                      <Download size={16} />
+                      Download free
                     </>
                   ) : (
-                    `Buy for $${template.price}`
+                    <span className="inline-flex items-baseline gap-2">
+                      Buy now —
+                      <span className="font-mono" style={MONO_TNUM}>${template.price}</span>
+                    </span>
                   )}
                 </button>
               )}
@@ -462,58 +406,43 @@ export default function TemplateDetailPage() {
               {hasLivePreview ? (
                 <button
                   onClick={() => setPreviewOpen(true)}
-                  style={{
-                    marginTop: '10px', width: '100%',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    borderRadius: '12px', border: '1px solid #334155',
-                    background: 'transparent',
-                    padding: '12px', fontSize: '14px', fontWeight: 500,
-                    color: '#94a3b8', cursor: 'pointer',
-                  }}
+                  className="btn btn-secondary mt-2.5 w-full"
                 >
                   <Monitor size={15} />
                   Live preview
                 </button>
               ) : (
-                <div style={{
-                  marginTop: '10px', width: '100%', boxSizing: 'border-box',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  borderRadius: '12px', border: '1px solid #1e293b',
-                  padding: '12px', fontSize: '14px',
-                  color: '#334155',
-                }}>
+                <div className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-lg border border-border-subtle px-4 py-3 text-[14px] text-text-disabled">
                   Preview coming soon
                 </div>
               )}
 
               {/* Trust row */}
-              <div style={{
-                marginTop: '14px', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', gap: '14px', flexWrap: 'wrap',
-              }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
-                  <Zap size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
+                  <Zap size={13} className="shrink-0 text-accent-text" />
                   Instant download
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
-                  <RefreshCw size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
+                  <RefreshCw size={13} className="shrink-0 text-accent-text" />
                   Free updates
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#64748b' }}>
-                  <LifeBuoy size={12} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
+                  <LifeBuoy size={13} className="shrink-0 text-accent-text" />
                   Support included
                 </span>
               </div>
 
               {/* Included */}
-              <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #1e293b' }}>
-                <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
+              <div className="hairline my-6" />
+              <div>
+                <h4 className="m-0 mb-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
                   What's included
                 </h4>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
                   {included.map(item => (
-                    <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#94a3b8' }}>
-                      <Check size={14} style={{ color: '#38bdf8', flexShrink: 0 }} />
+                    <li key={item} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
+                      <Check size={14} className="shrink-0 text-accent" />
                       {item}
                     </li>
                   ))}
@@ -521,9 +450,13 @@ export default function TemplateDetailPage() {
               </div>
 
               {/* Category */}
-              <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid #1e293b', fontSize: '13px', color: '#475569' }}>
-                Category: {' '}
-                <Link to="/templates" style={{ color: '#38bdf8', textDecoration: 'none', textTransform: 'capitalize' }}>
+              <div className="hairline my-6" />
+              <div className="text-[13px] text-text-tertiary">
+                Category:{' '}
+                <Link
+                  to="/templates"
+                  className="capitalize text-accent-text no-underline transition-colors duration-150 hover:text-accent-hover"
+                >
                   {template.category}
                 </Link>
               </div>
@@ -561,17 +494,25 @@ function RelatedTemplates({ currentId, category, tags }: { currentId: string; ca
   if (items.length === 0) return null;
 
   return (
-    <section style={{ borderTop: '1px solid #1e293b', background: '#020617' }}>
-      <Container style={{ paddingTop: '3.5rem', paddingBottom: '4rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
-            Related templates
-          </h2>
-          <Link to="/templates" style={{ fontSize: '14px', color: '#38bdf8', textDecoration: 'none', fontWeight: 500 }}>
-            View all templates →
+    <section className="border-t border-border-subtle bg-canvas-raised">
+      <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="m-0 mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">
+              Keep exploring
+            </p>
+            <h2 className="m-0 text-2xl font-semibold tracking-[-0.015em] text-text-primary">
+              Related templates
+            </h2>
+          </div>
+          <Link
+            to="/templates"
+            className="inline-flex items-center gap-1.5 text-[14px] font-medium text-text-secondary no-underline transition-colors duration-150 hover:text-text-primary"
+          >
+            View all templates <ArrowRight size={14} />
           </Link>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {items.map(t => <TemplateCard key={t.id} template={t} />)}
         </div>
       </Container>
