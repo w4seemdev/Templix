@@ -89,15 +89,10 @@
   --focus-ring: #8D70FF;
 }
 
-/* ── Base ─────────────────────────────────────────────────── */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ── Base ─────────────────────────────────────────────────────
+   NOTE: no universal margin/padding reset here — Tailwind v4
+   preflight already provides it inside @layer base. An unlayered
+   reset would override every margin/padding utility on the site. */
 
 html {
   scroll-behavior: smooth;
