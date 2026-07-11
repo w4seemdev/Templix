@@ -1,266 +1,144 @@
-import { useState } from 'react';
-
 /* ============================================================
-   THE DAILY — News & Magazine Template
-   Newspaper white · Georgia serif headlines · red #b91c1c
-   Thin black rules · dense editorial grid
+   THE MERIDIAN — Daily news
+   Classic broadsheet: white, ink black, editorial red accent
+   Self-contained, responsive single-page site
    ============================================================ */
+import { useState, useEffect } from 'react';
 
-const RED = '#b91c1c';
-const INK = '#111111';
-const GREY = '#555555';
-const RULE = '#111111';
-const LIGHT_RULE = '#e0e0e0';
-const SERIF = "Georgia, 'Times New Roman', serif";
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
 
-const sections = ['Politics', 'Tech', 'Business', 'Culture', 'Science', 'Opinion', 'Sports'];
+const PAPER = '#ffffff';
+const INK = '#1a1a1a';
+const MUTE = '#6b6b6b';
+const RED = '#c8102e';
+const LINE = '#e2e2e0';
+const SERIF = "'Playfair Display', Georgia, 'Times New Roman', serif";
 
-const breaking = 'Senate passes landmark AI accountability act · Markets rally on rate-cut signals · Wildfire containment reaches 80% in Sierra foothills';
+const SECTIONS = ['World', 'Politics', 'Business', 'Tech', 'Culture', 'Sport'];
 
-const lead = {
-  kicker: 'Politics',
-  headline: 'AI Accountability Act clears Senate in rare bipartisan vote',
-  standfirst: 'The sweeping bill requires audits for high-risk systems and creates a federal model registry — the most significant technology regulation in two decades.',
-  byline: 'By Dana Okonkwo and Felix Marsh',
-  time: 'Updated 22 minutes ago',
-  img: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80',
-};
+const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-const secondary = [
-  { kicker: 'Analysis', title: 'What the act actually requires of model makers — and what it leaves out', time: '1 hr ago' },
-  { kicker: 'Markets', title: 'Chipmakers shrug off compliance costs as shares hit record highs', time: '2 hrs ago' },
-  { kicker: 'World', title: 'Brussels signals it will mirror US audit framework by spring', time: '3 hrs ago' },
-  { kicker: 'Tech', title: 'Startups race to build the audit tooling the new law demands', time: '4 hrs ago' },
+const side = [
+  { k: 'Politics', t: 'Coalition talks stretch into third week as budget deadline looms' },
+  { k: 'Business', t: 'Central bank holds rates, signals patience amid cooling inflation' },
+  { k: 'Tech', t: 'Chipmakers race to secure rare-earth supply after export curbs' },
 ];
 
-const categoryBlocks = [
-  {
-    name: 'Politics',
-    leadStory: { title: 'Coalition fractures over infrastructure rider as shutdown clock ticks', img: 'https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=800&q=80', byline: 'By Marcus Hale' },
-    headlines: ['Governors press White House on disaster-relief formula', 'Redistricting fight heads back to the high court', 'Veterans bill stalls despite broad public support'],
-  },
-  {
-    name: 'Tech',
-    leadStory: { title: 'The quiet rise of local-first software — and why big cloud is worried', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80', byline: 'By Suki Tanaka' },
-    headlines: ['Quantum startup claims error-correction milestone', 'EU opens probe into app-store steering rules', 'Open-source maintainers win landmark funding deal'],
-  },
-  {
-    name: 'Culture',
-    leadStory: { title: 'A restored 1920s movie palace becomes the most exciting stage in town', img: 'https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80', byline: 'By Imogen Clarke' },
-    headlines: ['The cookbook that turned leftovers into literature', 'Museum returns looted bronzes in landmark ceremony', 'Why everyone is suddenly reading novellas again'],
-  },
+const opinion = [
+  { t: 'The quiet return of the local newspaper', a: 'Editorial Board' },
+  { t: 'Why the four-day week keeps failing upward', a: 'H. Okafor' },
+  { t: 'We are measuring the wrong things in schools', a: 'D. Lindqvist' },
 ];
 
-const trending = [
-  'AI Accountability Act: full text annotated',
-  'The 28-hour city: how night logistics reshaped downtown',
-  'Interview: the engineer who refused to ship',
-  'Heat-pump nation: a buyer’s guide',
-  'Opinion: The case for boring infrastructure',
-];
-
-const columnists = [
-  { name: 'Evelyn Cho', col: 'The Long View', take: 'Regulation always arrives late. The question is whether it arrives useful.', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80' },
-  { name: 'Robert Ellison', col: 'Capital Letters', take: 'Markets priced in compliance months ago. Main Street has not.', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80' },
-  { name: 'Amara Diallo', col: 'On Culture', take: 'The novella revival is really an attention revival in disguise.', avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80' },
-];
-
-const photoEssay = [
-  'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=700&q=80',
-  'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=700&q=80',
-  'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=700&q=80',
-  'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=700&q=80',
-];
-
-const footerCols = [
-  { title: 'Sections', links: ['Politics', 'Tech', 'Business', 'Culture', 'Sports'] },
-  { title: 'The Daily', links: ['About us', 'Staff', 'Ethics policy', 'Careers'] },
-  { title: 'Subscribe', links: ['Digital access', 'Print edition', 'Newsletters', 'Gift subscriptions'] },
+const more = [
+  { k: 'Culture', t: 'A restored 1920s cinema reopens to sold-out crowds', g: 'linear-gradient(150deg,#8a6d4b,#c8a578)' },
+  { k: 'Sport', t: 'Underdogs clinch the cup in extra-time thriller', g: 'linear-gradient(150deg,#3d6b4a,#7fa78a)' },
+  { k: 'World', t: 'Coastal cities trial floating defenses against rising seas', g: 'linear-gradient(150deg,#3a5a78,#88a6bd)' },
+  { k: 'Business', t: 'Small exporters find footing in regional trade blocs', g: 'linear-gradient(150deg,#6b4a5a,#a5849a)' },
 ];
 
 export default function DailyNewsPreview() {
-  const [edition] = useState('Morning Edition');
-
+  const mobile = useIsMobile();
+  const [open, setOpen] = useState(false);
   return (
-    <div style={{ fontFamily: SERIF, background: '#ffffff', color: INK, minHeight: '100vh' }}>
-
-      {/* ── Top bar with ticker ── */}
-      <div style={{ background: INK, color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '12px', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        <span style={{ background: RED, padding: '8px 14px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', flexShrink: 0 }}>Breaking</span>
-        <p style={{ margin: 0, padding: '8px 16px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#d4d4d4' }}>{breaking}</p>
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: PAPER, color: INK, minHeight: '100vh' }}>
+      <div style={{ background: INK, color: '#fff', fontSize: '12px', letterSpacing: '0.02em' }}>
+        <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '7px clamp(1.25rem,4vw,2rem)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ background: RED, borderRadius: '3px', padding: '2px 6px', fontWeight: 800, letterSpacing: '0.06em' }}>LIVE</span>Markets open higher on easing trade tensions</span>
+          {!mobile && <span style={{ color: 'rgba(255,255,255,0.7)' }}>{today}</span>}
+        </div>
       </div>
 
-      {/* ── Masthead ── */}
-      <header style={{ borderBottom: `3px double ${RULE}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 1.5rem 1rem', textAlign: 'center' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: "'Inter', sans-serif", fontSize: '11.5px', color: GREY, marginBottom: '0.75rem' }}>
-            <span>Thursday, June 11, 2026 · {edition}</span>
-            <span style={{ display: 'flex', gap: '1.25rem' }}>
-              <a href="#" style={{ color: GREY, textDecoration: 'none' }}>Sign in</a>
-              <a href="#" style={{ color: RED, textDecoration: 'none', fontWeight: 700 }}>Subscribe — $1/week</a>
-            </span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(2.6rem, 6vw, 4rem)', fontWeight: 700, letterSpacing: '0.02em', margin: 0 }}>The Daily</h1>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.3em', color: GREY, margin: '0.4rem 0 1rem' }}>Independent journalism since 1924</p>
-          <nav style={{ borderTop: `1px solid ${RULE}`, paddingTop: '0.8rem', display: 'flex', justifyContent: 'center', gap: '1.75rem', flexWrap: 'wrap' }}>
-            {sections.map(s => (
-              <a key={s} href="#" style={{ fontFamily: "'Inter', sans-serif", fontSize: '12.5px', fontWeight: 600, color: INK, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s}</a>
-            ))}
-          </nav>
-        </div>
+      <header style={{ borderBottom: `2px solid ${INK}`, textAlign: 'center', padding: mobile ? '1.25rem 1.25rem 0' : '1.75rem 2rem 0' }}>
+        <a href="#top" style={{ fontFamily: SERIF, fontWeight: 800, fontSize: mobile ? '2.6rem' : '4rem', letterSpacing: '-0.02em', color: INK, textDecoration: 'none', display: 'block' }}>The Meridian</a>
+        <p style={{ fontSize: '11px', letterSpacing: '0.28em', textTransform: 'uppercase', color: MUTE, margin: '0.35rem 0 1rem' }}>Independent journalism since 1946</p>
       </header>
 
-      {/* ── Lead story + secondary stack ── */}
-      <section style={{ padding: '2.5rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2.5rem' }}>
-          <div style={{ gridColumn: 'span 1' }}>
-            <img src={lead.img} alt={lead.headline} style={{ width: '100%', height: '340px', objectFit: 'cover', display: 'block', marginBottom: '1.25rem' }} />
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: RED, margin: '0 0 0.6rem' }}>{lead.kicker}</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 700, lineHeight: 1.15, margin: '0 0 0.9rem' }}>{lead.headline}</h2>
-            <p style={{ fontSize: '1.08rem', color: '#333', lineHeight: 1.65, margin: '0 0 0.9rem' }}>{lead.standfirst}</p>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: GREY, margin: 0 }}>{lead.byline} · <span style={{ color: RED }}>{lead.time}</span></p>
-          </div>
-          <div>
-            <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', borderBottom: `2px solid ${RULE}`, paddingBottom: '8px', margin: '0 0 0.5rem' }}>More on this story</h3>
-            {secondary.map(s => (
-              <a key={s.title} href="#" style={{ display: 'block', padding: '1.1rem 0', borderBottom: `1px solid ${LIGHT_RULE}`, textDecoration: 'none', color: INK }}>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: RED, margin: '0 0 5px' }}>{s.kicker}</p>
-                <h4 style={{ fontSize: '17.5px', fontWeight: 700, lineHeight: 1.35, margin: '0 0 5px' }}>{s.title}</h4>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', color: GREY, margin: 0 }}>{s.time}</p>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${LINE}`, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}>
+        <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 clamp(1.25rem,4vw,2rem)', height: '46px', display: 'flex', alignItems: 'center', justifyContent: mobile ? 'space-between' : 'center', gap: '2rem' }}>
+          {!mobile ? SECTIONS.map(s => <a key={s} href="#more" style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.02em', color: INK, textDecoration: 'none' }}>{s}</a>)
+            : (<>
+              <span style={{ fontSize: '13px', fontWeight: 700 }}>Sections</span>
+              <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: `1px solid ${LINE}`, borderRadius: '6px', padding: '5px 8px', cursor: 'pointer', display: 'grid', gap: '3px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '16px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            </>)}
+        </div>
+        {mobile && open && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0.5rem 1.25rem 1rem', borderTop: `1px solid ${LINE}` }}>{SECTIONS.map(s => <a key={s} href="#more" onClick={() => setOpen(false)} style={{ padding: '10px 0', fontSize: '14px', color: INK, textDecoration: 'none' }}>{s}</a>)}</div>}
+      </nav>
+
+      <main id="top" style={{ maxWidth: '1160px', margin: '0 auto', padding: mobile ? '1.75rem 1.25rem' : '2.5rem 2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '2fr 1fr', gap: mobile ? '2rem' : '2.5rem' }}>
+          <article style={{ borderRight: mobile ? 'none' : `1px solid ${LINE}`, paddingRight: mobile ? 0 : '2.5rem' }}>
+            <span style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: RED }}>World · Analysis</span>
+            <h1 style={{ fontFamily: SERIF, fontSize: mobile ? '2.1rem' : '3.1rem', fontWeight: 800, letterSpacing: '-0.015em', lineHeight: 1.08, margin: '0.6rem 0 1rem' }}>
+              A fragile ceasefire holds as diplomats push for a lasting accord
+            </h1>
+            <div style={{ aspectRatio: '16/9', borderRadius: '6px', background: 'linear-gradient(150deg,#37506b,#8ba0b5)', margin: '0 0 0.75rem' }} />
+            <p style={{ fontSize: '12px', color: MUTE, margin: '0 0 1.25rem', fontStyle: 'italic' }}>Delegations gather ahead of the third round of talks. — Meridian staff</p>
+            <p style={{ fontSize: mobile ? '1.02rem' : '1.1rem', color: '#33322f', lineHeight: 1.8, margin: '0 0 1rem' }}>
+              After forty days of negotiation, envoys emerged cautiously optimistic that a framework agreement could be reached within the week. Observers warn that the hardest questions — borders, reconstruction, and the return of the displaced — remain unresolved.
+            </p>
+            <p style={{ fontSize: '1rem', color: '#33322f', lineHeight: 1.8, margin: 0 }}>
+              &ldquo;This is a beginning, not an ending,&rdquo; said one senior mediator, speaking on condition of anonymity. Aid convoys resumed for the first time in six weeks as the guns fell silent along the northern corridor.
+            </p>
+          </article>
+
+          <aside>
+            <h2 style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: INK, borderBottom: `2px solid ${INK}`, paddingBottom: '6px', margin: '0 0 1rem' }}>Top stories</h2>
+            {side.map((s) => (
+              <a key={s.t} href="#more" style={{ display: 'block', textDecoration: 'none', color: INK, padding: '0.9rem 0', borderBottom: `1px solid ${LINE}` }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: RED }}>{s.k}</span>
+                <h3 style={{ fontFamily: SERIF, fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.25, margin: '0.35rem 0 0' }}>{s.t}</h3>
               </a>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Category sections + trending sidebar ── */}
-      <section style={{ padding: '1.5rem 1.5rem 3rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
-          <div style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-            {categoryBlocks.map(block => (
-              <div key={block.name}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: `2px solid ${RULE}`, paddingBottom: '8px', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>{block.name}</h3>
-                  <a href="#" style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: RED, textDecoration: 'none', fontWeight: 700 }}>All {block.name} →</a>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
-                  <a href="#" style={{ textDecoration: 'none', color: INK }}>
-                    <img src={block.leadStory.img} alt={block.leadStory.title} style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', marginBottom: '0.8rem' }} />
-                    <h4 style={{ fontSize: '19px', fontWeight: 700, lineHeight: 1.3, margin: '0 0 6px' }}>{block.leadStory.title}</h4>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', color: GREY, margin: 0 }}>{block.leadStory.byline}</p>
-                  </a>
-                  <div>
-                    {block.headlines.map(h => (
-                      <a key={h} href="#" style={{ display: 'block', padding: '0.8rem 0', borderBottom: `1px solid ${LIGHT_RULE}`, textDecoration: 'none', color: INK }}>
-                        <h5 style={{ fontSize: '15.5px', fontWeight: 700, lineHeight: 1.4, margin: 0 }}>{h}</h5>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Trending sidebar */}
-          <aside>
-            <div style={{ border: `1px solid ${RULE}`, padding: '1.5rem' }}>
-              <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 1rem', color: RED }}>Most read</h3>
-              <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {trending.map((t, i) => (
-                  <li key={t} style={{ display: 'flex', gap: '1rem', padding: '0.9rem 0', borderBottom: i < trending.length - 1 ? `1px solid ${LIGHT_RULE}` : 'none' }}>
-                    <span style={{ fontSize: '26px', fontWeight: 700, color: '#cccccc', lineHeight: 1, flexShrink: 0 }}>{i + 1}</span>
-                    <a href="#" style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: INK, textDecoration: 'none' }}>{t}</a>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <div style={{ background: '#f7f7f7', border: `1px solid ${LIGHT_RULE}`, padding: '1.5rem', marginTop: '1.5rem', textAlign: 'center' }}>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: RED, margin: '0 0 0.6rem' }}>The Evening Brief</p>
-              <h4 style={{ fontSize: '19px', fontWeight: 700, margin: '0 0 0.6rem' }}>The day’s five stories, told straight</h4>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: GREY, lineHeight: 1.6, margin: '0 0 1.1rem' }}>Join 480,000 readers who end the day informed, not exhausted.</p>
-              <a href="#" style={{ display: 'block', background: INK, color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 700, padding: '12px', textDecoration: 'none' }}>Sign up free</a>
+            <div style={{ background: '#f6f5f2', borderRadius: '6px', padding: '1.25rem', marginTop: '1.5rem' }}>
+              <h3 style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: MUTE, margin: '0 0 0.9rem' }}>Opinion</h3>
+              {opinion.map(o => (
+                <a key={o.t} href="#more" style={{ display: 'block', textDecoration: 'none', color: INK, marginBottom: '0.85rem' }}>
+                  <p style={{ fontFamily: SERIF, fontSize: '1.02rem', fontWeight: 600, lineHeight: 1.3, fontStyle: 'italic', margin: '0 0 2px' }}>{o.t}</p>
+                  <span style={{ fontSize: '12px', color: MUTE }}>{o.a}</span>
+                </a>
+              ))}
             </div>
           </aside>
         </div>
-      </section>
 
-      {/* ── Opinion / columnists ── */}
-      <section style={{ padding: '3rem 1.5rem', borderTop: `2px solid ${RULE}`, background: '#fafafa' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 1.75rem' }}>Opinion</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
-            {columnists.map(c => (
-              <a key={c.name} href="#" style={{ display: 'flex', gap: '1rem', textDecoration: 'none', color: INK }}>
-                <img src={c.avatar} alt={c.name} style={{ width: '58px', height: '58px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, filter: 'grayscale(100%)' }} />
-                <div>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: RED, margin: '0 0 4px' }}>{c.col}</p>
-                  <p style={{ fontSize: '16.5px', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, margin: '0 0 5px' }}>“{c.take}”</p>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: GREY, margin: 0 }}>{c.name}</p>
-                </div>
+        <section id="more" style={{ marginTop: mobile ? '2.5rem' : '3.5rem', borderTop: `2px solid ${INK}`, paddingTop: '1.5rem' }}>
+          <h2 style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: INK, margin: '0 0 1.5rem' }}>More to read</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(4,1fr)', gap: '1.5rem' }}>
+            {more.map(m => (
+              <a key={m.t} href="#more" style={{ textDecoration: 'none', color: INK }}>
+                <div style={{ aspectRatio: '16/10', borderRadius: '6px', background: m.g, marginBottom: '0.75rem' }} />
+                <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: RED }}>{m.k}</span>
+                <h3 style={{ fontFamily: SERIF, fontSize: '1.1rem', fontWeight: 700, lineHeight: 1.25, margin: '0.35rem 0 0' }}>{m.t}</h3>
               </a>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Photo essay strip ── */}
-      <section style={{ padding: '3rem 1.5rem', borderTop: `1px solid ${LIGHT_RULE}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>Photo essay · The last print shops of Mott Street</h3>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: GREY }}>Photographs by Lena Brightwater</span>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-            {photoEssay.map((src, i) => (
-              <img key={src} src={src} alt={`Photo essay frame ${i + 1}`} style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }} />
-            ))}
-          </div>
-        </div>
-      </section>
+        <section style={{ marginTop: mobile ? '2.5rem' : '3.5rem', background: INK, color: '#fff', borderRadius: '10px', padding: mobile ? '2rem 1.5rem' : '2.75rem', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '1.7rem' : '2.2rem', fontWeight: 700, margin: '0 0 0.6rem' }}>Journalism worth paying for</h2>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1rem', margin: '0 0 1.5rem' }}>Support independent reporting. Cancel anytime. First month on us.</p>
+          <a href="#top" style={{ display: 'inline-block', background: RED, color: '#fff', borderRadius: '6px', padding: '13px 30px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>Subscribe for $4/month</a>
+        </section>
+      </main>
 
-      {/* ── Subscription band ── */}
-      <section style={{ padding: '3.5rem 1.5rem', borderTop: `3px double ${RULE}`, borderBottom: `3px double ${RULE}` }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, margin: '0 0 0.9rem' }}>Journalism worth paying for</h2>
-          <p style={{ fontSize: '1.05rem', color: GREY, lineHeight: 1.7, margin: '0 0 1.75rem' }}>
-            Unlimited digital access, the Sunday print edition, and every newsletter — for less than a coffee a week. Cancel anytime.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap' }}>
-            <a href="#" style={{ background: RED, color: '#fff', fontFamily: "'Inter', sans-serif", padding: '14px 32px', fontSize: '14px', fontWeight: 800, textDecoration: 'none' }}>Subscribe for $1/week</a>
-            <a href="#" style={{ border: `1px solid ${INK}`, color: INK, fontFamily: "'Inter', sans-serif", padding: '14px 32px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>Gift a subscription</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer style={{ padding: '3rem 1.5rem 2rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '3rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-            <div style={{ maxWidth: '280px' }}>
-              <h3 style={{ fontSize: '26px', fontWeight: 700, margin: '0 0 0.75rem' }}>The Daily</h3>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: GREY, lineHeight: 1.7, margin: 0 }}>
-                Independent journalism since 1924. 88 Beacon Street, New York, NY.
-              </p>
-            </div>
-            {footerCols.map(col => (
-              <div key={col.title}>
-                <h4 style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: GREY, margin: '0 0 1rem' }}>{col.title}</h4>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {col.links.map(l => (
-                    <li key={l}><a href="#" style={{ fontFamily: "'Inter', sans-serif", fontSize: '13.5px', color: '#333', textDecoration: 'none' }}>{l}</a></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div style={{ borderTop: `1px solid ${LIGHT_RULE}`, paddingTop: '1.25rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: GREY, margin: 0 }}>© 2026 The Daily Press Company · Terms · Privacy · Ethics</p>
-            <div style={{ display: 'flex', gap: '1.5rem' }}>
-              {['X', 'Instagram', 'RSS'].map(s => (
-                <a key={s} href="#" style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: GREY, textDecoration: 'none' }}>{s}</a>
-              ))}
-            </div>
-          </div>
+      <footer style={{ borderTop: `1px solid ${LINE}`, padding: '2rem 0', marginTop: '1rem' }}>
+        <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 clamp(1.25rem,4vw,2rem)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <span style={{ fontFamily: SERIF, fontSize: '20px', fontWeight: 800 }}>The Meridian</span>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>{['About', 'Ethics', 'Contact', 'Careers'].map(s => <a key={s} href="#top" style={{ fontSize: '13px', color: MUTE, textDecoration: 'none' }}>{s}</a>)}</div>
+          <span style={{ fontSize: '13px', color: '#aaa' }}>© {new Date().getFullYear()} The Meridian</span>
         </div>
       </footer>
     </div>

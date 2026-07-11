@@ -1,82 +1,114 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ui/ProtectedRoute';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import ScrollToTop from './components/ui/ScrollToTop';
 import HomePage from './pages/HomePage';
-import TemplatesPage from './pages/TemplatesPage';
-import TemplateDetailPage from './pages/TemplateDetailPage';
-import CategoriesPage from './pages/CategoriesPage';
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
-import NotFoundPage from './pages/NotFoundPage';
-import TermsPage from './pages/TermsPage';
-import PrivacyPage from './pages/PrivacyPage';
-import WishlistPage from './pages/WishlistPage';
-import AboutPage from './pages/AboutPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
-import LuminarySaasPreview      from './pages/previews/LuminarySaasPreview';
-import FolioPortfolioPreview    from './pages/previews/FolioPortfolioPreview';
-import ShopDropEcommercePreview from './pages/previews/ShopDropEcommercePreview';
-import BloomBlogPreview         from './pages/previews/BloomBlogPreview';
-import AgencyProPreview         from './pages/previews/AgencyProPreview';
-import LaunchPadPreview         from './pages/previews/LaunchPadPreview';
-import DashifyPreview           from './pages/previews/DashifyPreview';
-import SaveurRestaurantPreview  from './pages/previews/SaveurRestaurantPreview';
-import NexusCorporatePreview    from './pages/previews/NexusCorporatePreview';
-import CRMDashboardPreview      from './pages/previews/CRMDashboardPreview';
-import FashionStorePreview      from './pages/previews/FashionStorePreview';
-import AppLandingPreview        from './pages/previews/AppLandingPreview';
-import CoffeeShopPreview        from './pages/previews/CoffeeShopPreview';
-import TechBlogPreview          from './pages/previews/TechBlogPreview';
-import RealEstatePreview        from './pages/previews/RealEstatePreview';
-import FitnessPreview           from './pages/previews/FitnessPreview';
-import PodcastPreview           from './pages/previews/PodcastPreview';
-import EventPreview             from './pages/previews/EventPreview';
-import WeddingPreview           from './pages/previews/WeddingPreview';
-import MusicPreview             from './pages/previews/MusicPreview';
-import PhotographyPreview       from './pages/previews/PhotographyPreview';
-import HotelPreview             from './pages/previews/HotelPreview';
-import TravelBlogPreview        from './pages/previews/TravelBlogPreview';
-import BeautySpaPreview         from './pages/previews/BeautySpaPreview';
-import Web3Preview              from './pages/previews/Web3Preview';
-import LegalPreview             from './pages/previews/LegalPreview';
-import ArchitecturePreview      from './pages/previews/ArchitecturePreview';
-import ConstructionPreview      from './pages/previews/ConstructionPreview';
-import JobBoardPreview          from './pages/previews/JobBoardPreview';
-import FinanceDashboardPreview  from './pages/previews/FinanceDashboardPreview';
-import HealthcarePreview        from './pages/previews/HealthcarePreview';
-import EmailMarketingPreview    from './pages/previews/EmailMarketingPreview';
-import VaultFinancePreview      from './pages/previews/VaultFinancePreview';
-import CreativeStudioPreview    from './pages/previews/CreativeStudioPreview';
-import BookstorePreview         from './pages/previews/BookstorePreview';
-import FloristPreview           from './pages/previews/FloristPreview';
-import NewsletterPreview        from './pages/previews/NewsletterPreview';
-import ProductivityPreview      from './pages/previews/ProductivityPreview';
-import StartKitStartupPreview   from './pages/previews/StartKitStartupPreview';
-import MedCareHealthcarePreview from './pages/previews/MedCareHealthcarePreview';
-import CoursifyEducationPreview from './pages/previews/CoursifyEducationPreview';
-import EstatlyRealEstatePreview from './pages/previews/EstatlyRealEstatePreview';
-import PulseAnalyticsPreview    from './pages/previews/PulseAnalyticsPreview';
-import AtlasMapSaasPreview      from './pages/previews/AtlasMapSaasPreview';
-import ForgeDevToolsPreview     from './pages/previews/ForgeDevToolsPreview';
-import VerdeEcoPreview          from './pages/previews/VerdeEcoPreview';
-import SwiftDeliveryPreview     from './pages/previews/SwiftDeliveryPreview';
-import IronPeakGymPreview       from './pages/previews/IronPeakGymPreview';
-import LaunchConfEventPreview   from './pages/previews/LaunchConfEventPreview';
-import AriaPhotographyPreview   from './pages/previews/AriaPhotographyPreview';
-import NomadRemoteJobsPreview   from './pages/previews/NomadRemoteJobsPreview';
-import VersePoetryPreview       from './pages/previews/VersePoetryPreview';
-import RoamRentalsPreview       from './pages/previews/RoamRentalsPreview';
-import PixelGameStudioPreview   from './pages/previews/PixelGameStudioPreview';
-import ScoutTalentPreview       from './pages/previews/ScoutTalentPreview';
-import HopeNonprofitPreview     from './pages/previews/HopeNonprofitPreview';
-import NeuronAiPreview          from './pages/previews/NeuronAiPreview';
-import VelocityAutoPreview      from './pages/previews/VelocityAutoPreview';
-import PawsPetCarePreview       from './pages/previews/PawsPetCarePreview';
-import HavenInteriorPreview     from './pages/previews/HavenInteriorPreview';
-import DailyNewsPreview         from './pages/previews/DailyNewsPreview';
+
+// Secondary pages — lazy so the initial bundle stays small (homepage only).
+const TemplatesPage        = lazy(() => import('./pages/TemplatesPage'));
+const TemplateDetailPage   = lazy(() => import('./pages/TemplateDetailPage'));
+const CategoriesPage       = lazy(() => import('./pages/CategoriesPage'));
+const LoginPage            = lazy(() => import('./pages/LoginPage'));
+const DashboardPage        = lazy(() => import('./pages/DashboardPage'));
+const PurchaseSuccessPage  = lazy(() => import('./pages/PurchaseSuccessPage'));
+const NotFoundPage         = lazy(() => import('./pages/NotFoundPage'));
+const TermsPage            = lazy(() => import('./pages/TermsPage'));
+const PrivacyPage          = lazy(() => import('./pages/PrivacyPage'));
+const WishlistPage         = lazy(() => import('./pages/WishlistPage'));
+const AboutPage            = lazy(() => import('./pages/AboutPage'));
+const ResetPasswordPage    = lazy(() => import('./pages/ResetPasswordPage'));
+const SupportPage          = lazy(() => import('./pages/SupportPage'));
+const FaqPage              = lazy(() => import('./pages/FaqPage'));
+const LicensePage          = lazy(() => import('./pages/LicensePage'));
+
+// Template previews — one lazy chunk each so a visitor loads only the demo
+// they open, not all 61. Route paths are unchanged.
+const LuminarySaasPreview      = lazy(() => import('./pages/previews/LuminarySaasPreview'));
+const FolioPortfolioPreview    = lazy(() => import('./pages/previews/FolioPortfolioPreview'));
+const ShopDropEcommercePreview = lazy(() => import('./pages/previews/ShopDropEcommercePreview'));
+const BloomBlogPreview         = lazy(() => import('./pages/previews/BloomBlogPreview'));
+const AgencyProPreview         = lazy(() => import('./pages/previews/AgencyProPreview'));
+const LaunchPadPreview         = lazy(() => import('./pages/previews/LaunchPadPreview'));
+const DashifyPreview           = lazy(() => import('./pages/previews/DashifyPreview'));
+const SaveurRestaurantPreview  = lazy(() => import('./pages/previews/SaveurRestaurantPreview'));
+const NexusCorporatePreview    = lazy(() => import('./pages/previews/NexusCorporatePreview'));
+const CRMDashboardPreview      = lazy(() => import('./pages/previews/CRMDashboardPreview'));
+const FashionStorePreview      = lazy(() => import('./pages/previews/FashionStorePreview'));
+const AppLandingPreview        = lazy(() => import('./pages/previews/AppLandingPreview'));
+const CoffeeShopPreview        = lazy(() => import('./pages/previews/CoffeeShopPreview'));
+const TechBlogPreview          = lazy(() => import('./pages/previews/TechBlogPreview'));
+const RealEstatePreview        = lazy(() => import('./pages/previews/RealEstatePreview'));
+const FitnessPreview           = lazy(() => import('./pages/previews/FitnessPreview'));
+const PodcastPreview           = lazy(() => import('./pages/previews/PodcastPreview'));
+const EventPreview             = lazy(() => import('./pages/previews/EventPreview'));
+const WeddingPreview           = lazy(() => import('./pages/previews/WeddingPreview'));
+const MusicPreview             = lazy(() => import('./pages/previews/MusicPreview'));
+const PhotographyPreview       = lazy(() => import('./pages/previews/PhotographyPreview'));
+const HotelPreview             = lazy(() => import('./pages/previews/HotelPreview'));
+const TravelBlogPreview        = lazy(() => import('./pages/previews/TravelBlogPreview'));
+const BeautySpaPreview         = lazy(() => import('./pages/previews/BeautySpaPreview'));
+const Web3Preview              = lazy(() => import('./pages/previews/Web3Preview'));
+const LegalPreview             = lazy(() => import('./pages/previews/LegalPreview'));
+const ArchitecturePreview      = lazy(() => import('./pages/previews/ArchitecturePreview'));
+const ConstructionPreview      = lazy(() => import('./pages/previews/ConstructionPreview'));
+const JobBoardPreview          = lazy(() => import('./pages/previews/JobBoardPreview'));
+const FinanceDashboardPreview  = lazy(() => import('./pages/previews/FinanceDashboardPreview'));
+const HealthcarePreview        = lazy(() => import('./pages/previews/HealthcarePreview'));
+const EmailMarketingPreview    = lazy(() => import('./pages/previews/EmailMarketingPreview'));
+const VaultFinancePreview      = lazy(() => import('./pages/previews/VaultFinancePreview'));
+const CreativeStudioPreview    = lazy(() => import('./pages/previews/CreativeStudioPreview'));
+const BookstorePreview         = lazy(() => import('./pages/previews/BookstorePreview'));
+const FloristPreview           = lazy(() => import('./pages/previews/FloristPreview'));
+const NewsletterPreview        = lazy(() => import('./pages/previews/NewsletterPreview'));
+const ProductivityPreview      = lazy(() => import('./pages/previews/ProductivityPreview'));
+const StartKitStartupPreview   = lazy(() => import('./pages/previews/StartKitStartupPreview'));
+const MedCareHealthcarePreview = lazy(() => import('./pages/previews/MedCareHealthcarePreview'));
+const CoursifyEducationPreview = lazy(() => import('./pages/previews/CoursifyEducationPreview'));
+const EstatlyRealEstatePreview = lazy(() => import('./pages/previews/EstatlyRealEstatePreview'));
+const PulseAnalyticsPreview    = lazy(() => import('./pages/previews/PulseAnalyticsPreview'));
+const AtlasMapSaasPreview      = lazy(() => import('./pages/previews/AtlasMapSaasPreview'));
+const ForgeDevToolsPreview     = lazy(() => import('./pages/previews/ForgeDevToolsPreview'));
+const VerdeEcoPreview          = lazy(() => import('./pages/previews/VerdeEcoPreview'));
+const SwiftDeliveryPreview     = lazy(() => import('./pages/previews/SwiftDeliveryPreview'));
+const IronPeakGymPreview       = lazy(() => import('./pages/previews/IronPeakGymPreview'));
+const LaunchConfEventPreview   = lazy(() => import('./pages/previews/LaunchConfEventPreview'));
+const AriaPhotographyPreview   = lazy(() => import('./pages/previews/AriaPhotographyPreview'));
+const NomadRemoteJobsPreview   = lazy(() => import('./pages/previews/NomadRemoteJobsPreview'));
+const VersePoetryPreview       = lazy(() => import('./pages/previews/VersePoetryPreview'));
+const RoamRentalsPreview       = lazy(() => import('./pages/previews/RoamRentalsPreview'));
+const PixelGameStudioPreview   = lazy(() => import('./pages/previews/PixelGameStudioPreview'));
+const ScoutTalentPreview       = lazy(() => import('./pages/previews/ScoutTalentPreview'));
+const HopeNonprofitPreview     = lazy(() => import('./pages/previews/HopeNonprofitPreview'));
+const NeuronAiPreview          = lazy(() => import('./pages/previews/NeuronAiPreview'));
+const VelocityAutoPreview      = lazy(() => import('./pages/previews/VelocityAutoPreview'));
+const PawsPetCarePreview       = lazy(() => import('./pages/previews/PawsPetCarePreview'));
+const HavenInteriorPreview     = lazy(() => import('./pages/previews/HavenInteriorPreview'));
+const DailyNewsPreview         = lazy(() => import('./pages/previews/DailyNewsPreview'));
+
+function PageFallback() {
+  return (
+    <div
+      className="flex min-h-[60vh] items-center justify-center"
+      role="status"
+      aria-label="Loading"
+    >
+      <div
+        style={{
+          width: 28,
+          height: 28,
+          border: '2px solid var(--color-border-strong)',
+          borderTopColor: 'var(--color-accent)',
+          borderRadius: '9999px',
+          animation: 'spin 0.7s linear infinite',
+        }}
+      />
+    </div>
+  );
+}
 
 // Hide navbar/footer on login, dashboard, and preview pages
 function Layout() {
@@ -85,85 +117,98 @@ function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-text-primary">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:border focus:border-border-strong focus:bg-surface-2 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-text-primary focus:shadow-lg"
+      >
+        Skip to content
+      </a>
       {!isShell && <Navbar />}
-      <main className="flex-1">
-        <Routes>
-          <Route path="/"                   element={<HomePage />}                                              />
-          <Route path="/templates"          element={<TemplatesPage />}                                         />
-          <Route path="/templates/:id"      element={<TemplateDetailPage />}                                    />
-          <Route path="/categories"         element={<CategoriesPage />}                                        />
-          <Route path="/login"              element={<LoginPage />}                                             />
-          <Route path="/purchase-success"   element={<PurchaseSuccessPage />}                                   />
-          <Route path="/dashboard"          element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}        />
-          <Route path="/wishlist"           element={<WishlistPage />}                                          />
-          <Route path="/about"             element={<AboutPage />}                                             />
-          <Route path="/terms"              element={<TermsPage />}                                             />
-          <Route path="/privacy"            element={<PrivacyPage />}                                           />
-          <Route path="/reset-password"     element={<ResetPasswordPage />}                                     />
-          {/* ── Template previews ── */}
-          <Route path="/preview/luminary"   element={<LuminarySaasPreview />}      />
-          <Route path="/preview/folio"      element={<FolioPortfolioPreview />}    />
-          <Route path="/preview/shopdrop"   element={<ShopDropEcommercePreview />} />
-          <Route path="/preview/bloom"      element={<BloomBlogPreview />}         />
-          <Route path="/preview/agency-pro" element={<AgencyProPreview />}         />
-          <Route path="/preview/launchpad"  element={<LaunchPadPreview />}         />
-          <Route path="/preview/dashify"    element={<DashifyPreview />}           />
-          <Route path="/preview/saveur"     element={<SaveurRestaurantPreview />}  />
-          <Route path="/preview/nexus"        element={<NexusCorporatePreview />}    />
-          <Route path="/preview/crm"          element={<CRMDashboardPreview />}      />
-          <Route path="/preview/fashion"      element={<FashionStorePreview />}      />
-          <Route path="/preview/app-landing"  element={<AppLandingPreview />}        />
-          <Route path="/preview/coffee"       element={<CoffeeShopPreview />}        />
-          <Route path="/preview/techblog"     element={<TechBlogPreview />}          />
-          <Route path="/preview/real-estate"  element={<RealEstatePreview />}        />
-          <Route path="/preview/fitness"      element={<FitnessPreview />}           />
-          <Route path="/preview/podcast"      element={<PodcastPreview />}           />
-          <Route path="/preview/event"        element={<EventPreview />}             />
-          <Route path="/preview/wedding"      element={<WeddingPreview />}           />
-          <Route path="/preview/music"        element={<MusicPreview />}             />
-          <Route path="/preview/photography"    element={<PhotographyPreview />}       />
-          <Route path="/preview/hotel"         element={<HotelPreview />}             />
-          <Route path="/preview/travel-blog"   element={<TravelBlogPreview />}        />
-          <Route path="/preview/beauty-spa"    element={<BeautySpaPreview />}         />
-          <Route path="/preview/web3"          element={<Web3Preview />}              />
-          <Route path="/preview/legal"         element={<LegalPreview />}             />
-          <Route path="/preview/architecture"  element={<ArchitecturePreview />}      />
-          <Route path="/preview/construction"  element={<ConstructionPreview />}      />
-          <Route path="/preview/job-board"     element={<JobBoardPreview />}          />
-          <Route path="/preview/finance-dashboard" element={<FinanceDashboardPreview />} />
-          <Route path="/preview/healthcare"    element={<HealthcarePreview />}        />
-          <Route path="/preview/email-marketing" element={<EmailMarketingPreview />}  />
-          <Route path="/preview/vault-finance" element={<VaultFinancePreview />}      />
-          <Route path="/preview/creative-studio" element={<CreativeStudioPreview />}  />
-          <Route path="/preview/bookstore"     element={<BookstorePreview />}         />
-          <Route path="/preview/florist"       element={<FloristPreview />}           />
-          <Route path="/preview/newsletter"    element={<NewsletterPreview />}        />
-          <Route path="/preview/productivity"  element={<ProductivityPreview />}      />
-          <Route path="/preview/startkit"      element={<StartKitStartupPreview />}   />
-          <Route path="/preview/medcare"       element={<MedCareHealthcarePreview />} />
-          <Route path="/preview/coursify"      element={<CoursifyEducationPreview />} />
-          <Route path="/preview/estatly"       element={<EstatlyRealEstatePreview />} />
-          <Route path="/preview/pulse-analytics" element={<PulseAnalyticsPreview />}  />
-          <Route path="/preview/atlas-maps"    element={<AtlasMapSaasPreview />}      />
-          <Route path="/preview/forge-devtools" element={<ForgeDevToolsPreview />}    />
-          <Route path="/preview/verde-eco"     element={<VerdeEcoPreview />}          />
-          <Route path="/preview/swift-delivery" element={<SwiftDeliveryPreview />}    />
-          <Route path="/preview/ironpeak"      element={<IronPeakGymPreview />}       />
-          <Route path="/preview/launchconf"    element={<LaunchConfEventPreview />}   />
-          <Route path="/preview/aria-photography" element={<AriaPhotographyPreview />} />
-          <Route path="/preview/nomad-jobs"    element={<NomadRemoteJobsPreview />}   />
-          <Route path="/preview/verse-lit"     element={<VersePoetryPreview />}       />
-          <Route path="/preview/roam-rentals"  element={<RoamRentalsPreview />}       />
-          <Route path="/preview/pixel-games"   element={<PixelGameStudioPreview />}   />
-          <Route path="/preview/scout-talent"  element={<ScoutTalentPreview />}       />
-          <Route path="/preview/hope-nonprofit" element={<HopeNonprofitPreview />}    />
-          <Route path="/preview/neuron-ai"     element={<NeuronAiPreview />}          />
-          <Route path="/preview/velocity-auto" element={<VelocityAutoPreview />}      />
-          <Route path="/preview/paws-petcare"  element={<PawsPetCarePreview />}       />
-          <Route path="/preview/haven-interior" element={<HavenInteriorPreview />}    />
-          <Route path="/preview/daily-news"    element={<DailyNewsPreview />}         />
-          <Route path="*"                   element={<NotFoundPage />}             />
-        </Routes>
+      <main id="main" tabIndex={-1} className="flex-1">
+        <ErrorBoundary>
+          <Suspense fallback={<PageFallback />}>
+            <Routes>
+              <Route path="/"                   element={<HomePage />}                                              />
+              <Route path="/templates"          element={<TemplatesPage />}                                         />
+              <Route path="/templates/:id"      element={<TemplateDetailPage />}                                    />
+              <Route path="/categories"         element={<CategoriesPage />}                                        />
+              <Route path="/login"              element={<LoginPage />}                                             />
+              <Route path="/purchase-success"   element={<PurchaseSuccessPage />}                                   />
+              <Route path="/dashboard"          element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}        />
+              <Route path="/wishlist"           element={<WishlistPage />}                                          />
+              <Route path="/about"              element={<AboutPage />}                                             />
+              <Route path="/terms"              element={<TermsPage />}                                             />
+              <Route path="/privacy"            element={<PrivacyPage />}                                           />
+              <Route path="/support"            element={<SupportPage />}                                           />
+              <Route path="/faq"                element={<FaqPage />}                                               />
+              <Route path="/license"            element={<LicensePage />}                                           />
+              <Route path="/reset-password"     element={<ResetPasswordPage />}                                     />
+              {/* ── Template previews ── */}
+              <Route path="/preview/luminary"   element={<LuminarySaasPreview />}      />
+              <Route path="/preview/folio"      element={<FolioPortfolioPreview />}    />
+              <Route path="/preview/shopdrop"   element={<ShopDropEcommercePreview />} />
+              <Route path="/preview/bloom"      element={<BloomBlogPreview />}         />
+              <Route path="/preview/agency-pro" element={<AgencyProPreview />}         />
+              <Route path="/preview/launchpad"  element={<LaunchPadPreview />}         />
+              <Route path="/preview/dashify"    element={<DashifyPreview />}           />
+              <Route path="/preview/saveur"     element={<SaveurRestaurantPreview />}  />
+              <Route path="/preview/nexus"        element={<NexusCorporatePreview />}    />
+              <Route path="/preview/crm"          element={<CRMDashboardPreview />}      />
+              <Route path="/preview/fashion"      element={<FashionStorePreview />}      />
+              <Route path="/preview/app-landing"  element={<AppLandingPreview />}        />
+              <Route path="/preview/coffee"       element={<CoffeeShopPreview />}        />
+              <Route path="/preview/techblog"     element={<TechBlogPreview />}          />
+              <Route path="/preview/real-estate"  element={<RealEstatePreview />}        />
+              <Route path="/preview/fitness"      element={<FitnessPreview />}           />
+              <Route path="/preview/podcast"      element={<PodcastPreview />}           />
+              <Route path="/preview/event"        element={<EventPreview />}             />
+              <Route path="/preview/wedding"      element={<WeddingPreview />}           />
+              <Route path="/preview/music"        element={<MusicPreview />}             />
+              <Route path="/preview/photography"    element={<PhotographyPreview />}       />
+              <Route path="/preview/hotel"         element={<HotelPreview />}             />
+              <Route path="/preview/travel-blog"   element={<TravelBlogPreview />}        />
+              <Route path="/preview/beauty-spa"    element={<BeautySpaPreview />}         />
+              <Route path="/preview/web3"          element={<Web3Preview />}              />
+              <Route path="/preview/legal"         element={<LegalPreview />}             />
+              <Route path="/preview/architecture"  element={<ArchitecturePreview />}      />
+              <Route path="/preview/construction"  element={<ConstructionPreview />}      />
+              <Route path="/preview/job-board"     element={<JobBoardPreview />}          />
+              <Route path="/preview/finance-dashboard" element={<FinanceDashboardPreview />} />
+              <Route path="/preview/healthcare"    element={<HealthcarePreview />}        />
+              <Route path="/preview/email-marketing" element={<EmailMarketingPreview />}  />
+              <Route path="/preview/vault-finance" element={<VaultFinancePreview />}      />
+              <Route path="/preview/creative-studio" element={<CreativeStudioPreview />}  />
+              <Route path="/preview/bookstore"     element={<BookstorePreview />}         />
+              <Route path="/preview/florist"       element={<FloristPreview />}           />
+              <Route path="/preview/newsletter"    element={<NewsletterPreview />}        />
+              <Route path="/preview/productivity"  element={<ProductivityPreview />}      />
+              <Route path="/preview/startkit"      element={<StartKitStartupPreview />}   />
+              <Route path="/preview/medcare"       element={<MedCareHealthcarePreview />} />
+              <Route path="/preview/coursify"      element={<CoursifyEducationPreview />} />
+              <Route path="/preview/estatly"       element={<EstatlyRealEstatePreview />} />
+              <Route path="/preview/pulse-analytics" element={<PulseAnalyticsPreview />}  />
+              <Route path="/preview/atlas-maps"    element={<AtlasMapSaasPreview />}      />
+              <Route path="/preview/forge-devtools" element={<ForgeDevToolsPreview />}    />
+              <Route path="/preview/verde-eco"     element={<VerdeEcoPreview />}          />
+              <Route path="/preview/swift-delivery" element={<SwiftDeliveryPreview />}    />
+              <Route path="/preview/ironpeak"      element={<IronPeakGymPreview />}       />
+              <Route path="/preview/launchconf"    element={<LaunchConfEventPreview />}   />
+              <Route path="/preview/aria-photography" element={<AriaPhotographyPreview />} />
+              <Route path="/preview/nomad-jobs"    element={<NomadRemoteJobsPreview />}   />
+              <Route path="/preview/verse-lit"     element={<VersePoetryPreview />}       />
+              <Route path="/preview/roam-rentals"  element={<RoamRentalsPreview />}       />
+              <Route path="/preview/pixel-games"   element={<PixelGameStudioPreview />}   />
+              <Route path="/preview/scout-talent"  element={<ScoutTalentPreview />}       />
+              <Route path="/preview/hope-nonprofit" element={<HopeNonprofitPreview />}    />
+              <Route path="/preview/neuron-ai"     element={<NeuronAiPreview />}          />
+              <Route path="/preview/velocity-auto" element={<VelocityAutoPreview />}      />
+              <Route path="/preview/paws-petcare"  element={<PawsPetCarePreview />}       />
+              <Route path="/preview/haven-interior" element={<HavenInteriorPreview />}    />
+              <Route path="/preview/daily-news"    element={<DailyNewsPreview />}         />
+              <Route path="*"                   element={<NotFoundPage />}             />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </main>
       {!isShell && <Footer />}
     </div>
@@ -174,6 +219,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <ScrollToTop />
         <Layout />
       </AuthProvider>
     </BrowserRouter>

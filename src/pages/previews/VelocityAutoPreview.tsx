@@ -1,325 +1,237 @@
-import { useState } from 'react';
-
 /* ============================================================
-   VELOCITY — Auto Dealership Template
-   Dark #0a0a0a / #171717 · racing red #dc2626 · condensed caps
+   VELOCITY — Performance Auto Dealership Template
+   Carbon black with electric crimson. Fully responsive.
    ============================================================ */
 
-const RED = '#dc2626';
-const BG = '#0a0a0a';
-const PANEL = '#171717';
-const BORDER = '#262626';
-const DIM = '#a3a3a3';
+import { useState, useEffect } from 'react';
 
-const navLinks = ['Inventory', 'Financing', 'Trade-In', 'Service', 'Contact'];
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
 
-const types = [
-  { icon: '🚙', label: 'SUV' }, { icon: '🚗', label: 'Sedan' }, { icon: '🏎️', label: 'Sports' },
-  { icon: '⚡', label: 'Electric' }, { icon: '🛻', label: 'Truck' }, { icon: '✨', label: 'Luxury' },
-];
+const C = {
+  bg: '#0b0c0e',
+  surface: '#14161a',
+  ink: '#f4f5f7',
+  muted: '#9aa1ad',
+  faint: '#636975',
+  line: 'rgba(255,255,255,0.08)',
+  red: '#e01e37',
+};
+const sans = "'Inter', system-ui, sans-serif";
+const container: React.CSSProperties = { maxWidth: '1220px', margin: '0 auto', width: '100%' };
 
-const conditions = ['All', 'New', 'Pre-Owned'] as const;
-
-const inventory = [
-  { name: '2026 Veyron GT-S Coupe', price: 84900, year: 2026, miles: '12 mi', cond: 'New', specs: ['612 HP', 'AWD', 'Carbon pack'], img: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80' },
-  { name: '2026 Ionix EV Crossover', price: 56700, year: 2026, miles: '8 mi', cond: 'New', specs: ['410 mi range', 'Dual motor', 'Autopilot'], img: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80' },
-  { name: '2024 Strada Sport Sedan', price: 38900, year: 2024, miles: '18,420 mi', cond: 'Pre-Owned', specs: ['335 HP', 'RWD', '1 owner'], img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80' },
-  { name: '2023 Apex Roadster S', price: 61500, year: 2023, miles: '9,870 mi', cond: 'Pre-Owned', specs: ['503 HP', 'Convertible', 'Certified'], img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80' },
-  { name: '2026 Terra X Off-Road', price: 72300, year: 2026, miles: '15 mi', cond: 'New', specs: ['460 HP', '4x4', 'Tow pack'], img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80' },
-  { name: '2024 Metro EV Hatch', price: 27800, year: 2024, miles: '22,310 mi', cond: 'Pre-Owned', specs: ['260 mi range', 'FWD', 'Certified'], img: 'https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=800&q=80' },
-];
-
-const spotlightSpecs = [
-  { label: 'Horsepower', value: '612 HP' },
-  { label: '0–60 mph', value: '3.1 s' },
-  { label: 'Top speed', value: '198 mph' },
-  { label: 'Drivetrain', value: 'AWD' },
-];
-
-const financeSteps = [
-  { num: '01', title: 'Tell us your budget', desc: 'Pick a monthly payment that fits. Soft credit pull — no score impact.' },
-  { num: '02', title: 'Get instant offers', desc: 'Compare APRs from 12 lenders in under two minutes, fully online.' },
-  { num: '03', title: 'Drive it home', desc: 'E-sign, schedule delivery or pickup, and keep your weekend free.' },
-];
-
-const reviews = [
-  {
-    quote: 'In and out in 90 minutes with the exact trim I configured online. No back room, no four-square sheet, no games.',
-    name: 'Marcus T.', detail: 'Bought a Veyron GT-S · March 2026',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
-  },
-  {
-    quote: 'They beat my bank’s APR by 1.4 points and gave me $2,100 more on my trade than the chain store across town.',
-    name: 'Alicia R.', detail: 'Financed an Ionix EV · May 2026',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
-  },
-];
-
-const stats = [
-  { value: '1,200+', label: 'Vehicles in stock' },
-  { value: '4.9★', label: 'Google rating' },
-  { value: '12', label: 'Lender partners' },
-  { value: '7-day', label: 'Return guarantee' },
-];
-
-const footerCols = [
-  { title: 'Shop', links: ['New inventory', 'Pre-owned', 'Electric', 'Specials'] },
-  { title: 'Finance', links: ['Get pre-approved', 'Payment calculator', 'Trade-in value', 'Warranties'] },
-  { title: 'Dealership', links: ['About us', 'Service center', 'Reviews', 'Careers'] },
+const bodies = ['All', 'Coupé', 'SUV', 'Electric', 'Roadster'];
+const cars = [
+  { name: 'Velocity GT-R', body: 'Coupé', price: '128,900', hp: 612, zero: '3.2s', top: '198', from: '#c11f34', to: '#3a0a12' },
+  { name: 'Apex Electric', body: 'Electric', price: '96,400', hp: 560, zero: '3.5s', top: '162', from: '#1f5fc1', to: '#0a1a3a' },
+  { name: 'Terra SUV', body: 'SUV', price: '84,200', hp: 468, zero: '4.6s', top: '155', from: '#3a3f45', to: '#141619' },
+  { name: 'Spyder R', body: 'Roadster', price: '142,000', hp: 640, zero: '3.0s', top: '205', from: '#c1841f', to: '#3a2607' },
+  { name: 'Coupé S', body: 'Coupé', price: '72,500', hp: 402, zero: '4.9s', top: '168', from: '#5a5f66', to: '#1a1c1f' },
+  { name: 'Volt SUV', body: 'Electric', price: '78,900', hp: 512, zero: '4.1s', top: '149', from: '#1fa38a', to: '#0a3329' },
 ];
 
 export default function VelocityAutoPreview() {
-  const [cond, setCond] = useState<typeof conditions[number]>('All');
-  const filtered = cond === 'All' ? inventory : inventory.filter(v => v.cond === cond);
-
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: BG, color: '#f5f5f5', minHeight: '100vh' }}>
-
-      {/* ── Nav ── */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(10,10,10,0.9)', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${BORDER}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '34px', height: '34px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: '17px', transform: 'skewX(-8deg)' }}>V</div>
-            <span style={{ fontSize: '19px', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Velocity</span>
-          </div>
-          <nav style={{ display: 'flex', gap: '1.75rem' }}>
-            {navLinks.map(l => (
-              <a key={l} href="#" style={{ fontSize: '13px', fontWeight: 600, color: DIM, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{l}</a>
-            ))}
-          </nav>
-          <a href="#" style={{ background: RED, color: '#fff', padding: '10px 22px', fontSize: '13px', fontWeight: 800, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Book test drive</a>
-        </div>
-      </header>
-
-      {/* ── Hero ── */}
-      <section style={{ position: 'relative', overflow: 'hidden' }}>
-        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=80" alt="Sports car on open road" style={{ width: '100%', height: '540px', objectFit: 'cover', display: 'block', opacity: 0.5 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(10,10,10,0.95) 18%, rgba(10,10,10,0.25) 70%)' }} />
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem', width: '100%' }}>
-            <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.24em', color: RED, margin: '0 0 1rem' }}>The no-haggle dealership</p>
-            <h1 style={{ fontSize: 'clamp(2.6rem, 6.5vw, 4.6rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.01em', lineHeight: 1.0, margin: '0 0 1.25rem', maxWidth: '620px' }}>
-              Find your <span style={{ color: RED }}>fast</span> lane
-            </h1>
-            <p style={{ fontSize: '1.05rem', color: '#d4d4d4', maxWidth: '460px', lineHeight: 1.7, margin: '0 0 2rem' }}>
-              1,200+ new and certified pre-owned vehicles, transparent pricing, and financing you can finish from your couch.
-            </p>
-            {/* Search bar */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0, maxWidth: '640px', border: `1px solid ${BORDER}`, background: 'rgba(23,23,23,0.95)' }}>
-              {['Make', 'Model', 'Max price'].map(f => (
-                <div key={f} style={{ flex: '1 1 140px', padding: '14px 18px', borderRight: `1px solid ${BORDER}`, fontSize: '13.5px', color: '#737373' }}>{f}</div>
-              ))}
-              <a href="#" style={{ background: RED, color: '#fff', padding: '14px 28px', fontSize: '13px', fontWeight: 800, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center' }}>Search</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Browse by type ── */}
-      <section style={{ padding: '3rem 1.5rem', borderBottom: `1px solid ${BORDER}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
-          {types.map(t => (
-            <a key={t.label} href="#" style={{ textAlign: 'center', background: PANEL, border: `1px solid ${BORDER}`, padding: '1.4rem 1rem', textDecoration: 'none' }}>
-              <div style={{ fontSize: '26px', marginBottom: '8px' }}>{t.icon}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#e5e5e5', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{t.label}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Inventory ── */}
-      <section style={{ padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2.5rem' }}>
-            <div>
-              <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: RED, margin: '0 0 0.6rem' }}>Inventory</p>
-              <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>Featured vehicles</h2>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              {conditions.map(c => (
-                <button key={c} onClick={() => setCond(c)}
-                  style={{ padding: '10px 20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', fontFamily: 'inherit', background: cond === c ? RED : 'transparent', color: cond === c ? '#fff' : DIM, border: cond === c ? `1px solid ${RED}` : `1px solid ${BORDER}` }}>
-                  {c}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-            {filtered.map(v => (
-              <div key={v.name} style={{ background: PANEL, border: `1px solid ${BORDER}` }}>
-                <div style={{ position: 'relative' }}>
-                  <img src={v.img} alt={v.name} style={{ width: '100%', height: '190px', objectFit: 'cover', display: 'block' }} />
-                  <span style={{ position: 'absolute', top: '12px', left: '12px', background: v.cond === 'New' ? RED : '#404040', color: '#fff', padding: '4px 12px', fontSize: '10.5px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{v.cond}</span>
-                </div>
-                <div style={{ padding: '1.4rem' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, margin: '0 0 4px' }}>{v.name}</h3>
-                  <p style={{ fontSize: '12.5px', color: '#737373', margin: '0 0 1rem' }}>{v.year} · {v.miles}</p>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '1.1rem' }}>
-                    {v.specs.map(s => (
-                      <span key={s} style={{ border: `1px solid ${BORDER}`, padding: '3px 9px', fontSize: '11px', color: DIM }}>{s}</span>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#fff' }}>${v.price.toLocaleString()}</span>
-                    <a href="#" style={{ fontSize: '12px', fontWeight: 800, color: RED, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Details →</a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Spotlight vehicle ── */}
-      <section style={{ padding: '5rem 1.5rem', background: PANEL, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000&q=80" alt="Veyron GT-S spotlight" style={{ width: '100%', height: '380px', objectFit: 'cover', display: 'block' }} />
-          <div>
-            <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: RED, margin: '0 0 0.75rem' }}>Spotlight</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 1rem' }}>Veyron GT-S Coupe</h2>
-            <p style={{ color: DIM, fontSize: '0.98rem', lineHeight: 1.75, margin: '0 0 1.75rem', maxWidth: '440px' }}>
-              The flagship. Twin-turbo V8, carbon-ceramic brakes, and a cabin that smells like a very good decision. Two in stock, both ready today.
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: BORDER, border: `1px solid ${BORDER}`, marginBottom: '1.75rem' }}>
-              {spotlightSpecs.map(s => (
-                <div key={s.label} style={{ background: BG, padding: '1rem 1.2rem' }}>
-                  <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#737373', margin: '0 0 4px' }}>{s.label}</p>
-                  <p style={{ fontSize: '19px', fontWeight: 900, margin: 0, color: '#fff' }}>{s.value}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: '0.875rem', flexWrap: 'wrap' }}>
-              <a href="#" style={{ background: RED, color: '#fff', padding: '13px 26px', fontSize: '13px', fontWeight: 800, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Book a test drive</a>
-              <a href="#" style={{ border: '1px solid #525252', color: '#e5e5e5', padding: '13px 26px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Full spec sheet</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Financing calculator mock ── */}
-      <section style={{ padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-          <div>
-            <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: RED, margin: '0 0 0.75rem' }}>Financing</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 2rem' }}>Approved before you arrive</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-              {financeSteps.map(s => (
-                <div key={s.num} style={{ display: 'flex', gap: '1.25rem' }}>
-                  <span style={{ fontSize: '1.4rem', fontWeight: 900, color: RED, flexShrink: 0 }}>{s.num}</span>
-                  <div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 800, margin: '0 0 5px' }}>{s.title}</h3>
-                    <p style={{ fontSize: '14px', color: DIM, lineHeight: 1.65, margin: 0 }}>{s.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ background: PANEL, border: `1px solid ${BORDER}`, padding: '2rem' }}>
-            <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: DIM, margin: '0 0 1.5rem' }}>Payment estimate</p>
-            {[
-              { label: 'Vehicle price', value: '$56,700' },
-              { label: 'Down payment', value: '$8,000' },
-              { label: 'Trade-in credit', value: '$6,400' },
-              { label: 'Term', value: '60 months · 5.2% APR' },
-            ].map(row => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: `1px solid ${BORDER}` }}>
-                <span style={{ fontSize: '14px', color: DIM }}>{row.label}</span>
-                <span style={{ fontSize: '14px', fontWeight: 700 }}>{row.value}</span>
-              </div>
-            ))}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '1.5rem 0 0' }}>
-              <span style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', color: DIM }}>Est. monthly</span>
-              <span style={{ fontSize: '2.2rem', fontWeight: 900, color: RED }}>$806<span style={{ fontSize: '14px', color: DIM, fontWeight: 500 }}>/mo</span></span>
-            </div>
-            <a href="#" style={{ display: 'block', textAlign: 'center', background: RED, color: '#fff', padding: '14px', fontSize: '13px', fontWeight: 800, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '1.25rem' }}>Get pre-approved</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats ── */}
-      <section style={{ padding: '3.5rem 1.5rem', background: PANEL, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-          {stats.map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: 900, color: RED }}>{s.value}</div>
-              <div style={{ fontSize: '12px', color: DIM, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Reviews ── */}
-      <section style={{ padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: RED, margin: '0 0 0.6rem' }}>Reviews</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>Drivers talk</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
-            {reviews.map(r => (
-              <div key={r.name} style={{ background: PANEL, border: `1px solid ${BORDER}`, padding: '2rem' }}>
-                <div style={{ color: '#f59e0b', fontSize: '15px', marginBottom: '1rem' }}>★★★★★</div>
-                <p style={{ fontSize: '14.5px', color: '#d4d4d4', lineHeight: 1.75, margin: '0 0 1.5rem' }}>“{r.quote}”</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <img src={r.avatar} alt={r.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
-                  <div>
-                    <p style={{ fontSize: '14px', fontWeight: 800, margin: 0 }}>{r.name}</p>
-                    <p style={{ fontSize: '12px', color: '#737373', margin: 0 }}>{r.detail}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section style={{ padding: '0 1.5rem 5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ background: `linear-gradient(120deg, ${RED}, #7f1d1d)`, padding: '4rem 2.5rem', textAlign: 'center' }}>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.7rem)', fontWeight: 900, textTransform: 'uppercase', color: '#fff', margin: '0 0 1rem' }}>Your seat is waiting</h2>
-            <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '1.05rem', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.7 }}>
-              Book a no-pressure test drive — we bring the keys to the curb, you bring the playlist.
-            </p>
-            <a href="#" style={{ display: 'inline-block', background: '#fff', color: '#7f1d1d', padding: '14px 32px', fontSize: '13px', fontWeight: 900, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Schedule test drive</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer style={{ borderTop: `1px solid ${BORDER}`, background: PANEL, padding: '3.5rem 1.5rem 2rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '3rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-            <div style={{ maxWidth: '280px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-                <div style={{ width: '30px', height: '30px', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: '15px', transform: 'skewX(-8deg)' }}>V</div>
-                <span style={{ fontSize: '17px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Velocity</span>
-              </div>
-              <p style={{ fontSize: '13.5px', color: DIM, lineHeight: 1.7, margin: 0 }}>
-                4400 Motorway Blvd, Austin TX · Open 7 days · (512) 555-0177
-              </p>
-            </div>
-            {footerCols.map(col => (
-              <div key={col.title}>
-                <h4 style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: '#525252', margin: '0 0 1rem' }}>{col.title}</h4>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px' }}>
-                  {col.links.map(l => (
-                    <li key={l}><a href="#" style={{ fontSize: '14px', color: DIM, textDecoration: 'none' }}>{l}</a></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <p style={{ fontSize: '12px', color: '#525252', margin: 0 }}>© 2026 Velocity Motors Group</p>
-            <div style={{ display: 'flex', gap: '1.5rem' }}>
-              {['Instagram', 'YouTube', 'Facebook'].map(s => (
-                <a key={s} href="#" style={{ fontSize: '12px', color: '#525252', textDecoration: 'none' }}>{s}</a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
+    <div style={{ fontFamily: sans, background: C.bg, color: C.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav />
+      <Hero />
+      <Fleet />
+      <Why />
+      <TradeIn />
+      <Reviews />
+      <Footer />
     </div>
+  );
+}
+
+function Logo() {
+  return (
+    <span style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={C.red} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 17h2l1.5-4h9L18 17h2M6 17v2M18 17v2M8 9l1-3h6l1 3" /><circle cx="8" cy="17" r="1.4" fill={C.red} /><circle cx="16" cy="17" r="1.4" fill={C.red} /></svg>
+      <span style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>Velocity</span>
+    </span>
+  );
+}
+
+function Nav() {
+  const m = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const links = ['Fleet', 'Why us', 'Trade-in', 'Reviews'];
+  return (
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(11,12,14,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: '0 20px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#top" style={{ textDecoration: 'none', color: C.ink }}><Logo /></a>
+        {!m && <nav style={{ display: 'flex', gap: '30px' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase().replace(/[^a-z]/g, '')}`} style={{ fontSize: '13px', letterSpacing: '0.04em', textTransform: 'uppercase', color: C.muted, textDecoration: 'none', fontWeight: 600 }}>{l}</a>)}</nav>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {!m && <a href="#fleet" style={{ background: C.red, color: '#fff', borderRadius: '6px', padding: '10px 20px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Book a test drive</a>}
+          {m && <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: 'none', color: C.ink, cursor: 'pointer', padding: 0, display: 'flex' }}><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{open ? <path d="M18 6 6 18M6 6l12 12" /> : <><path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" /></>}</svg></button>}
+        </div>
+      </div>
+      {m && open && <nav style={{ borderTop: `1px solid ${C.line}`, padding: '8px 20px 16px', display: 'flex', flexDirection: 'column' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase().replace(/[^a-z]/g, '')}`} onClick={() => setOpen(false)} style={{ fontSize: '14px', color: C.muted, textDecoration: 'none', padding: '11px 0', borderBottom: `1px solid ${C.line}`, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{l}</a>)}</nav>}
+    </header>
+  );
+}
+
+function Hero() {
+  const m = useIsMobile();
+  return (
+    <section id="top" style={{ position: 'relative', overflow: 'hidden', borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(900px 480px at 76% 0%, rgba(224,30,55,0.22), transparent 60%)' }} />
+      <div style={{ ...container, padding: m ? '52px 20px 56px' : '92px 20px 104px', position: 'relative' }}>
+        <span style={{ display: 'inline-block', border: `1px solid ${C.red}`, color: C.red, borderRadius: '999px', padding: '5px 14px', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '22px' }}>New 2025 lineup</span>
+        <h1 style={{ fontSize: m ? '2.8rem' : '5rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 20px', maxWidth: '660px' }}>Engineered to move you.</h1>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.65, maxWidth: '460px', margin: '0 0 30px' }}>A curated fleet of performance and electric machines, backed by transparent pricing and a five-year warranty on every drive.</p>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <a href="#fleet" style={{ background: C.red, color: '#fff', borderRadius: '8px', padding: '15px 32px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Explore the fleet</a>
+          <a href="#tradein" style={{ border: `1px solid ${C.line}`, color: C.ink, borderRadius: '8px', padding: '15px 32px', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>Value my trade-in</a>
+        </div>
+        <div style={{ display: 'flex', gap: m ? '26px' : '48px', marginTop: '48px', flexWrap: 'wrap' }}>
+          {[['4,200+', 'Cars delivered'], ['4.9★', 'Owner rating'], ['5 yr', 'Warranty'], ['0%', 'APR available']].map(([n, l]) => (
+            <div key={l}><div style={{ fontSize: m ? '1.5rem' : '1.9rem', fontWeight: 800 }}>{n}</div><div style={{ fontSize: '13px', color: C.muted }}>{l}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SpecChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div style={{ flex: 1, textAlign: 'center', padding: '8px 4px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)' }}>
+      <div style={{ fontSize: '14px', fontWeight: 800, color: C.ink }}>{value}</div>
+      <div style={{ fontSize: '10px', color: C.muted, textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: '2px' }}>{label}</div>
+    </div>
+  );
+}
+
+function Fleet() {
+  const m = useIsMobile();
+  const [active, setActive] = useState('All');
+  const list = active === 'All' ? cars : cars.filter((c) => c.body === active);
+  return (
+    <section id="fleet" style={{ ...container, padding: m ? '48px 20px' : '84px 20px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '24px' }}>
+        <h2 style={{ fontSize: m ? '1.9rem' : '2.6rem', fontWeight: 800, letterSpacing: '-0.03em', margin: 0 }}>The current fleet</h2>
+        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+          {bodies.map((b) => (
+            <button key={b} onClick={() => setActive(b)} style={{ flexShrink: 0, cursor: 'pointer', borderRadius: '6px', padding: '9px 18px', fontSize: '13px', fontWeight: 600, border: `1px solid ${active === b ? C.red : C.line}`, background: active === b ? C.red : 'transparent', color: active === b ? '#fff' : C.muted }}>{b}</button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: m ? '16px' : '24px' }}>
+        {list.map((c) => (
+          <article key={c.name} style={{ background: C.surface, border: `1px solid ${C.line}`, borderRadius: '16px', overflow: 'hidden' }}>
+            <div style={{ aspectRatio: '16/10', background: `linear-gradient(150deg,${c.from},${c.to})`, position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '16px' }}>
+              <span style={{ position: 'absolute', top: '14px', left: '14px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.85)' }}>{c.body}</span>
+            </div>
+            <div style={{ padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>{c.name}</h3>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: C.red }}>${c.price}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
+                <SpecChip label="Horsepower" value={`${c.hp}`} />
+                <SpecChip label="0–100" value={c.zero} />
+                <SpecChip label="Top mph" value={c.top} />
+              </div>
+              <a href="#fleet" style={{ display: 'block', textAlign: 'center', border: `1px solid ${C.line}`, color: C.ink, borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>Book a test drive</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Why() {
+  const m = useIsMobile();
+  const items = [
+    { t: 'Transparent pricing', d: 'One fair price on every car — no haggling, no hidden add-ons.', p: 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
+    { t: '200-point inspection', d: 'Every vehicle is fully reconditioned and certified before sale.', p: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
+    { t: '7-day return', d: 'Change your mind within a week and we take it back, no fuss.', p: 'M3 7v6h6M3 13a9 9 0 1 0 3-7.7L3 8' },
+    { t: 'Flexible finance', d: 'Rates from 0% APR with instant online pre-approval.', p: 'M3 10h18M3 6h18v12H3zM7 15h4' },
+  ];
+  return (
+    <section id="whyus" style={{ background: C.surface, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '84px 20px' }}>
+        <h2 style={{ fontSize: m ? '2rem' : '2.6rem', fontWeight: 800, letterSpacing: '-0.03em', textAlign: 'center', margin: '0 0 44px' }}>Buying, done properly</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(4,1fr)', gap: '24px' }}>
+          {items.map((i) => (
+            <div key={i.t}>
+              <div style={{ width: '46px', height: '46px', borderRadius: '10px', background: 'rgba(224,30,55,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                <svg width="22" height="22" fill="none" stroke={C.red} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d={i.p} /></svg>
+              </div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 8px' }}>{i.t}</h3>
+              <p style={{ fontSize: '14px', color: C.muted, lineHeight: 1.65, margin: 0 }}>{i.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TradeIn() {
+  const m = useIsMobile();
+  const field: React.CSSProperties = { background: C.bg, border: `1px solid ${C.line}`, borderRadius: '8px', padding: '13px 14px', color: C.ink, fontSize: '14px', width: '100%' };
+  return (
+    <section id="tradein" style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+      <div style={{ background: 'linear-gradient(135deg,#e01e37,#7a0f1e)', borderRadius: '20px', padding: m ? '32px 24px' : '52px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1.1fr 0.9fr', gap: m ? '28px' : '48px', alignItems: 'center', color: '#fff' }}>
+        <div>
+          <h2 style={{ fontSize: m ? '1.9rem' : '2.6rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 14px' }}>Trade in and drive out the same day.</h2>
+          <p style={{ fontSize: m ? '1rem' : '1.1rem', opacity: 0.92, lineHeight: 1.6, margin: 0, maxWidth: '420px' }}>Get a firm online valuation in under two minutes and put it straight toward your next Velocity.</p>
+        </div>
+        <form onSubmit={(e) => e.preventDefault()} style={{ background: C.surface, borderRadius: '14px', padding: m ? '22px' : '28px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <input placeholder="Registration plate" style={field} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}><input placeholder="Make" style={field} /><input placeholder="Mileage" style={field} /></div>
+          <button type="submit" style={{ background: C.red, color: '#fff', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Get my valuation</button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function Reviews() {
+  const m = useIsMobile();
+  const data = [
+    { text: 'Bought the GT-R sight-unseen and it arrived flawless. The 7-day return meant zero risk.', a: 'Marcus D.', c: 'GT-R owner' },
+    { text: 'Best car-buying experience I have had. No pressure, honest pricing, sorted my finance in minutes.', a: 'Elena F.', c: 'Apex Electric owner' },
+    { text: 'They gave me more for my trade-in than three other dealers. Drove home the same afternoon.', a: 'Raj P.', c: 'Terra SUV owner' },
+  ];
+  return (
+    <section id="reviews" style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+      <h2 style={{ fontSize: m ? '2rem' : '2.6rem', fontWeight: 800, letterSpacing: '-0.03em', textAlign: 'center', margin: '0 0 36px' }}>What owners say</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: '20px' }}>
+        {data.map((r) => (
+          <figure key={r.a} style={{ margin: 0, background: C.surface, border: `1px solid ${C.line}`, borderRadius: '16px', padding: '26px' }}>
+            <span style={{ display: 'inline-flex', gap: '2px', marginBottom: '12px' }}>{[1, 2, 3, 4, 5].map((s) => <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill={C.red} stroke={C.red}><path d="M12 2l3 6.5 7 .8-5.2 4.8L18.2 22 12 18.3 5.8 22 7.2 14.1 2 9.3l7-.8z" /></svg>)}</span>
+            <blockquote style={{ fontSize: '1rem', lineHeight: 1.65, margin: '0 0 16px' }}>"{r.text}"</blockquote>
+            <figcaption style={{ fontSize: '13px', color: C.muted }}><b style={{ color: C.ink }}>{r.a}</b> · {r.c}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  const m = useIsMobile();
+  return (
+    <footer style={{ borderTop: `1px solid ${C.line}`, padding: '44px 20px 28px' }}>
+      <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
+        <div style={{ width: m ? '100%' : 'auto', display: 'flex', justifyContent: m ? 'center' : 'flex-start' }}><Logo /></div>
+        <span style={{ fontSize: '14px', color: C.muted }}>Unit 4, Speedway Park, Birmingham · +44 121 496 0140</span>
+        <span style={{ fontSize: '13px', color: C.muted }}>© {new Date().getFullYear()} Velocity Motors</span>
+      </div>
+    </footer>
   );
 }

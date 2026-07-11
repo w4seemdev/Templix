@@ -146,7 +146,7 @@
 .btn-sm { height: 34px; padding: 0 14px; font-size: 14px; }
 
 .btn-primary {
-  background: var(--gradient-brand);
+  background: var(--gradient-cta);
   color: #FFFFFF;
   box-shadow: var(--shadow-glow-cta);
 }

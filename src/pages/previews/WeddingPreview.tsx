@@ -1,114 +1,154 @@
-const gallery = [
-  'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
-  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80',
-  'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80',
-  'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&q=80',
-  'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80',
-  'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80',
+/* ============================================================
+   EVELYN & JAMES — Wedding
+   Soft cream, blush + antique-gold accents, romantic serif
+   Self-contained, responsive single-page site
+   ============================================================ */
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const CREAM = '#fbf6f1';
+const INK = '#3a332e';
+const MUTE = '#8f857c';
+const BLUSH = '#c98a8a';
+const GOLD = '#b3924f';
+const LINE = 'rgba(58,51,46,0.12)';
+const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
+
+const NAV = [
+  { label: 'Our Story', href: '#story' },
+  { label: 'Details', href: '#details' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'RSVP', href: '#rsvp' },
 ];
 
-const timeline = [
-  { time: '3:00 PM', event: 'Ceremony Begins', icon: '💐', location: 'Rose Garden' },
-  { time: '4:30 PM', event: 'Cocktail Hour', icon: '🥂', location: 'Grand Terrace' },
-  { time: '6:00 PM', event: 'Reception Dinner', icon: '🍽️', location: 'The Grand Hall' },
-  { time: '8:00 PM', event: 'First Dance & Speeches', icon: '💃', location: 'The Grand Hall' },
-  { time: '9:00 PM', event: 'Dancing & Celebration', icon: '🎶', location: 'The Grand Hall' },
+const schedule = [
+  { time: '3:00 PM', t: 'Ceremony', d: 'Olive Grove Terrace' },
+  { time: '4:30 PM', t: 'Cocktail Hour', d: 'The Courtyard' },
+  { time: '6:00 PM', t: 'Dinner & Toasts', d: 'The Long Hall' },
+  { time: '8:30 PM', t: 'Dancing', d: 'Under the lights' },
+];
+
+const gallery = [
+  'linear-gradient(150deg,#e2c6bf,#bb8f88)',
+  'linear-gradient(150deg,#cdd3c2,#8fa082)',
+  'linear-gradient(150deg,#e6d4b8,#c2a266)',
+  'linear-gradient(150deg,#d8c4c9,#a98790)',
+  'linear-gradient(150deg,#cfd6cd,#93a08f)',
+  'linear-gradient(150deg,#e3cbbd,#bd917c)',
 ];
 
 export default function WeddingPreview() {
+  const mobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const [sent, setSent] = useState(false);
   return (
-    <div style={{ fontFamily: "'Playfair Display', Georgia, serif", background: '#fdf8f4', color: '#2d1b0e', minHeight: '100vh' }}>
-      {/* Nav */}
-      <nav style={{ background: 'rgba(253,248,244,0.95)', backdropFilter: 'blur(8px)', borderBottom: '1px solid #f0e6d9', padding: '0 2rem', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '15px', color: '#8b6b4a', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-          S & J
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: CREAM, color: INK, minHeight: '100vh' }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${LINE}`, background: 'rgba(251,246,241,0.9)', backdropFilter: 'blur(10px)' }}>
+        <div style={{ maxWidth: '1040px', margin: '0 auto', padding: '0 clamp(1.25rem,4vw,2rem)', height: '66px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="#top" style={{ fontFamily: SERIF, fontSize: '24px', fontStyle: 'italic', color: INK, textDecoration: 'none' }}>E <span style={{ color: GOLD }}>&amp;</span> J</a>
+          {!mobile && <nav style={{ display: 'flex', gap: '2.25rem' }}>{NAV.map(l => <a key={l.label} href={l.href} style={{ fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', color: MUTE, textDecoration: 'none' }}>{l.label}</a>)}</nav>}
+          {!mobile ? (
+            <a href="#rsvp" style={{ background: BLUSH, color: CREAM, borderRadius: '999px', padding: '8px 20px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none' }}>RSVP</a>
+          ) : (
+            <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: `1px solid ${LINE}`, borderRadius: '4px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+              {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '1.5px', background: INK, display: 'block' }} />)}
+            </button>
+          )}
         </div>
-        <div style={{ display: 'flex', gap: '2.5rem' }}>
-          {['Our Story', 'Gallery', 'Schedule', 'RSVP', 'Travel'].map(item => (
-            <span key={item} style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#8b6b4a', cursor: 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item}</span>
-          ))}
-        </div>
-        <button style={{ fontFamily: 'Inter, sans-serif', background: 'transparent', border: '1px solid #c9a882', borderRadius: '4px', padding: '8px 20px', fontSize: '12px', color: '#8b6b4a', cursor: 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          RSVP
-        </button>
-      </nav>
+        {mobile && open && <nav style={{ display: 'grid', padding: '0.5rem 1.25rem 1rem', borderTop: `1px solid ${LINE}` }}>{NAV.map(l => <a key={l.label} href={l.href} onClick={() => setOpen(false)} style={{ padding: '11px 0', fontSize: '15px', color: INK, textDecoration: 'none', borderBottom: `1px solid ${LINE}` }}>{l.label}</a>)}</nav>}
+      </header>
 
-      {/* Hero */}
-      <section style={{ position: 'relative', height: '90vh', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1400&q=80)', backgroundSize: 'cover', backgroundPosition: 'center 30%' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(45,27,14,0.38)' }} />
-        <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: 'rgba(253,248,244,0.8)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '1rem' }}>WE'RE GETTING MARRIED</p>
-          <h1 style={{ fontSize: 'clamp(3.5rem, 10vw, 7rem)', fontWeight: 700, color: '#fdf8f4', letterSpacing: '-0.01em', lineHeight: 1.05, margin: '0 0 0.75rem', textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}>
-            Sofia &amp; James
+      <section id="top" style={{ position: 'relative', minHeight: mobile ? '440px' : '560px', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', background: 'linear-gradient(160deg,#efdcd2,#d4b8ad 60%,#b79a7a)', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 40%, rgba(251,246,241,0.35), transparent 60%)' }} />
+        <div style={{ position: 'relative', padding: '2rem' }}>
+          <p style={{ fontSize: '13px', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(58,51,46,0.7)', margin: '0 0 1.25rem' }}>We&rsquo;re getting married</p>
+          <h1 style={{ fontFamily: SERIF, fontSize: mobile ? '3.4rem' : 'clamp(4rem,10vw,7rem)', fontWeight: 500, lineHeight: 1, margin: 0 }}>
+            Evelyn <span style={{ fontStyle: 'italic', color: '#fff' }}>&amp;</span> James
           </h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '2.5rem' }}>
-            <div style={{ height: '1px', width: '60px', background: 'rgba(253,248,244,0.5)' }} />
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: 'rgba(253,248,244,0.85)', letterSpacing: '0.12em', margin: 0 }}>JUNE 14, 2025 · VILLA BELLAGIO, LAKE COMO</p>
-            <div style={{ height: '1px', width: '60px', background: 'rgba(253,248,244,0.5)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'center', marginTop: '1.5rem' }}>
+            <span style={{ width: '40px', height: '1px', background: 'rgba(58,51,46,0.4)' }} />
+            <p style={{ fontFamily: SERIF, fontSize: mobile ? '1.2rem' : '1.5rem', fontStyle: 'italic', margin: 0 }}>September 14, 2026 · Tuscany</p>
+            <span style={{ width: '40px', height: '1px', background: 'rgba(58,51,46,0.4)' }} />
           </div>
-          <button style={{ fontFamily: 'Inter, sans-serif', background: 'rgba(253,248,244,0.15)', border: '1px solid rgba(253,248,244,0.5)', borderRadius: '4px', padding: '12px 32px', fontSize: '12px', color: '#fdf8f4', cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase', backdropFilter: 'blur(8px)' }}>
-            RSVP NOW
-          </button>
-        </div>
-        {/* Countdown */}
-        <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '1.5rem' }}>
-          {[['28', 'Days'], ['14', 'Hours'], ['32', 'Minutes'], ['10', 'Seconds']].map(([v, l]) => (
-            <div key={l} style={{ textAlign: 'center', background: 'rgba(253,248,244,0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(253,248,244,0.2)', borderRadius: '8px', padding: '10px 18px', minWidth: '64px' }}>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: '#fdf8f4', margin: '0 0 2px' }}>{v}</p>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', color: 'rgba(253,248,244,0.7)', margin: 0, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l}</p>
-            </div>
-          ))}
         </div>
       </section>
 
-      {/* Story section */}
-      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '5rem 2rem', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c9a882', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Our Story</p>
-        <h2 style={{ fontSize: '2.25rem', fontWeight: 700, margin: '0 0 1.5rem', color: '#2d1b0e', letterSpacing: '-0.02em' }}>How it all began</h2>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#78583a', lineHeight: 1.9, marginBottom: '1rem' }}>
-          We met on a rainy Tuesday in a small bookshop in Florence. James was looking for Hemingway; Sofia was hiding from the rain. A cup of coffee became five hours of conversation, and five years later, here we are.
+      <section id="story" style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center', padding: mobile ? '3.5rem 1.25rem' : '5.5rem 2rem' }}>
+        <span style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: GOLD }}>How it began</span>
+        <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.4rem' : '3rem', fontWeight: 500, margin: '1rem 0 1.5rem' }}>Our story</h2>
+        <p style={{ fontSize: '1.05rem', color: MUTE, lineHeight: 1.9, margin: '0 0 1.25rem' }}>
+          We met on a rained-out train platform in Bologna, sharing one small umbrella and a bad cup of coffee. Seven years, two cities, and one very opinionated dog later, we&rsquo;re finally saying the words out loud.
         </p>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#78583a', lineHeight: 1.9 }}>
-          We can't wait to celebrate with the people we love most in the most beautiful place on earth.
+        <p style={{ fontSize: '1.05rem', color: MUTE, lineHeight: 1.9, margin: 0 }}>
+          We would be honoured to have you with us as we begin the next chapter.
         </p>
       </section>
 
-      {/* Gallery */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 4rem' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c9a882', letterSpacing: '0.2em', textTransform: 'uppercase', textAlign: 'center', marginBottom: '2rem' }}>Gallery</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-          {gallery.map((src, i) => (
-            <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', aspectRatio: '4/3', cursor: 'pointer' }}>
-              <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section style={{ background: '#2d1b0e', padding: '5rem 2rem' }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c9a882', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>The Big Day</p>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, margin: '0 0 3rem', color: '#fdf8f4', letterSpacing: '-0.02em' }}>Day of Events</h2>
-          <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: 'rgba(201,168,130,0.25)', transform: 'translateX(-50%)' }} />
-            {timeline.map((item, i) => (
-              <div key={item.event} style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '2rem', flexDirection: i % 2 === 0 ? 'row' : 'row-reverse' }}>
-                <div style={{ flex: 1, textAlign: i % 2 === 0 ? 'right' : 'left' }}>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c9a882', margin: '0 0 3px', letterSpacing: '0.06em' }}>{item.time}</p>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 600, color: '#fdf8f4', margin: '0 0 2px' }}>{item.event}</p>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#78583a', margin: 0 }}>{item.location}</p>
+      <section id="details" style={{ borderTop: `1px solid ${LINE}`, borderBottom: `1px solid ${LINE}`, background: '#f3e7dd', padding: mobile ? '3.5rem 1.25rem' : '5rem 2rem' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.2rem' : '2.8rem', fontWeight: 500, textAlign: 'center', margin: '0 0 2.5rem' }}>The day</h2>
+          <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+            {schedule.map((s, i) => (
+              <div key={s.t} style={{ display: 'flex', gap: '1.5rem', paddingBottom: i === schedule.length - 1 ? 0 : '1.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <span style={{ width: '11px', height: '11px', borderRadius: '50%', border: `2px solid ${GOLD}`, background: CREAM }} />
+                  {i !== schedule.length - 1 && <span style={{ width: '1px', flex: 1, background: LINE, marginTop: '4px' }} />}
                 </div>
-                <div style={{ width: '40px', height: '40px', background: '#3d2512', border: '2px solid #c9a882', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1, fontSize: '16px' }}>
-                  {item.icon}
+                <div style={{ paddingBottom: '4px' }}>
+                  <span style={{ fontFamily: SERIF, fontSize: '1.3rem', fontStyle: 'italic', color: GOLD }}>{s.time}</span>
+                  <h3 style={{ fontSize: '17px', fontWeight: 700, margin: '2px 0 2px' }}>{s.t}</h3>
+                  <p style={{ fontSize: '14px', color: MUTE, margin: 0 }}>{s.d}</p>
                 </div>
-                <div style={{ flex: 1 }} />
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      <section id="gallery" style={{ maxWidth: '1040px', margin: '0 auto', padding: mobile ? '3.5rem 1.25rem' : '5rem 2rem' }}>
+        <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.2rem' : '2.8rem', fontWeight: 500, textAlign: 'center', margin: '0 0 2.5rem' }}>Moments</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(3,1fr)', gap: mobile ? '0.6rem' : '1rem' }}>
+          {gallery.map((g, i) => (
+            <div key={i} style={{ aspectRatio: i % 5 === 0 ? '3/4' : '1/1', borderRadius: '4px', background: g }} />
+          ))}
+        </div>
+      </section>
+
+      <section id="rsvp" style={{ borderTop: `1px solid ${LINE}`, background: '#f3e7dd', padding: mobile ? '4rem 1.25rem' : '6rem 2rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
+          <span style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: GOLD }}>Kindly respond by August 1</span>
+          <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.4rem' : '3rem', fontWeight: 500, margin: '1rem 0 1.75rem' }}>Will you join us?</h2>
+          {sent ? (
+            <p style={{ fontFamily: SERIF, fontSize: '1.6rem', fontStyle: 'italic', color: BLUSH }}>Thank you — we can&rsquo;t wait to celebrate with you.</p>
+          ) : (
+            <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ display: 'grid', gap: '0.9rem', textAlign: 'left' }}>
+              <input required placeholder="Full name" style={{ padding: '13px 16px', borderRadius: '6px', border: `1px solid ${LINE}`, background: CREAM, color: INK, fontSize: '15px', outline: 'none' }} />
+              <input required type="email" placeholder="Email address" style={{ padding: '13px 16px', borderRadius: '6px', border: `1px solid ${LINE}`, background: CREAM, color: INK, fontSize: '15px', outline: 'none' }} />
+              <select style={{ padding: '13px 16px', borderRadius: '6px', border: `1px solid ${LINE}`, background: CREAM, color: INK, fontSize: '15px', outline: 'none' }}>
+                <option>Joyfully accepts</option>
+                <option>Regretfully declines</option>
+              </select>
+              <button type="submit" style={{ background: BLUSH, color: CREAM, border: 'none', borderRadius: '999px', padding: '14px', fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', marginTop: '0.25rem' }}>Send RSVP</button>
+            </form>
+          )}
+        </div>
+      </section>
+
+      <footer style={{ padding: '3rem 0', textAlign: 'center' }}>
+        <p style={{ fontFamily: SERIF, fontSize: '2rem', fontStyle: 'italic', margin: '0 0 0.5rem' }}>E <span style={{ color: GOLD }}>&amp;</span> J</p>
+        <p style={{ fontSize: '13px', color: MUTE, margin: 0 }}>September 14, 2026 · With love, from Tuscany</p>
+      </footer>
     </div>
   );
 }

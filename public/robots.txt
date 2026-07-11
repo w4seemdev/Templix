@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Private / account routes and duplicate-content preview shells stay out of the index.
+Disallow: /dashboard
+Disallow: /wishlist
+Disallow: /reset-password
+Disallow: /purchase-success
+Disallow: /preview/
+
+Sitemap: https://templix-peach.vercel.app/sitemap.xml

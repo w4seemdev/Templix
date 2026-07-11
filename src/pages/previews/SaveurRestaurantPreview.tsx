@@ -1,171 +1,133 @@
 /* ============================================================
-   SAVEUR — Restaurant Website Template
-   Dark warm with gold accent — elegant dining experience
+   SAVEUR — Fine Dining Restaurant Template
+   Dark espresso with gold accent. Fully responsive.
    ============================================================ */
+
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const C = {
+  bg: '#14100c',
+  surface: '#1e1813',
+  ink: '#f5efe6',
+  muted: '#b8a99a',
+  faint: '#8a7c6e',
+  line: 'rgba(201,164,92,0.18)',
+  gold: '#c9a45c',
+};
+const serif = "'Playfair Display', Georgia, serif";
+const sans = "'Inter', system-ui, sans-serif";
+const container: React.CSSProperties = { maxWidth: '1120px', margin: '0 auto', width: '100%' };
+
+const courses = ['Starters', 'Mains', 'Desserts', 'Wine'];
+const menu: Record<string, { name: string; desc: string; price: string }[]> = {
+  Starters: [
+    { name: 'Hand-dived Scallops', desc: 'Cauliflower purée, brown butter, capers', price: '18' },
+    { name: 'Heritage Beet Tartare', desc: 'Whipped goat curd, walnut, aged sherry', price: '15' },
+    { name: 'Wild Mushroom Velouté', desc: 'Chestnut, truffle oil, sourdough crisp', price: '14' },
+  ],
+  Mains: [
+    { name: 'Dry-aged Ribeye', desc: '35-day aged, bone marrow, confit shallot', price: '42' },
+    { name: 'Line-caught Halibut', desc: 'Brown shrimp, samphire, beurre blanc', price: '36' },
+    { name: 'Roast Celeriac', desc: 'Smoked almond, apple, sage crumb', price: '28' },
+  ],
+  Desserts: [
+    { name: 'Valrhona Soufflé', desc: 'Salted caramel, crème fraîche ice cream', price: '13' },
+    { name: 'Tarte Tatin', desc: 'Bramley apple, vanilla, Calvados', price: '12' },
+    { name: 'Cheese Selection', desc: 'Five British cheeses, quince, oat biscuits', price: '16' },
+  ],
+  Wine: [
+    { name: 'Chablis Premier Cru', desc: 'Burgundy, France · 2020', price: '58' },
+    { name: 'Barolo Riserva', desc: 'Piedmont, Italy · 2016', price: '92' },
+    { name: 'Grower Champagne', desc: 'Côte des Bar · Brut Nature', price: '74' },
+  ],
+};
 
 export default function SaveurRestaurantPreview() {
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: '#0a0703', color: '#ffffff', minHeight: '100vh' }}>
-      <SaveurNav />
-      <SaveurHero />
-      <AboutSection />
-      <MenuSection />
-      <GallerySection />
-      <ReviewsSection />
-      <ReservationSection />
-      <SaveurFooter />
+    <div style={{ fontFamily: sans, background: C.bg, color: C.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav />
+      <Hero />
+      <Menu />
+      <Story />
+      <Gallery />
+      <Reserve />
+      <Footer />
     </div>
   );
 }
 
-function SaveurNav() {
+function Nav() {
+  const m = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const links = ['Menu', 'Story', 'Gallery', 'Reserve'];
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(212,163,80,0.15)', background: 'rgba(10,7,3,0.92)', backdropFilter: 'blur(16px)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <span style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '0.05em', color: '#f5dfa0' }}>SAVEUR</span>
-          <div style={{ fontSize: '9px', letterSpacing: '0.25em', color: '#7c6a44', fontFamily: 'Inter, sans-serif', textTransform: 'uppercase', marginTop: '-4px' }}>Restaurant &amp; Bar</div>
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(20,16,12,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: '0 20px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#top" style={{ fontFamily: serif, fontSize: '24px', fontWeight: 700, letterSpacing: '0.04em', color: C.gold, textDecoration: 'none' }}>Saveur</a>
+        {!m && <nav style={{ display: 'flex', gap: '32px' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', color: C.muted, textDecoration: 'none' }}>{l}</a>)}</nav>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {!m && <a href="#reserve" style={{ border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '2px', padding: '9px 20px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 600 }}>Book a table</a>}
+          {m && <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: 'none', color: C.ink, cursor: 'pointer', padding: 0, display: 'flex' }}><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">{open ? <path d="M18 6 6 18M6 6l12 12" /> : <><path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" /></>}</svg></button>}
         </div>
-        <nav style={{ display: 'flex', gap: '2.5rem' }}>
-          {['Menu', 'About', 'Gallery', 'Reserve'].map(l => (
-            <a key={l} href="#" style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.08em', color: '#a08050', textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>
-          ))}
-        </nav>
-        <a href="#" style={{ fontFamily: 'Inter, sans-serif', border: '1px solid rgba(212,163,80,0.4)', borderRadius: '4px', padding: '9px 20px', fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: '#f5dfa0', textDecoration: 'none', textTransform: 'uppercase' }}>
-          Reserve a table
-        </a>
       </div>
+      {m && open && <nav style={{ borderTop: `1px solid ${C.line}`, padding: '8px 20px 16px', display: 'flex', flexDirection: 'column' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} style={{ fontSize: '14px', color: C.muted, textDecoration: 'none', padding: '11px 0', borderBottom: `1px solid ${C.line}`, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{l}</a>)}</nav>}
     </header>
   );
 }
 
-function SaveurHero() {
+function Hero() {
+  const m = useIsMobile();
   return (
-    <section style={{ position: 'relative', minHeight: '90vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1400&q=80" alt="restaurant" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,7,3,0.95) 40%, rgba(10,7,3,0.6))' }} />
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem', position: 'relative' }}>
-        <div style={{ maxWidth: '600px' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.25em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
-            Est. 2018 · Paris, France
-          </p>
-          <h1 style={{ fontSize: 'clamp(3.5rem, 7vw, 6rem)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.0, margin: '0 0 1.5rem' }}>
-            A feast for<br />
-            <span style={{ color: '#d4a350', fontStyle: 'italic' }}>the senses.</span>
-          </h1>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.0625rem', color: '#8c7a5a', lineHeight: 1.8, maxWidth: '480px', marginBottom: '2.5rem' }}>
-            Contemporary French cuisine crafted from seasonal ingredients sourced from local farms and artisan producers. Every dish tells a story.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="#" style={{ fontFamily: 'Inter, sans-serif', background: '#d4a350', borderRadius: '4px', padding: '14px 32px', fontSize: '13px', fontWeight: 600, letterSpacing: '0.1em', color: '#0a0703', textDecoration: 'none', textTransform: 'uppercase' }}>
-              Reserve a table
-            </a>
-            <a href="#" style={{ fontFamily: 'Inter, sans-serif', border: '1px solid rgba(212,163,80,0.3)', borderRadius: '4px', padding: '14px 32px', fontSize: '13px', fontWeight: 600, letterSpacing: '0.1em', color: '#d4a350', textDecoration: 'none', textTransform: 'uppercase' }}>
-              View menu
-            </a>
-          </div>
-        </div>
-      </div>
-      {/* Awards strip */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, borderTop: '1px solid rgba(212,163,80,0.1)', padding: '1.25rem 2rem', background: 'rgba(10,7,3,0.8)', backdropFilter: 'blur(8px)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {['★ Michelin Guide 2024', '🏆 Best Restaurant Paris 2023', '★★ Wine Spectator Award'].map(a => (
-            <span key={a} style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#7c6a44', letterSpacing: '0.05em' }}>{a}</span>
-          ))}
+    <section id="top" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(900px 460px at 70% 0%, rgba(201,164,92,0.16), transparent 60%)' }} />
+      <div style={{ ...container, padding: m ? '64px 20px 72px' : '110px 20px 120px', position: 'relative', textAlign: 'center' }}>
+        <span style={{ fontSize: '12px', letterSpacing: '0.28em', textTransform: 'uppercase', color: C.gold }}>Est. 2011 · Michelin recommended</span>
+        <h1 style={{ fontFamily: serif, fontSize: m ? '2.9rem' : '5rem', fontWeight: 700, lineHeight: 1.02, margin: '22px auto 22px', maxWidth: '760px' }}>Seasonal cooking, rooted in place.</h1>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.7, maxWidth: '520px', margin: '0 auto 32px' }}>A modern British table where every plate follows the harvest. Slow-cooked, ingredient-led, and served with quiet warmth.</p>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="#reserve" style={{ background: C.gold, color: '#14100c', borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none' }}>Reserve a table</a>
+          <a href="#menu" style={{ border: `1px solid ${C.line}`, color: C.ink, borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>View menu</a>
         </div>
       </div>
     </section>
   );
 }
 
-function AboutSection() {
+function Menu() {
+  const m = useIsMobile();
+  const [tab, setTab] = useState('Starters');
   return (
-    <section style={{ padding: '6rem 2rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'center' }}>
-        <div style={{ position: 'relative' }}>
-          <div style={{ borderRadius: '4px', overflow: 'hidden', aspectRatio: '3/4' }}>
-            <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&q=80" alt="chef" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
-          </div>
-          <div style={{ position: 'absolute', bottom: '-24px', right: '-24px', background: '#d4a350', borderRadius: '4px', padding: '1.5rem', maxWidth: '180px' }}>
-            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#0a0703', letterSpacing: '-0.03em' }}>12+</div>
-            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#5c3d10', lineHeight: 1.4 }}>Years of culinary excellence</div>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '1.25rem' }}>Our story</p>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 1.5rem' }}>
-            Where tradition meets{' '}
-            <span style={{ fontStyle: 'italic', color: '#d4a350' }}>innovation</span>
-          </h2>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#7c6a44', lineHeight: 1.85, marginBottom: '1rem' }}>
-            Chef Éric Beaumont brings together 20 years of experience in Parisian kitchens with a passion for reimagining classical French technique through a modern lens.
-          </p>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#7c6a44', lineHeight: 1.85, marginBottom: '2rem' }}>
-            Our seasonal tasting menu changes with the harvest, ensuring every visit to Saveur offers something new, unexpected, and unforgettable.
-          </p>
-          <a href="#" style={{ fontFamily: 'Inter, sans-serif', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#d4a350', textDecoration: 'none', letterSpacing: '0.05em' }}>
-            Meet the team →
-          </a>
-        </div>
+    <section id="menu" style={{ ...container, padding: m ? '56px 20px' : '96px 20px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+        <p style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.gold, margin: '0 0 10px' }}>À la carte</p>
+        <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, margin: 0 }}>The menu</h2>
       </div>
-    </section>
-  );
-}
-
-function MenuSection() {
-  const dishes = [
-    { name: 'Foie Gras Torchon', desc: 'Brioche toast, fig compote, port wine reduction', price: '€28', type: 'Starter' },
-    { name: 'Soupe à l\'Oignon', desc: 'Gruyère crust, caramelized onion broth, thyme crouton', price: '€18', type: 'Starter' },
-    { name: 'Filet de Boeuf', desc: 'Black truffle sauce, pomme purée, seasonal vegetables', price: '€52', type: 'Main' },
-    { name: 'Sole Meunière', desc: 'Brown butter, capers, lemon, asparagus, finger potatoes', price: '€44', type: 'Main' },
-    { name: 'Tarte Tatin', desc: 'Caramelized apple, vanilla crème fraîche, calvados sauce', price: '€16', type: 'Dessert' },
-    { name: 'Crème Brûlée', desc: 'Classic vanilla, Madagascar bean, seasonal berries', price: '€14', type: 'Dessert' },
-  ];
-  return (
-    <section style={{ borderTop: '1px solid rgba(212,163,80,0.1)', padding: '6rem 2rem', background: '#0d0a05' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '1rem' }}>A la carte</p>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>Our menu</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1px', background: 'rgba(212,163,80,0.1)' }}>
-          {dishes.map((dish) => (
-            <div key={dish.name} style={{ background: '#0d0a05', padding: '1.75rem 2rem', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', color: '#7c6a44', textTransform: 'uppercase' }}>{dish.type}</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
-                <h3 style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.01em', color: '#f5e6c8', margin: 0, lineHeight: 1.3 }}>{dish.name}</h3>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', fontWeight: 700, color: '#d4a350', flexShrink: 0 }}>{dish.price}</span>
-              </div>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6b5a3a', lineHeight: 1.65, margin: 0 }}>{dish.desc}</p>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '40px' }}>
+        {courses.map((c) => (
+          <button key={c} onClick={() => setTab(c)} style={{ cursor: 'pointer', background: 'none', border: 'none', padding: '8px 6px', fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, color: tab === c ? C.gold : C.faint, borderBottom: `2px solid ${tab === c ? C.gold : 'transparent'}` }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '26px' }}>
+        {menu[tab].map((d) => (
+          <div key={d.name} style={{ display: 'flex', alignItems: 'baseline', gap: '14px' }}>
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontFamily: serif, fontSize: '1.2rem', fontWeight: 600, margin: '0 0 5px' }}>{d.name}</h3>
+              <p style={{ fontSize: '14px', color: C.muted, margin: 0, lineHeight: 1.55 }}>{d.desc}</p>
             </div>
-          ))}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-          <a href="#" style={{ fontFamily: 'Inter, sans-serif', display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,163,80,0.3)', borderRadius: '4px', padding: '13px 28px', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', color: '#d4a350', textDecoration: 'none', textTransform: 'uppercase' }}>
-            Full menu →
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function GallerySection() {
-  const imgs = [
-    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
-    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80',
-    'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80',
-    'https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=600&q=80',
-  ];
-  return (
-    <section style={{ padding: '4rem 0' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px' }}>
-        {imgs.map((src, i) => (
-          <div key={i} style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
-            <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.65, transition: 'opacity 0.3s' }}
-              onMouseEnter={e => (e.currentTarget as HTMLImageElement).style.opacity = '0.85'}
-              onMouseLeave={e => (e.currentTarget as HTMLImageElement).style.opacity = '0.65'}
-            />
+            <span style={{ borderBottom: `1px dotted ${C.faint}`, flex: '0 1 40px', minWidth: '20px', alignSelf: 'center' }} />
+            <span style={{ fontFamily: serif, fontSize: '1.15rem', color: C.gold, fontWeight: 600 }}>£{d.price}</span>
           </div>
         ))}
       </div>
@@ -173,81 +135,85 @@ function GallerySection() {
   );
 }
 
-function ReviewsSection() {
-  const reviews = [
-    { text: "An extraordinary evening. Chef Beaumont's tasting menu was the finest meal I've had in Paris. Each course was a revelation.", author: 'Henri D.', source: 'TripAdvisor', stars: 5 },
-    { text: "Impeccable service, divine food, and an atmosphere that feels both intimate and grand. This is fine dining at its absolute best.", author: 'Sophie M.', source: 'Google', stars: 5 },
-    { text: "The sole meunière alone is worth the trip to Paris. We have been regulars for three years and it never disappoints.", author: 'James & Clara W.', source: 'Yelp', stars: 5 },
+function Story() {
+  const m = useIsMobile();
+  return (
+    <section id="story" style={{ background: C.surface, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '56px 20px' : '96px 20px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '32px' : '64px', alignItems: 'center' }}>
+        <div>
+          <p style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.gold, margin: '0 0 14px' }}>Our kitchen</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 20px' }}>Led by chef Rosa Fontaine</h2>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 16px' }}>Rosa trained across kitchens in Lyon and San Sebastián before returning home to build a restaurant around one idea: cook what is best, right now. Menus change with the season and the day's catch.</p>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: 0 }}>Nearly everything is made in-house — from the sourdough to the aged vinegars — and sourced from farms within forty miles of the door.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+          <div style={{ aspectRatio: '3/4', borderRadius: '4px', background: 'linear-gradient(160deg,#3a2c1c,#1a130c)' }} />
+          <div style={{ aspectRatio: '3/4', borderRadius: '4px', background: 'linear-gradient(160deg,#c9a45c,#6b4f22)', marginTop: '28px' }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Gallery() {
+  const m = useIsMobile();
+  const tiles = [
+    { l: 'The dining room', g: 'linear-gradient(160deg,#2a2016,#120d08)' },
+    { l: 'Open kitchen', g: 'linear-gradient(160deg,#c9a45c,#5c421d)' },
+    { l: 'Cellar', g: 'linear-gradient(160deg,#3a2418,#160e08)' },
+    { l: "Chef's table", g: 'linear-gradient(160deg,#7a5a2e,#2a1d0e)' },
   ];
   return (
-    <section style={{ padding: '5rem 2rem', background: '#070502', borderTop: '1px solid rgba(212,163,80,0.1)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Guest reviews</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>What our guests say</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-          {reviews.map(r => (
-            <div key={r.author} style={{ border: '1px solid rgba(212,163,80,0.12)', borderRadius: '4px', padding: '2rem', background: '#0a0703' }}>
-              <div style={{ display: 'flex', gap: '3px', marginBottom: '1.25rem' }}>
-                {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#d4a350', fontSize: '14px' }}>★</span>)}
-              </div>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#8c7a5a', lineHeight: 1.8, margin: '0 0 1.5rem', fontStyle: 'italic' }}>"{r.text}"</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#f5e6c8' }}>{r.author}</span>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#4a3c28', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{r.source}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="gallery" style={{ ...container, padding: m ? '56px 20px' : '96px 20px' }}>
+      <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, textAlign: 'center', margin: '0 0 36px' }}>The room</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr 1fr' : 'repeat(4,1fr)', gap: m ? '12px' : '18px' }}>
+        {tiles.map((t) => (
+          <div key={t.l} style={{ aspectRatio: '3/4', borderRadius: '4px', background: t.g, position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', bottom: '14px', left: '14px', fontSize: '12px', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>{t.l}</span>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
-function ReservationSection() {
+function Reserve() {
+  const m = useIsMobile();
+  const field: React.CSSProperties = { background: C.bg, border: `1px solid ${C.line}`, borderRadius: '2px', padding: '13px 14px', color: C.ink, fontSize: '14px', width: '100%' };
   return (
-    <section style={{ padding: '6rem 2rem', background: '#0d0a05', borderTop: '1px solid rgba(212,163,80,0.1)' }}>
-      <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', color: '#d4a350', textTransform: 'uppercase', marginBottom: '1rem' }}>Reservations</p>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 1rem' }}>
-          Book your table
-        </h2>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#7c6a44', marginBottom: '3rem', lineHeight: 1.7 }}>
-          We accept reservations up to 30 days in advance. For groups of 8 or more, please contact us directly.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-          {[{ placeholder: 'Full name', type: 'text' }, { placeholder: 'Email address', type: 'email' }, { placeholder: 'Date', type: 'date' }, { placeholder: 'Time', type: 'time' }].map((field, i) => (
-            <input key={i} type={field.type} placeholder={field.placeholder} style={{ fontFamily: 'Inter, sans-serif', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212,163,80,0.15)', borderRadius: '4px', padding: '13px 16px', fontSize: '14px', color: '#f5e6c8', outline: 'none' }} />
-          ))}
-        </div>
-        <select style={{ fontFamily: 'Inter, sans-serif', width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212,163,80,0.15)', borderRadius: '4px', padding: '13px 16px', fontSize: '14px', color: '#7c6a44', marginBottom: '12px', outline: 'none' }}>
-          <option>Number of guests</option>
-          {[1,2,3,4,5,6,7,8].map(n => <option key={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
-        </select>
-        <button style={{ fontFamily: 'Inter, sans-serif', width: '100%', background: '#d4a350', border: 'none', borderRadius: '4px', padding: '15px', fontSize: '14px', fontWeight: 700, letterSpacing: '0.1em', color: '#0a0703', cursor: 'pointer', textTransform: 'uppercase' }}>
-          Confirm reservation
-        </button>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#4a3c28', marginTop: '1rem' }}>
-          Or call us: <span style={{ color: '#d4a350' }}>+33 1 23 45 67 89</span>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function SaveurFooter() {
-  return (
-    <footer style={{ borderTop: '1px solid rgba(212,163,80,0.1)', padding: '2.5rem 2rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+    <section id="reserve" style={{ background: C.surface, borderTop: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '56px 20px' : '96px 20px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '36px' : '64px', alignItems: 'center' }}>
         <div>
-          <div style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '0.05em', color: '#f5dfa0' }}>SAVEUR</div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#4a3c28', marginTop: '4px' }}>12 Rue de la Paix, 75001 Paris</div>
+          <p style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.gold, margin: '0 0 14px' }}>Reservations</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 20px' }}>Join us for dinner</h2>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 24px' }}>We take bookings up to eight weeks ahead. For parties larger than six, please call us directly and we'll take care of the rest.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: C.muted }}>
+            <span><b style={{ color: C.ink }}>Dinner</b> · Tue–Sat, 6pm–10pm</span>
+            <span><b style={{ color: C.ink }}>Lunch</b> · Fri & Sat, 12pm–2:30pm</span>
+            <span><b style={{ color: C.ink }}>Call</b> · +44 20 7946 0110</span>
+          </div>
         </div>
-        <div style={{ fontFamily: 'Inter, sans-serif', display: 'flex', gap: '2rem' }}>
-          {['Menu', 'About', 'Gallery', 'Press', 'Contact'].map(l => <a key={l} href="#" style={{ fontSize: '12px', letterSpacing: '0.08em', color: '#4a3c28', textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>)}
-        </div>
-        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#2a1e10' }}>© {new Date().getFullYear()} Saveur. All rights reserved.</div>
+        <form onSubmit={(e) => e.preventDefault()} style={{ background: C.bg, border: `1px solid ${C.line}`, borderRadius: '4px', padding: m ? '22px' : '32px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <input placeholder="Full name" style={field} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <input type="date" style={field} />
+            <input type="time" style={field} />
+          </div>
+          <select style={field} defaultValue="2"><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5">5 guests</option><option value="6">6 guests</option></select>
+          <button type="submit" style={{ background: C.gold, color: '#14100c', border: 'none', borderRadius: '2px', padding: '14px', fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700, cursor: 'pointer' }}>Request booking</button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ padding: '48px 20px 30px', textAlign: 'center' }}>
+      <div style={{ ...container }}>
+        <span style={{ fontFamily: serif, fontSize: '22px', fontWeight: 700, color: C.gold }}>Saveur</span>
+        <p style={{ fontSize: '14px', color: C.muted, margin: '14px 0 8px' }}>18 Curlew Street, London SE1 · +44 20 7946 0110</p>
+        <p style={{ fontSize: '13px', color: C.faint, margin: 0 }}>© {new Date().getFullYear()} Saveur Restaurant. All rights reserved.</p>
       </div>
     </footer>
   );

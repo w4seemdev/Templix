@@ -38,6 +38,10 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
   const { toggle, isWishlisted } = useWishlist();
   const wishlisted = isWishlisted(template.id);
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  // Keyboard focus gets the same lift + ring as hover so the card reads as an
+  // interactive target for non-mouse users. :focus-visible keeps mouse clicks quiet.
+  const active = hovered || focused;
 
   const visibleTags = template.tags.slice(0, MAX_VISIBLE_TAGS);
   const extraTags = template.tags.length - visibleTags.length;
@@ -47,16 +51,20 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
       to={`/templates/${template.id}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onFocus={e => { if (e.currentTarget.matches(':focus-visible')) setFocused(true); }}
+      onBlur={() => setFocused(false)}
       style={{
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '12px',
-        border: `1px solid ${hovered ? 'rgba(124,92,252,0.35)' : 'var(--color-border-subtle)'}`,
+        border: `1px solid ${active ? 'rgba(124,92,252,0.35)' : 'var(--color-border-subtle)'}`,
         background: 'var(--color-surface-1)',
         overflow: 'hidden',
         textDecoration: 'none',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered
+        transform: active ? 'translateY(-4px)' : 'translateY(0)',
+        outline: focused ? '2px solid var(--color-border-accent)' : 'none',
+        outlineOffset: '2px',
+        boxShadow: active
           ? '0 0 24px -6px rgba(124,92,252,0.30), 0 16px 40px -16px rgba(0,0,0,0.6)'
           : '0 1px 2px rgba(0,0,0,0.40)',
         transition:
@@ -75,14 +83,16 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
       >
         <img
           src={template.image}
-          alt={template.title}
+          alt={`${template.title} template preview`}
           loading="lazy"
+          width={800}
+          height={500}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-            transform: hovered ? 'scale(1.04)' : 'scale(1)',
+            transform: active ? 'scale(1.04)' : 'scale(1)',
             transition: 'transform 600ms cubic-bezier(0.2,0.8,0.2,1)',
           }}
         />
@@ -108,8 +118,8 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
               alignItems: 'center',
               justifyContent: 'center',
               background: 'rgba(7,8,10,0.5)',
-              opacity: hovered ? 1 : 0,
-              transition: hovered ? 'opacity 200ms ease-out' : 'opacity 150ms ease-out',
+              opacity: active ? 1 : 0,
+              transition: active ? 'opacity 200ms ease-out' : 'opacity 150ms ease-out',
               pointerEvents: 'none',
             }}
           >
@@ -127,7 +137,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
                 border: '1px solid rgba(255,255,255,0.14)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
-                transform: hovered ? 'scale(1)' : 'scale(0.96)',
+                transform: active ? 'scale(1)' : 'scale(0.96)',
                 transition: 'transform 200ms ease-out',
               }}
             >

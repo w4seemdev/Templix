@@ -1,107 +1,134 @@
-const destinations = [
-  { name: 'Santorini, Greece', tag: 'Europe', reads: '14K', img: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&q=80', desc: '10 days in the Aegean — what no one tells you' },
-  { name: 'Kyoto, Japan', tag: 'Asia', reads: '22K', img: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80', desc: 'Cherry blossoms, temples, and the bullet train' },
-  { name: 'Patagonia, Chile', tag: 'South America', reads: '9K', img: 'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&q=80', desc: 'Trekking Torres del Paine: the complete guide' },
-  { name: 'Marrakech, Morocco', tag: 'Africa', reads: '17K', img: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80', desc: 'Getting lost (on purpose) in the medina' },
-  { name: 'Amalfi Coast, Italy', tag: 'Europe', reads: '31K', img: 'https://images.unsplash.com/photo-1633321702518-7feccafb94d5?w=600&q=80', desc: 'The most scenic drive in the world — is it worth it?' },
+/* ============================================================
+   WANDERLINE — Travel journal & guides
+   Airy off-white, deep teal + warm sand accents
+   Self-contained, responsive single-page site
+   ============================================================ */
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const PAPER = '#f7f5f0';
+const INK = '#1f3b3a';
+const MUTE = '#6f7d78';
+const TEAL = '#0f8177';
+const SAND = '#d9915a';
+const LINE = 'rgba(31,59,58,0.1)';
+const SERIF = "'Playfair Display', Georgia, serif";
+
+const NAV = [
+  { label: 'Guides', href: '#guides' },
+  { label: 'Destinations', href: '#guides' },
+  { label: 'About', href: '#about' },
+  { label: 'Newsletter', href: '#newsletter' },
 ];
 
-const tags = ['All', 'Europe', 'Asia', 'Americas', 'Africa', 'Budget Tips', 'Guides'];
+const dests = [
+  { n: 'Santorini, Greece', region: 'Europe', reads: '14K', d: '10 slow days in the Aegean — the caldera villages worth the climb', g: 'linear-gradient(150deg,#2f7db0,#9fc6dd)' },
+  { n: 'Kyoto, Japan', region: 'Asia', reads: '22K', d: 'Temples at dawn, back-alley kissaten, and the last cherry blossoms', g: 'linear-gradient(150deg,#c66a72,#e6b3ad)' },
+  { n: 'Chefchaouen, Morocco', region: 'Africa', reads: '9K', d: 'A blue city in the Rif Mountains, and how to reach it by bus', g: 'linear-gradient(150deg,#2f7d8b,#8fc0c6)' },
+  { n: 'Patagonia, Chile', region: 'Americas', reads: '18K', d: 'The W trek, unhurried — five days, four refugios, zero regrets', g: 'linear-gradient(150deg,#5b8b5a,#b6cf9f)' },
+];
 
 export default function TravelBlogPreview() {
+  const mobile = useIsMobile();
+  const [open, setOpen] = useState(false);
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', background: '#fafaf8', color: '#1a1a1a', minHeight: '100vh' }}>
-      {/* Nav */}
-      <nav style={{ background: '#fff', borderBottom: '1px solid #e8e8e0', padding: '0 2rem', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '20px' }}>🌍</span>
-          <span style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em', color: '#1a1a1a' }}>Wanderlog</span>
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: PAPER, color: INK, minHeight: '100vh' }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${LINE}`, background: 'rgba(247,245,240,0.9)', backdropFilter: 'blur(12px)' }}>
+        <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 clamp(1.25rem,4vw,2rem)', height: '66px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="#top" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: '23px', letterSpacing: '-0.01em', color: INK, textDecoration: 'none' }}>Wander<span style={{ color: TEAL }}>line</span></a>
+          {!mobile && <nav style={{ display: 'flex', gap: '2rem' }}>{NAV.map(l => <a key={l.label} href={l.href} style={{ fontSize: '14px', color: MUTE, textDecoration: 'none' }}>{l.label}</a>)}</nav>}
+          {!mobile ? (
+            <a href="#newsletter" style={{ background: TEAL, color: PAPER, borderRadius: '999px', padding: '8px 18px', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>Follow along</a>
+          ) : (
+            <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: `1px solid ${LINE}`, borderRadius: '8px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+              {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+            </button>
+          )}
         </div>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          {['Destinations', 'Guides', 'Budget Tips', 'About', 'Newsletter'].map(item => (
-            <span key={item} style={{ fontSize: '13px', color: '#737373', cursor: 'pointer', fontWeight: 500 }}>{item}</span>
-          ))}
-        </div>
-        <button style={{ background: '#1a1a1a', border: 'none', borderRadius: '8px', padding: '8px 18px', fontSize: '13px', fontWeight: 600, color: '#fff', cursor: 'pointer' }}>Subscribe</button>
-      </nav>
+        {mobile && open && <nav style={{ display: 'grid', padding: '0.5rem 1.25rem 1rem', borderTop: `1px solid ${LINE}` }}>{NAV.map(l => <a key={l.label} href={l.href} onClick={() => setOpen(false)} style={{ padding: '11px 0', fontSize: '15px', color: INK, textDecoration: 'none', borderBottom: `1px solid ${LINE}` }}>{l.label}</a>)}</nav>}
+      </header>
 
-      {/* Hero */}
-      <section style={{ position: 'relative', height: '540px', overflow: 'hidden' }}>
-        <img src={destinations[0].img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '2.5rem 3rem' }}>
-          <div style={{ maxWidth: '700px' }}>
-            <span style={{ background: '#16a34a', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '4px', marginBottom: '1rem', display: 'inline-block', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Featured</span>
-            <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 800, color: '#fff', margin: '0 0 0.75rem', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
-              {destinations[0].desc}
+      <section id="top" style={{ position: 'relative', maxWidth: '1140px', margin: mobile ? '1.25rem auto 0' : '1.5rem auto 0', padding: '0 clamp(1.25rem,4vw,2rem)' }}>
+        <div style={{ position: 'relative', borderRadius: '20px', overflow: 'hidden', minHeight: mobile ? '360px' : '460px', background: 'linear-gradient(135deg,#0f6b74,#39a0a0 55%,#e0b070)', display: 'flex', alignItems: 'flex-end', padding: mobile ? '1.75rem' : '3rem' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent 60%)' }} />
+          <div style={{ position: 'relative', maxWidth: '640px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.85)' }}>Field notes · Coastal Vietnam</span>
+            <h1 style={{ fontFamily: SERIF, fontSize: mobile ? '2.4rem' : 'clamp(2.6rem,6vw,4.6rem)', fontWeight: 700, color: '#fff', lineHeight: 1.05, margin: '0.75rem 0 1rem' }}>
+              The long way to Hội An
             </h1>
-            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.75)', margin: '0 0 0.5rem' }}>{destinations[0].name} · {destinations[0].reads} reads</p>
+            <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.7, maxWidth: '520px' }}>
+              Two weeks by motorbike down the coast — lantern-lit alleys, roadside phở, and the case for taking the road with more potholes.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Tags */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e8e8e0', padding: '0 2rem', display: 'flex', gap: '2rem', overflowX: 'auto' }}>
-        {tags.map((tag, i) => (
-          <span key={tag} style={{ fontSize: '13px', fontWeight: 600, color: i === 0 ? '#1a1a1a' : '#737373', padding: '1rem 0', borderBottom: i === 0 ? '2px solid #1a1a1a' : '2px solid transparent', cursor: 'pointer', whiteSpace: 'nowrap' }}>{tag}</span>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-          {/* Large feature */}
-          <div style={{ cursor: 'pointer' }}>
-            <div style={{ borderRadius: '12px', overflow: 'hidden', height: '300px', marginBottom: '1.25rem' }}>
-              <img src={destinations[1].img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }} />
-            </div>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{destinations[1].tag}</span>
-            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, margin: '0.375rem 0 0.5rem', letterSpacing: '-0.02em', lineHeight: 1.3 }}>{destinations[1].desc}</h2>
-            <p style={{ fontSize: '13px', color: '#737373', margin: 0 }}>{destinations[1].name} · {destinations[1].reads} reads</p>
-          </div>
-          {/* Side list */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {destinations.slice(2, 4).map(d => (
-              <div key={d.name} style={{ display: 'flex', gap: '1rem', cursor: 'pointer' }}>
-                <div style={{ width: '100px', height: '80px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                  <img src={d.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div>
-                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{d.tag}</span>
-                  <h3 style={{ fontSize: '13px', fontWeight: 700, margin: '3px 0 4px', lineHeight: 1.35 }}>{d.desc}</h3>
-                  <p style={{ fontSize: '12px', color: '#737373', margin: 0 }}>{d.name}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <section id="guides" style={{ maxWidth: '1140px', margin: '0 auto', padding: mobile ? '3rem 1.25rem' : '4.5rem 2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '2rem' }}>
+          <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '1.8rem' : '2.2rem', fontWeight: 700, margin: 0 }}>Latest guides</h2>
+          <a href="#guides" style={{ fontSize: '13px', color: TEAL, fontWeight: 600, textDecoration: 'none' }}>Browse all →</a>
         </div>
-        {/* Bottom row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', borderTop: '1px solid #e8e8e0', paddingTop: '2rem' }}>
-          {destinations.slice(3).map(d => (
-            <div key={d.name} style={{ display: 'flex', gap: '1.25rem', cursor: 'pointer' }}>
-              <div style={{ width: '120px', height: '90px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                <img src={d.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(2,1fr)', gap: mobile ? '1.75rem' : '2rem' }}>
+          {dests.map(d => (
+            <a key={d.n} href="#guides" style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '150px 1fr', gap: '1.25rem', textDecoration: 'none', color: INK, alignItems: 'center' }}>
+              <div style={{ aspectRatio: mobile ? '16/9' : '1/1', borderRadius: '14px', background: d.g }} />
               <div>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{d.tag}</span>
-                <h3 style={{ fontSize: '14px', fontWeight: 700, margin: '4px 0 6px', lineHeight: 1.35 }}>{d.desc}</h3>
-                <p style={{ fontSize: '12px', color: '#737373', margin: 0 }}>{d.name} · {d.reads} reads</p>
+                <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: SAND }}>{d.region} · {d.reads} reads</span>
+                <h3 style={{ fontFamily: SERIF, fontSize: '1.35rem', fontWeight: 700, lineHeight: 1.2, margin: '0.4rem 0 0.5rem' }}>{d.n}</h3>
+                <p style={{ fontSize: '14px', color: MUTE, lineHeight: 1.55, margin: 0 }}>{d.d}</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section style={{ background: '#1a1a1a', padding: '4rem 2rem', textAlign: 'center' }}>
-        <span style={{ fontSize: '2rem' }}>✈️</span>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fff', margin: '0.5rem 0', letterSpacing: '-0.02em' }}>Get travel inspiration weekly</h2>
-        <p style={{ fontSize: '14px', color: '#737373', marginBottom: '1.5rem' }}>50,000+ readers. No spam. Unsubscribe anytime.</p>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-          <input type="email" placeholder="your@email.com" style={{ borderRadius: '8px', border: '1px solid #333', background: '#222', padding: '11px 18px', fontSize: '14px', color: '#fff', outline: 'none', minWidth: '260px' }} />
-          <button style={{ background: '#16a34a', border: 'none', borderRadius: '8px', padding: '11px 24px', fontSize: '14px', fontWeight: 700, color: '#fff', cursor: 'pointer' }}>Subscribe</button>
+      <section id="about" style={{ borderTop: `1px solid ${LINE}`, borderBottom: `1px solid ${LINE}`, background: '#eef0e9', padding: mobile ? '3rem 1.25rem' : '4.5rem 2rem' }}>
+        <div style={{ maxWidth: '1140px', margin: '0 auto', display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1.4fr', gap: mobile ? '1.5rem' : '3rem', alignItems: 'center' }}>
+          <div style={{ aspectRatio: mobile ? '16/10' : '1/1', borderRadius: '18px', background: 'linear-gradient(150deg,#2f7d8b,#d9915a)' }} />
+          <div>
+            <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: TEAL }}>Behind Wanderline</span>
+            <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 700, lineHeight: 1.2, margin: '0.75rem 0 1rem' }}>34 countries, one carry-on, and a lot of wrong turns</h2>
+            <p style={{ fontSize: '1.02rem', color: MUTE, lineHeight: 1.8, margin: '0 0 1.25rem' }}>
+              I&rsquo;m Noor — a full-time traveller writing honest, budget-aware guides for people who&rsquo;d rather get lost than tick boxes. Everything here is first-hand and self-funded.
+            </p>
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+              {[{ v: '34', l: 'Countries' }, { v: '210+', l: 'Guides' }, { v: '96K', l: 'Readers/mo' }].map(s => (
+                <div key={s.l}><div style={{ fontFamily: SERIF, fontSize: '1.9rem', fontWeight: 700, color: INK }}>{s.v}</div><div style={{ fontSize: '12px', color: MUTE }}>{s.l}</div></div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
+      <section id="newsletter" style={{ padding: mobile ? '3.5rem 1.25rem' : '5rem 2rem' }}>
+        <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Postcards</h2>
+          <p style={{ color: MUTE, fontSize: '1rem', lineHeight: 1.7, margin: '0 0 1.75rem' }}>A short dispatch from the road every other week — one place, one meal, one thing I got wrong.</p>
+          <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', gap: '0.6rem', flexDirection: mobile ? 'column' : 'row' }}>
+            <input type="email" placeholder="you@email.com" style={{ flex: 1, padding: '13px 16px', borderRadius: '999px', border: `1px solid ${LINE}`, background: '#fff', color: INK, fontSize: '14px', outline: 'none' }} />
+            <button type="submit" style={{ background: TEAL, color: PAPER, border: 'none', borderRadius: '999px', padding: '13px 26px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>Send me postcards</button>
+          </form>
+        </div>
+      </section>
+
+      <footer style={{ borderTop: `1px solid ${LINE}`, padding: '2.5rem 0' }}>
+        <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 clamp(1.25rem,4vw,2rem)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <span style={{ fontFamily: SERIF, fontSize: '19px', fontWeight: 700 }}>Wander<span style={{ color: TEAL }}>line</span></span>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>{['Instagram', 'YouTube', 'Pinterest'].map(s => <a key={s} href="#top" style={{ fontSize: '13px', color: MUTE, textDecoration: 'none' }}>{s}</a>)}</div>
+          <span style={{ fontSize: '13px', color: 'rgba(31,59,58,0.35)' }}>© {new Date().getFullYear()} Wanderline</span>
+        </div>
+      </footer>
     </div>
   );
 }

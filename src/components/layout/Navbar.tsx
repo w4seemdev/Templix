@@ -67,6 +67,18 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Make the advertised ⌘K / Ctrl-K search hint real: jump to the catalog search.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        navigate('/templates');
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [navigate]);
+
   // Close any open menus when the route changes.
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect -- resetting transient menu state on navigation is intentional */

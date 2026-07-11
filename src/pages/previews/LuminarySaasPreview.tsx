@@ -1,288 +1,129 @@
 /* ============================================================
    LUMINARY — SaaS Landing Page Template
-   A premium dark SaaS template with violet/blue accent
+   Premium dark SaaS with violet/indigo accent. Self-contained,
+   inline styles only, fully responsive (375px → 1280px).
    ============================================================ */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const V = { bg: '#05070f', panel: '#0b0e1a', line: 'rgba(255,255,255,0.08)', ink: '#f8fafc', mut: '#94a3b8', dim: '#64748b', a1: '#8b5cf6', a2: '#6366f1' };
+const grad = 'linear-gradient(135deg, #8b5cf6, #6366f1)';
+const NAV = [['Features', 'features'], ['Workflow', 'workflow'], ['Pricing', 'pricing'], ['Reviews', 'reviews']] as const;
 
 export default function LuminarySaasPreview() {
+  const mobile = useIsMobile();
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#05070f', color: '#ffffff', minHeight: '100vh' }}>
-      <LuminaryNav />
-      <HeroSection />
-      <LogosSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <PricingSection />
-      <CtaSection />
-      <LuminaryFooter />
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: V.bg, color: V.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav mobile={mobile} />
+      <Hero mobile={mobile} />
+      <Logos />
+      <Features mobile={mobile} />
+      <Workflow mobile={mobile} />
+      <Reviews mobile={mobile} />
+      <Pricing mobile={mobile} />
+      <Cta />
+      <Foot mobile={mobile} />
     </div>
   );
 }
 
-/* ─── NAV ─── */
-function LuminaryNav() {
+function Nav({ mobile }: { mobile: boolean }) {
+  const [open, setOpen] = useState(false);
   return (
-    <header style={{
-      position: 'sticky', top: 0, zIndex: 50,
-      borderBottom: '1px solid rgba(255,255,255,0.06)',
-      background: 'rgba(5,7,15,0.85)', backdropFilter: 'blur(16px)',
-    }}>
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto',
-        padding: '0 2rem', height: '64px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '32px', height: '32px', borderRadius: '8px',
-            background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${V.line}`, background: 'rgba(5,7,15,0.82)', backdropFilter: 'blur(16px)' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 9, background: grad, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
           </div>
-          <span style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '-0.02em' }}>Luminary</span>
+          <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em' }}>Luminary</span>
         </div>
-
-        {/* Nav links */}
-        <nav style={{ display: 'flex', gap: '2rem' }}>
-          {['Features', 'Pricing', 'Docs', 'Blog'].map(l => (
-            <a key={l} href="#" style={{ fontSize: '14px', color: '#94a3b8', textDecoration: 'none' }}>{l}</a>
-          ))}
-        </nav>
-
-        {/* CTA */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <a href="#" style={{ fontSize: '14px', color: '#94a3b8', textDecoration: 'none' }}>Sign in</a>
-          <a href="#" style={{
-            background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-            borderRadius: '10px', padding: '8px 18px',
-            fontSize: '14px', fontWeight: 600, color: '#ffffff', textDecoration: 'none',
-          }}>
-            Get started free
-          </a>
-        </div>
+        {!mobile && (
+          <nav style={{ display: 'flex', gap: 28 }}>
+            {NAV.map(([l, h]) => <a key={h} href={`#${h}`} style={{ fontSize: 14, color: V.mut, textDecoration: 'none' }}>{l}</a>)}
+          </nav>
+        )}
+        {!mobile ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <a href="#pricing" style={{ fontSize: 14, color: V.mut, textDecoration: 'none' }}>Sign in</a>
+            <a href="#pricing" style={{ background: grad, borderRadius: 10, padding: '9px 18px', fontSize: 14, fontWeight: 600, color: '#fff', textDecoration: 'none' }}>Get started</a>
+          </div>
+        ) : (
+          <button aria-label="Menu" onClick={() => setOpen(o => !o)} style={{ background: 'transparent', border: `1px solid ${V.line}`, borderRadius: 8, padding: 8, cursor: 'pointer' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d={open ? 'M6 6l12 12M6 18L18 6' : 'M3 6h18M3 12h18M3 18h18'} /></svg>
+          </button>
+        )}
       </div>
+      {mobile && open && (
+        <div style={{ padding: '8px 20px 18px', borderTop: `1px solid ${V.line}`, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {NAV.map(([l, h]) => <a key={h} href={`#${h}`} onClick={() => setOpen(false)} style={{ padding: '10px 0', fontSize: 15, color: V.mut, textDecoration: 'none' }}>{l}</a>)}
+          <a href="#pricing" onClick={() => setOpen(false)} style={{ marginTop: 8, textAlign: 'center', background: grad, borderRadius: 10, padding: '11px', fontSize: 14, fontWeight: 600, color: '#fff', textDecoration: 'none' }}>Get started free</a>
+        </div>
+      )}
     </header>
   );
 }
 
-/* ─── HERO ─── */
-function HeroSection() {
+function Hero({ mobile }: { mobile: boolean }) {
   return (
-    <section style={{ position: 'relative', overflow: 'hidden', paddingTop: '6rem', paddingBottom: '5rem' }}>
-
-      {/* Background glows */}
-      <div style={{
-        position: 'absolute', top: '-100px', left: '50%', transform: 'translateX(-50%)',
-        width: '800px', height: '500px',
-        background: 'radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        position: 'absolute', top: '200px', left: '10%',
-        width: '300px', height: '300px',
-        background: 'radial-gradient(ellipse, rgba(59,130,246,0.1) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem', position: 'relative' }}>
-
-        {/* Badge */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            border: '1px solid rgba(139,92,246,0.4)',
-            background: 'rgba(139,92,246,0.1)',
-            borderRadius: '9999px', padding: '6px 16px',
-            fontSize: '13px', color: '#c4b5fd',
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8b5cf6', display: 'inline-block' }} />
-            Now in beta — Try for free, no credit card required
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h1 style={{
-          textAlign: 'center', maxWidth: '820px', margin: '0 auto',
-          fontSize: 'clamp(2.8rem, 6vw, 4.5rem)',
-          fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.08,
-        }}>
-          Ship your product{' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #a78bfa, #60a5fa)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          }}>
-            10x faster
-          </span>
-          {' '}than before
+    <section style={{ position: 'relative', overflow: 'hidden', padding: mobile ? '52px 20px 40px' : '84px 20px 64px' }}>
+      <div style={{ position: 'absolute', top: -120, left: '50%', transform: 'translateX(-50%)', width: 760, height: 460, maxWidth: '120%', background: 'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative', textAlign: 'center' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid rgba(139,92,246,0.4)', background: 'rgba(139,92,246,0.1)', borderRadius: 9999, padding: '6px 15px', fontSize: 13, color: '#c4b5fd' }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: V.a1 }} /> New — AI sprint planning is live
+        </span>
+        <h1 style={{ fontSize: mobile ? '2.3rem' : '4.2rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.05, margin: '22px auto 0', maxWidth: 820 }}>
+          The workspace where teams<br />ship <span style={{ background: 'linear-gradient(135deg,#a78bfa,#818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>10x faster</span>
         </h1>
-
-        {/* Subtitle */}
-        <p style={{
-          textAlign: 'center', maxWidth: '560px', margin: '1.5rem auto 0',
-          fontSize: '1.125rem', color: '#94a3b8', lineHeight: 1.75,
-        }}>
-          Luminary gives your team the tools to collaborate, ship, and scale — all in one beautiful platform built for modern teams.
+        <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: V.mut, lineHeight: 1.7, maxWidth: 560, margin: '20px auto 0' }}>
+          Plan sprints, track work, and ship on time — Luminary unifies your roadmap, issues, and docs in one fast, beautiful platform.
         </p>
-
-        {/* Buttons */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
-          <a href="#" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-            borderRadius: '12px', padding: '14px 28px',
-            fontSize: '15px', fontWeight: 600, color: '#ffffff', textDecoration: 'none',
-            boxShadow: '0 0 40px rgba(139,92,246,0.3)',
-          }}>
-            Start for free
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-          <a href="#" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            border: '1px solid rgba(255,255,255,0.1)',
-            background: 'rgba(255,255,255,0.04)',
-            borderRadius: '12px', padding: '14px 28px',
-            fontSize: '15px', fontWeight: 600, color: '#ffffff', textDecoration: 'none',
-          }}>
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
-            </svg>
-            Watch demo
-          </a>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 30, flexWrap: 'wrap' }}>
+          <a href="#pricing" style={{ background: grad, borderRadius: 12, padding: '14px 26px', fontSize: 15, fontWeight: 600, color: '#fff', textDecoration: 'none', boxShadow: '0 0 40px rgba(139,92,246,0.3)' }}>Start free trial</a>
+          <a href="#workflow" style={{ border: `1px solid ${V.line}`, background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '14px 26px', fontSize: 15, fontWeight: 600, color: '#fff', textDecoration: 'none' }}>See how it works</a>
         </div>
+        <p style={{ fontSize: 13, color: V.dim, marginTop: 16 }}>No credit card required · 14-day Pro trial</p>
+      </div>
 
-        {/* Dashboard mockup */}
-        <div style={{
-          marginTop: '4rem',
-          borderRadius: '16px',
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: '#0d1117',
-          overflow: 'hidden',
-          boxShadow: '0 0 80px rgba(139,92,246,0.15), 0 40px 100px rgba(0,0,0,0.5)',
-        }}>
-          {/* Window bar */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            padding: '12px 16px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            background: '#0a0e1a',
-          }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f57' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#febc2e' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28c840' }} />
-            <div style={{ flex: 1, marginLeft: '12px', background: '#1a2035', borderRadius: '6px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: '11px', color: '#475569' }}>app.luminary.io/dashboard</span>
-            </div>
-          </div>
-
-          {/* App layout */}
-          <div style={{ display: 'flex', height: '420px' }}>
-            {/* Sidebar */}
-            <div style={{ width: '220px', borderRight: '1px solid rgba(255,255,255,0.06)', padding: '1.25rem 1rem', flexShrink: 0 }}>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <div style={{ fontSize: '11px', color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Workspace</div>
-                {[
-                  { icon: '▦', label: 'Dashboard', active: true },
-                  { icon: '◈', label: 'Projects' },
-                  { icon: '◎', label: 'Analytics' },
-                  { icon: '◷', label: 'Timeline' },
-                  { icon: '◻', label: 'Team' },
-                ].map(item => (
-                  <div key={item.label} style={{
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '7px 10px', borderRadius: '8px', marginBottom: '2px',
-                    background: item.active ? 'rgba(139,92,246,0.15)' : 'transparent',
-                    color: item.active ? '#a78bfa' : '#475569', fontSize: '13px',
-                  }}>
-                    <span>{item.icon}</span>
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div style={{ fontSize: '11px', color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Recent</div>
-                {['Website Redesign', 'Mobile App v2', 'API Migration'].map(p => (
-                  <div key={p} style={{ padding: '6px 10px', fontSize: '12px', color: '#334155', borderRadius: '6px', marginBottom: '2px' }}>{p}</div>
-                ))}
-              </div>
-            </div>
-
-            {/* Main content */}
-            <div style={{ flex: 1, padding: '1.5rem', overflow: 'hidden' }}>
-              {/* Stats row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '1.5rem' }}>
-                {[
-                  { label: 'Active Tasks', value: '142', change: '+12%', color: '#8b5cf6' },
-                  { label: 'Completed', value: '891', change: '+8%', color: '#10b981' },
-                  { label: 'Team Members', value: '24', change: '+2', color: '#3b82f6' },
-                ].map(stat => (
-                  <div key={stat.label} style={{
-                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: '10px', padding: '14px',
-                  }}>
-                    <div style={{ fontSize: '11px', color: '#475569', marginBottom: '6px' }}>{stat.label}</div>
-                    <div style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff' }}>{stat.value}</div>
-                    <div style={{ fontSize: '11px', color: stat.color, marginTop: '4px' }}>{stat.change} this week</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Chart area */}
-              <div style={{
-                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '10px', padding: '16px', marginBottom: '12px',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8' }}>Velocity Overview</span>
-                  <span style={{ fontSize: '11px', color: '#475569' }}>Last 7 days</span>
+      {/* Product mock */}
+      <div style={{ maxWidth: 980, margin: `${mobile ? 36 : 56}px auto 0`, position: 'relative', borderRadius: 16, border: `1px solid ${V.line}`, background: V.panel, overflow: 'hidden', boxShadow: '0 40px 100px rgba(0,0,0,0.55), 0 0 70px rgba(139,92,246,0.12)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '11px 14px', borderBottom: `1px solid ${V.line}`, background: '#0a0e1a' }}>
+          {['#ff5f57', '#febc2e', '#28c840'].map(c => <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c }} />)}
+          <span style={{ flex: 1, marginLeft: 10, background: '#161b2e', borderRadius: 6, height: 20, display: 'flex', alignItems: 'center', paddingLeft: 10, fontSize: 11, color: V.dim }}>app.luminary.io/sprint</span>
+        </div>
+        <div style={{ display: mobile ? 'block' : 'flex', minHeight: mobile ? 'auto' : 380 }}>
+          {!mobile && (
+            <div style={{ width: 190, borderRight: `1px solid ${V.line}`, padding: 16, flexShrink: 0 }}>
+              {['Inbox', 'My issues', 'Sprint 24', 'Roadmap', 'Docs'].map((x, i) => (
+                <div key={x} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '8px 10px', borderRadius: 8, marginBottom: 3, background: i === 2 ? 'rgba(139,92,246,0.15)' : 'transparent', color: i === 2 ? '#a78bfa' : V.dim, fontSize: 13 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: 2, background: i === 2 ? V.a1 : '#334155' }} />{x}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '80px' }}>
-                  {[45, 65, 40, 80, 55, 90, 70].map((h, i) => (
-                    <div key={i} style={{
-                      flex: 1, height: `${h}%`, borderRadius: '4px 4px 0 0',
-                      background: i === 5
-                        ? 'linear-gradient(180deg, #8b5cf6, rgba(139,92,246,0.3))'
-                        : 'rgba(139,92,246,0.2)',
-                    }} />
-                  ))}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                    <span key={d} style={{ flex: 1, textAlign: 'center', fontSize: '10px', color: '#334155' }}>{d}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tasks */}
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '12px' }}>
-                {[
-                  { title: 'Design system v2', status: 'In Progress', color: '#8b5cf6' },
-                  { title: 'API rate limiting', status: 'Review', color: '#f59e0b' },
-                  { title: 'Onboarding flow', status: 'Done', color: '#10b981' },
-                ].map(task => (
-                  <div key={task.title} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.04)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: task.color }} />
-                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>{task.title}</span>
-                    </div>
-                    <span style={{
-                      fontSize: '11px', padding: '2px 8px', borderRadius: '9999px',
-                      background: `${task.color}20`, color: task.color,
-                    }}>{task.status}</span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
+          )}
+          <div style={{ flex: 1, padding: mobile ? 16 : 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(3,1fr)', gap: 10, marginBottom: 14 }}>
+              {[['In progress', '18', V.a1], ['In review', '7', '#f59e0b'], ['Done', '124', '#10b981']].map(([l, v, c]) => (
+                <div key={l} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${V.line}`, borderRadius: 10, padding: 12 }}>
+                  <div style={{ fontSize: 11, color: V.dim }}>{l}</div>
+                  <div style={{ fontSize: 22, fontWeight: 800 }}>{v}</div>
+                  <div style={{ height: 3, borderRadius: 3, marginTop: 8, background: c as string, opacity: 0.5 }} />
+                </div>
+              ))}
+            </div>
+            <SparkChart color={V.a1} h={mobile ? 90 : 130} />
           </div>
         </div>
       </div>
@@ -290,402 +131,206 @@ function HeroSection() {
   );
 }
 
-/* ─── LOGOS ─── */
-function LogosSection() {
-  const logos = ['Vercel', 'Stripe', 'Linear', 'Notion', 'Figma', 'Supabase'];
+function SparkChart({ color, h }: { color: string; h: number }) {
+  const pts = [22, 30, 26, 40, 34, 52, 46, 64, 58, 72];
+  const w = 560, max = 80;
+  const step = w / (pts.length - 1);
+  const line = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${h - (p / max) * h}`).join(' ');
+  const area = `${line} L ${w} ${h} L 0 ${h} Z`;
   return (
-    <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem 0' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <p style={{ textAlign: 'center', fontSize: '13px', color: '#334155', marginBottom: '1.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          Trusted by teams at world-class companies
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '3rem', flexWrap: 'wrap' }}>
-          {logos.map(name => (
-            <span key={name} style={{ fontSize: '16px', fontWeight: 700, color: '#1e293b', letterSpacing: '-0.02em' }}>{name}</span>
-          ))}
+    <div style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${V.line}`, borderRadius: 10, padding: 14 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: V.mut, marginBottom: 10 }}>Sprint velocity · last 10 days</div>
+      <svg viewBox={`0 0 ${w} ${h}`} width="100%" height={h} preserveAspectRatio="none">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={color} stopOpacity="0.35" /><stop offset="100%" stopColor={color} stopOpacity="0" /></linearGradient></defs>
+        <path d={area} fill="url(#lg)" />
+        <path d={line} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+}
+
+function Logos() {
+  return (
+    <section style={{ borderTop: `1px solid ${V.line}`, borderBottom: `1px solid ${V.line}`, padding: '34px 20px' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+        <p style={{ textAlign: 'center', fontSize: 12, color: V.dim, marginBottom: 22, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Trusted by fast-moving product teams</p>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px 40px', flexWrap: 'wrap' }}>
+          {['Northwind', 'Cascade', 'Orbital', 'Meridian', 'Voyager', 'Lumen'].map(n => <span key={n} style={{ fontSize: 17, fontWeight: 700, color: '#2b3650', letterSpacing: '-0.02em' }}>{n}</span>)}
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── FEATURES ─── */
-const features = [
-  { icon: '⚡', title: 'Blazing Fast', desc: 'Built on cutting-edge infrastructure to ensure your team never waits. Sub-100ms response times globally.' },
-  { icon: '🔒', title: 'Enterprise Security', desc: 'SOC2 Type II certified with end-to-end encryption, SSO, and granular permission controls.' },
-  { icon: '🤝', title: 'Real-time Collaboration', desc: 'Work together seamlessly with live cursors, comments, and instant notifications for every change.' },
-  { icon: '📊', title: 'Powerful Analytics', desc: 'Understand your team\'s performance with beautiful charts, velocity tracking, and custom reports.' },
-  { icon: '🔗', title: '100+ Integrations', desc: 'Connect with the tools you already use — GitHub, Slack, Figma, Jira, and many more.' },
-  { icon: '🤖', title: 'AI-Powered', desc: 'Let AI write your docs, summarize threads, auto-assign tasks, and predict project timelines.' },
-];
+const ICONS: Record<string, string> = {
+  bolt: 'M13 2L3 14h7l-1 8 10-12h-7z',
+  lock: 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4',
+  users: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  chart: 'M3 3v18h18M7 15l3-3 3 3 5-6',
+  plug: 'M9 2v6M15 2v6M7 8h10v3a5 5 0 0 1-10 0zM12 16v6',
+  spark: 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6',
+};
+function Icon({ name, color }: { name: string; color: string }) {
+  return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={ICONS[name]} /></svg>;
+}
 
-function FeaturesSection() {
+function Features({ mobile }: { mobile: boolean }) {
+  const items = [
+    ['bolt', 'Blazing fast', 'Keyboard-first UI with sub-100ms navigation. Never wait on a spinner again.'],
+    ['chart', 'Sprint analytics', 'Burndown, velocity, and cycle-time charts that update the moment work moves.'],
+    ['users', 'Real-time by default', 'Live cursors, inline comments, and instant sync keep everyone on the same page.'],
+    ['plug', '80+ integrations', 'Two-way sync with GitHub, Slack, Figma, and the tools your team already lives in.'],
+    ['lock', 'Enterprise-ready', 'SOC 2 Type II, SSO/SAML, audit logs, and granular role-based permissions.'],
+    ['spark', 'AI assist', 'Draft specs, summarize threads, and auto-triage issues with one command.'],
+  ];
   return (
-    <section style={{ padding: '6rem 0', background: '#05070f' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6' }}>
-            Features
-          </span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem', color: '#ffffff' }}>
-            Everything your team needs
-          </h2>
-          <p style={{ color: '#64748b', fontSize: '1.0625rem', maxWidth: '520px', margin: '0 auto' }}>
-            A complete platform that handles all the complexity so your team can focus on what matters.
-          </p>
-        </div>
-
-        {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
-          {features.map(f => (
-            <div key={f.title} style={{
-              borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)',
-              background: 'rgba(255,255,255,0.02)',
-              padding: '1.75rem',
-              transition: 'border-color 0.2s',
-            }}>
-              <div style={{
-                width: '44px', height: '44px', borderRadius: '12px',
-                background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '20px', marginBottom: '1.25rem',
-              }}>
-                {f.icon}
-              </div>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '8px' }}>{f.title}</h3>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.7 }}>{f.desc}</p>
-            </div>
-          ))}
-        </div>
+    <Section id="features" mobile={mobile} tag="Features" title="Everything your team needs to ship" sub="One tool that replaces the tangle of trackers, docs, and spreadsheets.">
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: 16 }}>
+        {items.map(([ic, t, d]) => (
+          <div key={t} style={{ borderRadius: 16, border: `1px solid ${V.line}`, background: 'rgba(255,255,255,0.02)', padding: 22 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}><Icon name={ic} color="#a78bfa" /></div>
+            <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>{t}</h3>
+            <p style={{ fontSize: 14, color: V.dim, lineHeight: 1.65, margin: 0 }}>{d}</p>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
-/* ─── HOW IT WORKS ─── */
-function HowItWorksSection() {
+function Workflow({ mobile }: { mobile: boolean }) {
   const steps = [
-    { num: '01', title: 'Create your workspace', desc: 'Sign up and set up your team workspace in under 2 minutes. Invite your team and you\'re ready to go.' },
-    { num: '02', title: 'Organize your work', desc: 'Create projects, break them down into tasks, assign owners, and set due dates with a few clicks.' },
-    { num: '03', title: 'Ship with confidence', desc: 'Track progress in real time, spot blockers early, and celebrate your team\'s wins — all in one place.' },
+    ['01', 'Plan the sprint', 'Drag issues into the sprint, set estimates, and let capacity planning flag overload before it happens.'],
+    ['02', 'Track the work', 'A live board and timeline show exactly what is moving, what is blocked, and who owns what.'],
+    ['03', 'Ship & review', 'Auto-generated changelogs and velocity reports close the loop so the next sprint starts sharper.'],
   ];
   return (
-    <section style={{ padding: '6rem 0', background: '#080b18', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6' }}>How it works</span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 0', color: '#ffffff' }}>
-            Up and running in minutes
-          </h2>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
-          {steps.map((step, i) => (
-            <div key={step.num} style={{ position: 'relative' }}>
-              {/* Connector line */}
-              {i < steps.length - 1 && (
-                <div style={{
-                  position: 'absolute', top: '22px', left: 'calc(100% - 0px)', width: '2rem',
-                  height: '1px', background: 'rgba(139,92,246,0.3)',
-                  display: 'none',
-                }} />
-              )}
-              <div style={{
-                fontSize: '13px', fontWeight: 700, color: '#8b5cf6',
-                fontVariantNumeric: 'tabular-nums', marginBottom: '1rem',
-                letterSpacing: '0.05em',
-              }}>
-                {step.num}
-              </div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
-                {step.title}
-              </h3>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.75 }}>{step.desc}</p>
-            </div>
-          ))}
-        </div>
+    <Section id="workflow" mobile={mobile} alt tag="Workflow" title="From backlog to shipped in three moves" sub="A rhythm your team will actually keep.">
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: 26 }}>
+        {steps.map(([n, t, d]) => (
+          <div key={n}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: V.a1, marginBottom: 12 }}>{n}</div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 8px' }}>{t}</h3>
+            <p style={{ fontSize: 14, color: V.dim, lineHeight: 1.7, margin: 0 }}>{d}</p>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
-/* ─── TESTIMONIALS ─── */
-const testimonials = [
-  {
-    quote: "Luminary cut our sprint planning time in half. Our team ships 3x faster and everyone finally knows what's going on.",
-    name: 'Sarah Chen', role: 'Engineering Lead', company: 'Vercel', avatar: 'SC',
-  },
-  {
-    quote: "We evaluated 6 tools before choosing Luminary. The analytics alone are worth the price — nothing else comes close.",
-    name: 'Marcus Webb', role: 'VP of Product', company: 'Linear', avatar: 'MW',
-  },
-  {
-    quote: "Onboarding took 10 minutes. Our entire 40-person org was fully migrated in a week. Incredible product.",
-    name: 'Priya Nair', role: 'Chief of Staff', company: 'Notion', avatar: 'PN',
-  },
-];
-
-function TestimonialsSection() {
+function Reviews({ mobile }: { mobile: boolean }) {
+  const t = [
+    ['Luminary cut our planning time in half. The whole team finally knows what is going on.', 'Sarah Chen', 'Eng Lead, Cascade'],
+    ['We evaluated six tools. The analytics alone were worth the switch — nothing else compares.', 'Marcus Webb', 'VP Product, Orbital'],
+    ['Onboarded 40 people in a week. Fast, thoughtful, and it just works.', 'Priya Nair', 'Chief of Staff, Meridian'],
+  ];
   return (
-    <section style={{ padding: '6rem 0', background: '#080b18', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6' }}>Testimonials</span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 0', color: '#ffffff' }}>
-            Loved by 10,000+ teams
-          </h2>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-          {testimonials.map(t => (
-            <div key={t.name} style={{
-              borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.06)',
-              background: 'rgba(255,255,255,0.02)',
-              padding: '2rem',
-              display: 'flex', flexDirection: 'column', gap: '1.5rem',
-            }}>
-              {/* Stars */}
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[1,2,3,4,5].map(s => (
-                  <span key={s} style={{ color: '#f59e0b', fontSize: '14px' }}>★</span>
-                ))}
-              </div>
-              {/* Quote */}
-              <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.75, margin: 0, flex: 1 }}>
-                "{t.quote}"
-              </p>
-              {/* Author */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{
-                  width: '40px', height: '40px', borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '13px', fontWeight: 700, color: '#ffffff', flexShrink: 0,
-                }}>
-                  {t.avatar}
-                </div>
-                <div>
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', margin: 0 }}>{t.name}</p>
-                  <p style={{ fontSize: '12px', color: '#475569', margin: 0 }}>{t.role} · {t.company}</p>
-                </div>
-              </div>
+    <Section id="reviews" mobile={mobile} tag="Reviews" title="Loved by teams who ship" sub="Rated 4.9/5 across 2,000+ reviews.">
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: 18 }}>
+        {t.map(([q, n, r]) => (
+          <div key={n} style={{ borderRadius: 18, border: `1px solid ${V.line}`, background: 'rgba(255,255,255,0.02)', padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', gap: 3 }}>{[0, 1, 2, 3, 4].map(i => <svg key={i} width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17l-6 3.5 1.6-6.8L2 9.1l7-.6z" /></svg>)}</div>
+            <p style={{ fontSize: 14.5, color: V.mut, lineHeight: 1.7, margin: 0, flex: 1 }}>“{q}”</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+              <div style={{ width: 38, height: 38, borderRadius: '50%', background: grad, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{n.split(' ').map(w => w[0]).join('')}</div>
+              <div><div style={{ fontSize: 14, fontWeight: 600 }}>{n}</div><div style={{ fontSize: 12, color: V.dim }}>{r}</div></div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
-/* ─── PRICING ─── */
-function PricingSection() {
-  const [annual, setAnnual] = useState(false);
-
+function Pricing({ mobile }: { mobile: boolean }) {
+  const [annual, setAnnual] = useState(true);
   const plans = [
-    {
-      name: 'Starter', price: annual ? 0 : 0, label: 'Free forever',
-      desc: 'Perfect for small teams and side projects.',
-      features: ['Up to 5 members', '3 projects', '1GB storage', 'Basic integrations', 'Community support'],
-      cta: 'Start for free', highlight: false,
-    },
-    {
-      name: 'Pro', price: annual ? 19 : 29, label: '/month per seat',
-      desc: 'For growing teams that need more power.',
-      features: ['Unlimited members', 'Unlimited projects', '50GB storage', '100+ integrations', 'Priority support', 'Advanced analytics', 'Custom workflows'],
-      cta: 'Start free trial', highlight: true,
-    },
-    {
-      name: 'Enterprise', price: null, label: 'Custom pricing',
-      desc: 'For large organizations with custom needs.',
-      features: ['Everything in Pro', 'SSO & SAML', 'SLA guarantee', 'Dedicated manager', 'Custom contracts', 'On-premise option'],
-      cta: 'Contact sales', highlight: false,
-    },
+    { name: 'Free', price: 0, note: 'forever', desc: 'For solo makers and side projects.', feats: ['Up to 5 members', '3 active projects', 'Core boards & docs', 'Community support'], hot: false },
+    { name: 'Pro', price: annual ? 8 : 12, note: '/seat/mo', desc: 'For teams shipping every week.', feats: ['Unlimited projects', 'Sprint analytics', '80+ integrations', 'AI assist', 'Priority support'], hot: true },
+    { name: 'Enterprise', price: null, note: 'custom', desc: 'For orgs with scale & compliance.', feats: ['SSO & SAML', 'Audit logs', 'SLA guarantee', 'Dedicated CSM'], hot: false },
   ];
-
   return (
-    <section style={{ padding: '6rem 0', background: '#05070f', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8b5cf6' }}>Pricing</span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem', color: '#ffffff' }}>
-            Simple, transparent pricing
-          </h2>
-
-          {/* Toggle */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9999px', padding: '4px' }}>
-            {['Monthly', 'Annual'].map(opt => (
-              <button key={opt} onClick={() => setAnnual(opt === 'Annual')} style={{
-                padding: '6px 20px', borderRadius: '9999px', border: 'none',
-                fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-                background: (opt === 'Annual') === annual ? 'linear-gradient(135deg, #8b5cf6, #3b82f6)' : 'transparent',
-                color: (opt === 'Annual') === annual ? '#ffffff' : '#64748b',
-              }}>
-                {opt} {opt === 'Annual' && <span style={{ color: '#86efac', fontSize: '11px' }}>−34%</span>}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
-          {plans.map(plan => (
-            <div key={plan.name} style={{
-              borderRadius: '20px',
-              border: plan.highlight ? '1px solid rgba(139,92,246,0.5)' : '1px solid rgba(255,255,255,0.06)',
-              background: plan.highlight ? 'rgba(139,92,246,0.08)' : 'rgba(255,255,255,0.02)',
-              padding: '2rem',
-              position: 'relative',
-            }}>
-              {plan.highlight && (
-                <div style={{
-                  position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)',
-                  background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-                  borderRadius: '9999px', padding: '4px 16px',
-                  fontSize: '12px', fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap',
-                }}>
-                  Most popular
-                </div>
-              )}
-
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#ffffff', marginBottom: '4px' }}>{plan.name}</h3>
-                <p style={{ fontSize: '13px', color: '#64748b' }}>{plan.desc}</p>
-              </div>
-
-              <div style={{ marginBottom: '1.75rem' }}>
-                {plan.price !== null ? (
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
-                    <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.04em' }}>
-                      ${plan.price}
-                    </span>
-                    <span style={{ fontSize: '14px', color: '#64748b', marginBottom: '6px' }}>{plan.label}</span>
-                  </div>
-                ) : (
-                  <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#ffffff' }}>{plan.label}</span>
-                )}
-              </div>
-
-              <a href="#" style={{
-                display: 'block', textAlign: 'center',
-                borderRadius: '10px', padding: '11px',
-                fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-                background: plan.highlight ? 'linear-gradient(135deg, #8b5cf6, #3b82f6)' : 'rgba(255,255,255,0.06)',
-                color: '#ffffff',
-                marginBottom: '1.75rem',
-              }}>
-                {plan.cta}
-              </a>
-
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {plan.features.map(f => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#94a3b8' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+    <Section id="pricing" mobile={mobile} alt tag="Pricing" title="Simple pricing that scales" sub="Start free, upgrade when your team grows.">
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
+        <div style={{ display: 'inline-flex', gap: 4, background: 'rgba(255,255,255,0.04)', border: `1px solid ${V.line}`, borderRadius: 9999, padding: 4 }}>
+          {[['Monthly', false], ['Annual −33%', true]].map(([l, v]) => (
+            <button key={String(v)} onClick={() => setAnnual(v as boolean)} style={{ padding: '7px 18px', borderRadius: 9999, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: annual === v ? grad : 'transparent', color: annual === v ? '#fff' : V.dim }}>{l}</button>
           ))}
         </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: 18, alignItems: 'start' }}>
+        {plans.map(p => (
+          <div key={p.name} style={{ borderRadius: 20, border: p.hot ? '1px solid rgba(139,92,246,0.5)' : `1px solid ${V.line}`, background: p.hot ? 'rgba(139,92,246,0.08)' : 'rgba(255,255,255,0.02)', padding: 26, position: 'relative' }}>
+            {p.hot && <div style={{ position: 'absolute', top: -11, left: '50%', transform: 'translateX(-50%)', background: grad, borderRadius: 9999, padding: '3px 14px', fontSize: 12, fontWeight: 600 }}>Most popular</div>}
+            <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{p.name}</h3>
+            <p style={{ fontSize: 13, color: V.dim, margin: '0 0 16px' }}>{p.desc}</p>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 5, marginBottom: 18 }}>
+              {p.price !== null ? <><span style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em' }}>${p.price}</span><span style={{ fontSize: 14, color: V.dim, marginBottom: 8 }}>{p.note}</span></> : <span style={{ fontSize: '1.6rem', fontWeight: 700 }}>Let's talk</span>}
+            </div>
+            <a href="#pricing" style={{ display: 'block', textAlign: 'center', borderRadius: 10, padding: 11, fontSize: 14, fontWeight: 600, textDecoration: 'none', color: '#fff', background: p.hot ? grad : 'rgba(255,255,255,0.06)', marginBottom: 20 }}>{p.price === null ? 'Contact sales' : 'Choose ' + p.name}</a>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {p.feats.map(f => <li key={f} style={{ display: 'flex', gap: 9, fontSize: 13, color: V.mut }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>{f}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function Cta() {
+  return (
+    <section style={{ padding: '20px 20px 72px' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', borderRadius: 24, border: '1px solid rgba(139,92,246,0.3)', background: 'linear-gradient(135deg, rgba(139,92,246,0.14), rgba(99,102,241,0.08))', padding: '56px 28px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 300, maxWidth: '100%', background: 'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, transparent 70%)' }} />
+        <h2 style={{ fontSize: 'clamp(1.9rem,4vw,2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 12px', position: 'relative' }}>Ready to ship faster?</h2>
+        <p style={{ color: V.mut, fontSize: '1.05rem', maxWidth: 460, margin: '0 auto 26px', position: 'relative' }}>Join 10,000+ teams building with Luminary. Free for your first 5 seats.</p>
+        <a href="#pricing" style={{ position: 'relative', display: 'inline-block', background: grad, borderRadius: 12, padding: '14px 30px', fontSize: 15, fontWeight: 600, color: '#fff', textDecoration: 'none', boxShadow: '0 0 40px rgba(139,92,246,0.3)' }}>Start free trial</a>
       </div>
     </section>
   );
 }
 
-/* ─── CTA ─── */
-function CtaSection() {
+function Section({ id, mobile, tag, title, sub, alt, children }: { id: string; mobile: boolean; tag: string; title: string; sub: string; alt?: boolean; children: React.ReactNode }) {
   return (
-    <section style={{ padding: '6rem 0', background: '#080b18', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{
-          borderRadius: '24px', border: '1px solid rgba(139,92,246,0.3)',
-          background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))',
-          padding: '4rem 3rem', textAlign: 'center', position: 'relative', overflow: 'hidden',
-        }}>
-          {/* Glow */}
-          <div style={{
-            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-            width: '500px', height: '300px',
-            background: 'radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }} />
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#ffffff', margin: '0 0 1rem', position: 'relative' }}>
-            Ready to ship faster?
-          </h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.0625rem', maxWidth: '480px', margin: '0 auto 2.5rem', position: 'relative' }}>
-            Join 10,000+ teams who use Luminary to build and ship products faster than ever before.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', position: 'relative' }}>
-            <a href="#" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-              borderRadius: '12px', padding: '14px 28px',
-              fontSize: '15px', fontWeight: 600, color: '#ffffff', textDecoration: 'none',
-              boxShadow: '0 0 40px rgba(139,92,246,0.3)',
-            }}>
-              Get started for free
-            </a>
-            <a href="#" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '12px', padding: '14px 28px',
-              fontSize: '15px', fontWeight: 600, color: '#ffffff', textDecoration: 'none',
-            }}>
-              Talk to sales
-            </a>
-          </div>
+    <section id={id} style={{ padding: mobile ? '52px 20px' : '80px 20px', background: alt ? '#080b16' : V.bg, borderTop: `1px solid ${V.line}` }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: mobile ? 34 : 52 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: V.a1 }}>{tag}</span>
+          <h2 style={{ fontSize: mobile ? '1.7rem' : '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '10px 0 10px' }}>{title}</h2>
+          <p style={{ color: V.dim, fontSize: '1.03rem', maxWidth: 520, margin: '0 auto' }}>{sub}</p>
         </div>
+        {children}
       </div>
     </section>
   );
 }
 
-/* ─── FOOTER ─── */
-function LuminaryFooter() {
+function Foot({ mobile }: { mobile: boolean }) {
+  const cols = [['Product', ['Features', 'Pricing', 'Changelog', 'Roadmap']], ['Company', ['About', 'Blog', 'Careers', 'Press']], ['Legal', ['Privacy', 'Terms', 'Security', 'DPA']]] as const;
   return (
-    <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: '#05070f', padding: '3rem 0' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '3rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-          {/* Brand */}
-          <div style={{ maxWidth: '240px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="12" height="12" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span style={{ fontWeight: 700, fontSize: '16px' }}>Luminary</span>
+    <footer style={{ borderTop: `1px solid ${V.line}`, background: V.bg, padding: '48px 20px 28px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ display: mobile ? 'block' : 'flex', justifyContent: 'space-between', gap: 40, marginBottom: 36 }}>
+          <div style={{ maxWidth: 250, marginBottom: mobile ? 28 : 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 12 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: grad }} /><span style={{ fontWeight: 800, fontSize: 16 }}>Luminary</span>
             </div>
-            <p style={{ fontSize: '13px', color: '#334155', lineHeight: 1.7 }}>The modern project management platform for high-performing teams.</p>
+            <p style={{ fontSize: 13, color: V.dim, lineHeight: 1.7 }}>The modern workspace for high-performing product teams.</p>
           </div>
-
-          {/* Links */}
-          {[
-            { title: 'Product', links: ['Features', 'Pricing', 'Changelog', 'Roadmap'] },
-            { title: 'Company', links: ['About', 'Blog', 'Careers', 'Press'] },
-            { title: 'Legal', links: ['Privacy', 'Terms', 'Security', 'DPA'] },
-          ].map(col => (
-            <div key={col.title}>
-              <h4 style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', marginBottom: '1rem' }}>{col.title}</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {col.links.map(l => (
-                  <li key={l}><a href="#" style={{ fontSize: '14px', color: '#334155', textDecoration: 'none' }}>{l}</a></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <p style={{ fontSize: '13px', color: '#1e293b', margin: 0 }}>© {new Date().getFullYear()} Luminary, Inc. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            {['Twitter', 'GitHub', 'LinkedIn'].map(s => (
-              <a key={s} href="#" style={{ fontSize: '13px', color: '#1e293b', textDecoration: 'none' }}>{s}</a>
+          <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(3,auto)', gap: mobile ? 24 : 56 }}>
+            {cols.map(([t, ls]) => (
+              <div key={t}>
+                <h4 style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: V.dim, marginBottom: 12 }}>{t}</h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 9 }}>{ls.map(l => <li key={l}><a href="#features" style={{ fontSize: 14, color: '#334155', textDecoration: 'none' }}>{l}</a></li>)}</ul>
+              </div>
             ))}
           </div>
+        </div>
+        <div style={{ borderTop: `1px solid ${V.line}`, paddingTop: 18, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <span style={{ fontSize: 13, color: '#2b3650' }}>© {new Date().getFullYear()} Luminary, Inc.</span>
+          <div style={{ display: 'flex', gap: 18 }}>{['Twitter', 'GitHub', 'LinkedIn'].map(s => <a key={s} href="#features" style={{ fontSize: 13, color: '#2b3650', textDecoration: 'none' }}>{s}</a>)}</div>
         </div>
       </div>
     </footer>

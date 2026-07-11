@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  ChevronRight, ExternalLink, Check, Monitor, Zap, RefreshCw, LifeBuoy,
+  ChevronRight, ExternalLink, Check, Monitor, Zap, Star, LifeBuoy,
   ShieldCheck, Download, X, Loader2, ArrowRight, FileCode2, Layers,
 } from 'lucide-react';
 import { templates } from '../data/templates';
@@ -11,15 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import { usePurchases } from '../hooks/usePurchases';
 import { useSEO } from '../hooks/useSEO';
 import { supabase } from '../lib/supabase';
-
-const included = [
-  'Full source code',
-  'Figma design file',
-  'Free lifetime updates',
-  'Commercial license',
-  'Documentation & setup guide',
-  'Community support',
-];
+import { getTemplateDownloadUrl } from '../lib/downloads';
 
 const MONO_TNUM = { fontFeatureSettings: '"tnum"' } as const;
 
@@ -33,7 +25,9 @@ export default function TemplateDetailPage() {
   const { user }         = useAuth();
   const { hasPurchased } = usePurchases();
   const navigate         = useNavigate();
+  const { pathname }     = useLocation();
   const alreadyOwned     = template ? (template.isFree || hasPurchased(template.id)) : false;
+  const includedItems    = template?.included ?? [];
 
   useSEO({ title: template?.title, description: template?.description });
 
@@ -52,31 +46,24 @@ export default function TemplateDetailPage() {
     };
   }, [previewOpen]);
 
-  /** Trigger a direct browser download of the zip. */
+  /** Trigger a direct browser download of the zip via the shared, ownership-aware resolver. */
   const downloadZip = async (tpl: typeof template) => {
     if (!tpl) return;
     setDownloading(true);
     const fileName = `${tpl.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
 
     try {
-      // 1. Try Supabase Storage signed URL
-      const { data, error } = await supabase.storage
-        .from('templates')
-        .createSignedUrl(`${tpl.id}.zip`, 60);
-
-      const url = (!error && data?.signedUrl)
-        ? data.signedUrl
-        : `/templates/${tpl.id}.zip`;   // fallback: static public file
-
+      // Free -> public URL; paid -> ownership-verified signed URL (throws if not owned).
+      const url = await getTemplateDownloadUrl(tpl.id, tpl.isFree);
       const a = document.createElement('a');
       a.href = url;
       a.download = fileName;
+      a.rel = 'noopener';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    } catch {
-      // Last resort: just open the static file
-      window.open(`/templates/${tpl.id}.zip`, '_blank');
+    } catch (err) {
+      alert((err as Error).message || 'Download failed. Please try again.');
     } finally {
       setDownloading(false);
     }
@@ -84,7 +71,8 @@ export default function TemplateDetailPage() {
 
   const handleBuy = async () => {
     if (!template) return;
-    if (!user) { navigate('/login'); return; }
+    // Preserve purchase intent: send the buyer back to this template after auth.
+    if (!user) { navigate('/login', { state: { next: pathname } }); return; }
 
     // Free template → download immediately
     if (template.isFree) {
@@ -264,13 +252,13 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* Pages included */}
+              {/* Sections — each template is one responsive single-page site */}
               {template.pages && template.pages.length > 0 && (
                 <div className="mt-10">
                   <div className="hairline mb-8" />
                   <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                     <Layers size={16} className="text-accent-text" />
-                    Pages included
+                    Sections
                   </h3>
                   <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
                     {template.pages.map(page => (
@@ -286,31 +274,31 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* License & support */}
+              {/* License — identical Templix Standard License on every template */}
               <div className="mt-10">
                 <div className="hairline mb-8" />
                 <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                   <ShieldCheck size={16} className="text-accent-text" />
-                  License & support
+                  License
                 </h3>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
                   <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
-                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">Personal license</p>
+                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">What you can do</p>
                     <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                      {['Use in unlimited personal projects', 'Modify and customize freely', 'Lifetime access to the files'].map(item => (
+                      {['Use in unlimited personal and commercial end-products', 'Modify and customize freely', 'Use in client work — no attribution required'].map(item => (
                         <li key={item} className="flex items-start gap-2 text-[13px] leading-normal text-text-secondary">
-                          <Check size={13} className="mt-[3px] shrink-0 text-accent" />
+                          <Check size={13} className="mt-[3px] shrink-0 text-success" />
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
-                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">Commercial license</p>
+                    <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">What you cannot do</p>
                     <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                      {['Use in client and commercial work', 'Ship as part of an end product', 'No attribution required'].map(item => (
+                      {['Resell or redistribute the template itself', 'Sublicense it to others', 'Offer the template for download elsewhere'].map(item => (
                         <li key={item} className="flex items-start gap-2 text-[13px] leading-normal text-text-secondary">
-                          <Check size={13} className="mt-[3px] shrink-0 text-accent" />
+                          <X size={13} className="mt-[3px] shrink-0 text-danger" />
                           {item}
                         </li>
                       ))}
@@ -318,8 +306,32 @@ export default function TemplateDetailPage() {
                   </div>
                 </div>
                 <p className="m-0 mt-4 text-[13px] leading-[1.6] text-text-tertiary">
-                  Every purchase includes friendly email support and free updates. Reselling or redistributing the template itself is not permitted.
+                  Free templates carry the same usage terms with no purchase required. Read the full{' '}
+                  <Link to="/license" className="font-medium text-accent-text no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+                    Templix Standard License
+                  </Link>
+                  .
                 </p>
+              </div>
+
+              {/* Reviews — honest placeholder; no ratings system exists yet */}
+              <div className="mt-10">
+                <div className="hairline mb-8" />
+                <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                  <Star size={16} className="text-accent-text" />
+                  Reviews
+                </h3>
+                <div className="flex flex-col items-center rounded-xl border border-dashed border-border-default bg-surface-1 px-6 py-10 text-center">
+                  <div className="mb-3 flex gap-1" aria-hidden="true">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star key={i} size={16} className="text-text-disabled" strokeWidth={1.5} />
+                    ))}
+                  </div>
+                  <p className="m-0 text-[14px] font-medium text-text-secondary">No reviews yet</p>
+                  <p className="m-0 mt-1 text-[13px] text-text-tertiary">
+                    Buy this template and you can be the first to review it.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -349,7 +361,7 @@ export default function TemplateDetailPage() {
               {!template.isFree && (
                 <p className="-mt-4 mb-6 flex items-center gap-1.5 text-[13px] text-success">
                   <Check size={13} className="shrink-0" />
-                  Lifetime updates included
+                  One-time purchase — yours to keep
                 </p>
               )}
 
@@ -417,37 +429,41 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* Trust row */}
+              {/* Trust row — every item links to a real page */}
               <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
                   <Zap size={13} className="shrink-0 text-accent-text" />
                   Instant download
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
-                  <RefreshCw size={13} className="shrink-0 text-accent-text" />
-                  Free updates
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
+                <Link to="/license" className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary no-underline transition-colors duration-150 hover:text-text-secondary">
+                  <ShieldCheck size={13} className="shrink-0 text-accent-text" />
+                  Standard license
+                </Link>
+                <Link to="/support" className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary no-underline transition-colors duration-150 hover:text-text-secondary">
                   <LifeBuoy size={13} className="shrink-0 text-accent-text" />
-                  Support included
-                </span>
+                  Email support
+                </Link>
               </div>
 
-              {/* Included */}
-              <div className="hairline my-6" />
-              <div>
-                <h4 className="m-0 mb-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-                  What's included
-                </h4>
-                <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
-                  {included.map(item => (
-                    <li key={item} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
-                      <Check size={14} className="shrink-0 text-accent" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {/* Included — sourced from the catalog so it stays truthful per template */}
+              {includedItems.length > 0 && (
+                <>
+                  <div className="hairline my-6" />
+                  <div>
+                    <h4 className="m-0 mb-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+                      What's included
+                    </h4>
+                    <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
+                      {includedItems.map(item => (
+                        <li key={item} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
+                          <Check size={14} className="shrink-0 text-accent" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
 
               {/* Category */}
               <div className="hairline my-6" />
@@ -460,6 +476,15 @@ export default function TemplateDetailPage() {
                   {template.category}
                 </Link>
               </div>
+
+              {/* Licensing & refunds pointer */}
+              <p className="m-0 mt-4 text-[12px] leading-[1.6] text-text-tertiary">
+                Questions about licensing or refunds? See our{' '}
+                <Link to="/faq" className="text-accent-text no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+                  FAQ
+                </Link>
+                .
+              </p>
             </div>
           </div>
 

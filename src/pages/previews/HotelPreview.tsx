@@ -1,117 +1,233 @@
-import { useState } from 'react';
+/* ============================================================
+   THE MERIDIAN — Boutique Hotel Template
+   Deep navy with brass accent. Fully responsive.
+   ============================================================ */
+
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const C = {
+  bg: '#0e1622',
+  surface: '#16202e',
+  ink: '#eef2f7',
+  muted: '#9fb0c3',
+  faint: '#6c7d90',
+  line: 'rgba(200,161,90,0.16)',
+  brass: '#c8a15a',
+};
+const serif = "'Playfair Display', Georgia, serif";
+const sans = "'Inter', system-ui, sans-serif";
+const container: React.CSSProperties = { maxWidth: '1160px', margin: '0 auto', width: '100%' };
+
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: '2px' }} aria-label={`${rating} of 5`}>
+      {[1, 2, 3, 4, 5].map((s) => (
+        <svg key={s} width="13" height="13" viewBox="0 0 24 24" fill={s <= Math.round(rating) ? C.brass : 'none'} stroke={s <= Math.round(rating) ? C.brass : '#3a4655'} strokeWidth="1.5"><path d="M12 2l3 6.5 7 .8-5.2 4.8L18.2 22 12 18.3 5.8 22 7.2 14.1 2 9.3l7-.8z" /></svg>
+      ))}
+    </span>
+  );
+}
 
 const rooms = [
-  { name: 'Deluxe King Room', size: '42 m²', guests: 2, price: '$420', img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80', features: ['City View', 'King Bed', 'Mini Bar'] },
-  { name: 'Junior Suite', size: '68 m²', guests: 2, price: '$680', img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80', features: ['Ocean View', 'Lounge Area', 'Jacuzzi'] },
-  { name: 'Grand Suite', size: '120 m²', guests: 4, price: '$1,200', img: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80', features: ['Panoramic View', 'Dining Room', 'Butler Service'] },
+  { name: 'Garden Deluxe', size: '38 m²', guests: 2, price: 240, tags: ['Garden view', 'King bed', 'Rain shower'], from: '#2a3648', to: '#12202e' },
+  { name: 'Harbour Suite', size: '56 m²', guests: 3, price: 420, tags: ['Sea view', 'Living area', 'Soaking tub'], from: '#2f4a63', to: '#132434' },
+  { name: 'The Loft', size: '72 m²', guests: 4, price: 640, tags: ['Terrace', 'Two bedrooms', 'Fireplace'], from: '#3a3a52', to: '#171a2a' },
 ];
 
 export default function HotelPreview() {
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
-
   return (
-    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", background: '#0a0a08', color: '#f5f0e8', minHeight: '100vh' }}>
-      {/* Nav */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(10,10,8,0.8)', backdropFilter: 'blur(20px)', padding: '0 3rem', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(197,168,110,0.15)' }}>
-        <div>
-          <span style={{ fontSize: '20px', fontWeight: 600, letterSpacing: '0.2em', color: '#c5a86e', textTransform: 'uppercase' }}>LUXE</span>
-          <span style={{ fontSize: '10px', display: 'block', letterSpacing: '0.35em', color: 'rgba(197,168,110,0.6)', textTransform: 'uppercase', marginTop: '-2px', fontFamily: 'Inter, sans-serif' }}>COLLECTION</span>
-        </div>
-        <div style={{ display: 'flex', gap: '2.5rem' }}>
-          {['Rooms', 'Dining', 'Spa', 'Events', 'Gallery'].map(item => (
-            <span key={item} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: 'rgba(245,240,232,0.5)', cursor: 'pointer', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item}</span>
-          ))}
-        </div>
-        <button style={{ fontFamily: 'Inter, sans-serif', background: '#c5a86e', border: 'none', borderRadius: '3px', padding: '10px 24px', fontSize: '11px', fontWeight: 600, color: '#0a0a08', cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Book Now
-        </button>
-      </nav>
+    <div style={{ fontFamily: sans, background: C.bg, color: C.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav />
+      <Hero />
+      <Rooms />
+      <Amenities />
+      <Gallery />
+      <Reviews />
+      <Footer />
+    </div>
+  );
+}
 
-      {/* Hero */}
-      <section style={{ height: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0 }}>
-          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&q=80" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,10,8,0.55)' }} />
-        </div>
-        <div style={{ position: 'relative', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.4em', color: '#c5a86e', textTransform: 'uppercase', marginBottom: '1.5rem' }}>Monaco · Paris · Dubai</p>
-          <h1 style={{ fontSize: 'clamp(3.5rem, 9vw, 7.5rem)', fontWeight: 400, letterSpacing: '0.05em', color: '#f5f0e8', margin: '0 0 1rem', lineHeight: 1, textTransform: 'uppercase' }}>
-            Luxe<br />Collection
-          </h1>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: 'rgba(245,240,232,0.65)', margin: '0 0 3rem', letterSpacing: '0.04em' }}>Where luxury meets timeless elegance.</p>
-          <a href="#rooms" style={{ fontFamily: 'Inter, sans-serif', background: 'transparent', border: '1px solid #c5a86e', borderRadius: '3px', padding: '13px 36px', fontSize: '11px', color: '#c5a86e', cursor: 'pointer', letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-block' }}>
-            Explore Rooms
-          </a>
-        </div>
-      </section>
-
-      {/* Booking bar */}
-      <div style={{ background: '#c5a86e', padding: '1.75rem 3rem' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '1.5rem', alignItems: 'flex-end' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(10,10,8,0.65)', display: 'block', marginBottom: '4px' }}>Check-in</label>
-            <input type="date" value={checkIn} onChange={e => setCheckIn(e.target.value)} style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(10,10,8,0.4)', padding: '6px 0', fontSize: '14px', color: '#0a0a08', outline: 'none', fontFamily: 'Inter, sans-serif', cursor: 'pointer' }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(10,10,8,0.65)', display: 'block', marginBottom: '4px' }}>Check-out</label>
-            <input type="date" value={checkOut} onChange={e => setCheckOut(e.target.value)} style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(10,10,8,0.4)', padding: '6px 0', fontSize: '14px', color: '#0a0a08', outline: 'none', fontFamily: 'Inter, sans-serif', cursor: 'pointer' }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(10,10,8,0.65)', display: 'block', marginBottom: '4px' }}>Guests</label>
-            <select style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(10,10,8,0.4)', padding: '6px 0', fontSize: '14px', color: '#0a0a08', outline: 'none', fontFamily: 'Inter, sans-serif', cursor: 'pointer' }}>
-              <option>2 Guests</option><option>1 Guest</option><option>3 Guests</option><option>4 Guests</option>
-            </select>
-          </div>
-          <button style={{ background: '#0a0a08', border: 'none', borderRadius: '3px', padding: '12px 32px', fontSize: '11px', fontWeight: 700, color: '#c5a86e', cursor: 'pointer', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
-            Check Availability
-          </button>
+function Nav() {
+  const m = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const links = ['Rooms', 'Amenities', 'Gallery', 'Reviews'];
+  return (
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(14,22,34,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: '0 20px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#top" style={{ textDecoration: 'none', color: C.ink }}>
+          <span style={{ fontFamily: serif, fontSize: '22px', fontWeight: 700, letterSpacing: '0.06em' }}>THE MERIDIAN</span>
+        </a>
+        {!m && <nav style={{ display: 'flex', gap: '32px' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', color: C.muted, textDecoration: 'none' }}>{l}</a>)}</nav>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {!m && <a href="#rooms" style={{ border: `1px solid ${C.brass}`, color: C.brass, borderRadius: '2px', padding: '9px 20px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 600 }}>Book now</a>}
+          {m && <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: 'none', color: C.ink, cursor: 'pointer', padding: 0, display: 'flex' }}><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">{open ? <path d="M18 6 6 18M6 6l12 12" /> : <><path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" /></>}</svg></button>}
         </div>
       </div>
+      {m && open && <nav style={{ borderTop: `1px solid ${C.line}`, padding: '8px 20px 16px', display: 'flex', flexDirection: 'column' }}>{links.map((l) => <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} style={{ fontSize: '14px', color: C.muted, textDecoration: 'none', padding: '11px 0', borderBottom: `1px solid ${C.line}`, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{l}</a>)}</nav>}
+    </header>
+  );
+}
 
-      {/* Rooms */}
-      <section id="rooms" style={{ maxWidth: '1200px', margin: '0 auto', padding: '6rem 2rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.3em', color: '#c5a86e', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Accommodations</p>
-          <h2 style={{ fontSize: '2.75rem', fontWeight: 400, margin: 0, letterSpacing: '0.04em' }}>Rooms &amp; Suites</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
-          {rooms.map(room => (
-            <div key={room.name} style={{ cursor: 'pointer' }}>
-              <div style={{ borderRadius: '4px', overflow: 'hidden', marginBottom: '1.25rem', aspectRatio: '4/3' }}>
-                <img src={room.img} alt={room.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s' }} />
+function Hero() {
+  const m = useIsMobile();
+  const field: React.CSSProperties = { background: C.bg, border: `1px solid ${C.line}`, borderRadius: '2px', padding: '12px 12px', color: C.ink, fontSize: '14px', width: '100%' };
+  return (
+    <section id="top" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(155deg,#1a2a3d,#0b121c)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(760px 420px at 82% 8%, rgba(200,161,90,0.16), transparent 60%)' }} />
+      <div style={{ ...container, padding: m ? '58px 20px 40px' : '104px 20px 72px', position: 'relative' }}>
+        <span style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.brass }}>Coastal retreat · Cornwall</span>
+        <h1 style={{ fontFamily: serif, fontSize: m ? '2.9rem' : '4.8rem', fontWeight: 700, lineHeight: 1.03, margin: '20px 0 20px', maxWidth: '720px' }}>An unhurried stay by the sea.</h1>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.7, maxWidth: '480px', margin: '0 0 34px' }}>Twenty-two individually designed rooms, a sea-view restaurant and a spa built into the cliffside. Rest is the whole point.</p>
+      </div>
+      <div style={{ ...container, padding: '0 20px', position: 'relative', marginTop: m ? '0' : '-8px', paddingBottom: m ? '48px' : '72px' }}>
+        <form onSubmit={(e) => e.preventDefault()} style={{ background: C.surface, border: `1px solid ${C.line}`, borderRadius: '6px', padding: m ? '18px' : '20px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr 1fr auto', gap: '12px', alignItems: 'end', boxShadow: '0 20px 50px rgba(0,0,0,0.35)' }}>
+          <label style={{ fontSize: '12px', color: C.faint }}>Check in<input type="date" style={field} /></label>
+          <label style={{ fontSize: '12px', color: C.faint }}>Check out<input type="date" style={field} /></label>
+          <label style={{ fontSize: '12px', color: C.faint }}>Guests<select style={field} defaultValue="2"><option value="1">1 guest</option><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option></select></label>
+          <button type="submit" style={{ background: C.brass, color: '#0e1622', border: 'none', borderRadius: '2px', padding: '13px 26px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 700, cursor: 'pointer', height: '43px' }}>Check availability</button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function Rooms() {
+  const m = useIsMobile();
+  return (
+    <section id="rooms" style={{ ...container, padding: m ? '52px 20px' : '92px 20px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <p style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.brass, margin: '0 0 12px' }}>Where you'll stay</p>
+        <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, margin: 0 }}>Rooms & suites</h2>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: '22px' }}>
+        {rooms.map((r) => (
+          <article key={r.name} style={{ background: C.surface, border: `1px solid ${C.line}`, borderRadius: '10px', overflow: 'hidden' }}>
+            <div style={{ aspectRatio: '4/3', background: `linear-gradient(155deg,${r.from},${r.to})` }} />
+            <div style={{ padding: '22px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '10px' }}>
+                <h3 style={{ fontFamily: serif, fontSize: '1.3rem', fontWeight: 700, margin: 0 }}>{r.name}</h3>
+                <span style={{ fontSize: '12px', color: C.faint }}>{r.size} · {r.guests} guests</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 500, margin: 0 }}>{room.name}</h3>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '15px', color: '#c5a86e', fontWeight: 600 }}>{room.price}<span style={{ fontSize: '11px', color: 'rgba(245,240,232,0.4)' }}>/night</span></span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '18px' }}>
+                {r.tags.map((t) => <span key={t} style={{ fontSize: '11px', color: C.muted, border: `1px solid ${C.line}`, borderRadius: '999px', padding: '4px 10px' }}>{t}</span>)}
               </div>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: 'rgba(245,240,232,0.5)', margin: '0 0 0.75rem' }}>{room.size} · Up to {room.guests} guests</p>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {room.features.map(f => (
-                  <span key={f} style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', color: '#c5a86e', border: '1px solid rgba(197,168,110,0.3)', borderRadius: '2px', padding: '3px 8px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{f}</span>
-                ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span><span style={{ fontFamily: serif, fontSize: '1.5rem', fontWeight: 700, color: C.brass }}>£{r.price}</span><span style={{ fontSize: '13px', color: C.faint }}> / night</span></span>
+                <a href="#rooms" style={{ background: C.brass, color: '#0e1622', borderRadius: '2px', padding: '9px 16px', fontSize: '12px', fontWeight: 700, letterSpacing: '0.04em', textDecoration: 'none' }}>Reserve</a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Amenities() {
+  const m = useIsMobile();
+  const items = [
+    { t: 'Cliffside spa', d: 'Sauna, hammam and sea-facing treatment rooms.', p: 'M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z M12 6v6' },
+    { t: 'Sea-view dining', d: 'Daily-changing menu built on the day\'s catch.', p: 'M4 3v7a4 4 0 0 0 8 0V3 M8 3v18 M17 3c-1.5 2-1.5 6 0 8v10' },
+    { t: 'Heated pool', d: 'Year-round outdoor pool warmed to 30°C.', p: 'M2 16c2 0 2 1.5 4 1.5S8 16 10 16s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 M2 20c2 0 2 1.5 4 1.5S8 20 10 20' },
+    { t: 'Private cove', d: 'Steps to a sheltered beach kept just for guests.', p: 'M3 20h18 M6 20V9l6-4 6 4v11' },
+  ];
+  return (
+    <section id="amenities" style={{ background: C.surface, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+        <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, textAlign: 'center', margin: '0 0 40px' }}>Time well spent</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(4,1fr)', gap: '24px' }}>
+          {items.map((i) => (
+            <div key={i.t} style={{ textAlign: m ? 'left' : 'center', display: m ? 'flex' : 'block', gap: '14px' }}>
+              <div style={{ width: '46px', height: '46px', flexShrink: 0, borderRadius: '50%', border: `1px solid ${C.brass}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: m ? '0' : '0 auto 14px' }}>
+                <svg width="22" height="22" fill="none" stroke={C.brass} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d={i.p} /></svg>
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 6px' }}>{i.t}</h3>
+                <p style={{ fontSize: '14px', color: C.muted, lineHeight: 1.65, margin: 0 }}>{i.d}</p>
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* Amenities */}
-      <section style={{ background: '#0f0f0c', borderTop: '1px solid rgba(197,168,110,0.1)', padding: '5rem 2rem' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.3em', color: '#c5a86e', textTransform: 'uppercase', marginBottom: '0.75rem' }}>The Experience</p>
-          <h2 style={{ fontSize: '2.25rem', fontWeight: 400, margin: '0 0 3rem' }}>World-Class Amenities</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2.5rem' }}>
-            {[['🍽️', 'Fine Dining', '3 Michelin-starred restaurants'], ['💆', 'Spa & Wellness', '2,000 sqm luxury spa'], ['🏊', 'Infinity Pool', 'Rooftop pool with city views'], ['🏋️', 'Fitness', 'State-of-the-art gym & studio']].map(([icon, title, desc]) => (
-              <div key={title as string}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{icon}</div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 500, margin: '0 0 0.5rem' }}>{title as string}</h3>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: 'rgba(245,240,232,0.45)', margin: 0, lineHeight: 1.6 }}>{desc as string}</p>
-              </div>
-            ))}
+function Gallery() {
+  const m = useIsMobile();
+  const tiles = [
+    { l: 'The terrace', g: 'linear-gradient(155deg,#2f4a63,#132434)', span: 2 },
+    { l: 'Spa', g: 'linear-gradient(155deg,#3a3a52,#171a2a)', span: 1 },
+    { l: 'Restaurant', g: 'linear-gradient(155deg,#2a3648,#12202e)', span: 1 },
+    { l: 'The cove', g: 'linear-gradient(155deg,#26506a,#0f2130)', span: 2 },
+  ];
+  return (
+    <section id="gallery" style={{ ...container, padding: m ? '52px 20px' : '92px 20px' }}>
+      <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, textAlign: 'center', margin: '0 0 36px' }}>A look around</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr 1fr' : 'repeat(3,1fr)', gap: m ? '12px' : '18px' }}>
+        {tiles.map((t) => (
+          <div key={t.l} style={{ gridColumn: m ? 'span 1' : `span ${t.span}`, aspectRatio: m ? '1/1' : t.span === 2 ? '16/9' : '3/4', borderRadius: '8px', background: t.g, position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', bottom: '14px', left: '14px', fontSize: '12px', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>{t.l}</span>
           </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Reviews() {
+  const m = useIsMobile();
+  const data = [
+    { text: 'The most restful weekend we have had in years. The room, the food, the sea — flawless.', a: 'Helena & Marc', s: 'Harbour Suite' },
+    { text: 'Staff remembered our names and our coffee order by day two. Genuinely special place.', a: 'Dev P.', s: 'Garden Deluxe' },
+    { text: 'Worth every penny. The cliffside spa alone is reason enough to come back.', a: 'Sofia L.', s: 'The Loft' },
+  ];
+  return (
+    <section id="reviews" style={{ background: C.surface, borderTop: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+          <Stars rating={5} />
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, margin: '12px 0 6px' }}>9.6 / 10 guest rating</h2>
+          <p style={{ color: C.muted, margin: 0 }}>From 1,240 verified stays</p>
         </div>
-      </section>
-    </div>
+        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: '20px' }}>
+          {data.map((r) => (
+            <figure key={r.a} style={{ margin: 0, background: C.bg, border: `1px solid ${C.line}`, borderRadius: '10px', padding: '26px' }}>
+              <blockquote style={{ fontFamily: serif, fontSize: '1.1rem', lineHeight: 1.6, fontStyle: 'italic', margin: '0 0 18px' }}>"{r.text}"</blockquote>
+              <figcaption style={{ fontSize: '13px', color: C.muted }}><b style={{ color: C.ink }}>{r.a}</b> · {r.s}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  const m = useIsMobile();
+  return (
+    <footer style={{ padding: '48px 20px 30px' }}>
+      <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
+        <div>
+          <span style={{ fontFamily: serif, fontSize: '20px', fontWeight: 700, letterSpacing: '0.06em' }}>THE MERIDIAN</span>
+          <p style={{ fontSize: '14px', color: C.muted, margin: '10px 0 0' }}>Cliff Road, St Ives, Cornwall TR26 · +44 1736 796 000</p>
+        </div>
+        <span style={{ fontSize: '13px', color: C.faint }}>© {new Date().getFullYear()} The Meridian Hotel. All rights reserved.</span>
+      </div>
+    </footer>
   );
 }

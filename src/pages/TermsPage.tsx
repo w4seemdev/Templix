@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useSEO } from '../hooks/useSEO';
 import Container from '../components/ui/Container';
 
@@ -8,7 +9,7 @@ const sections = [
   },
   {
     title: '2. License & Usage',
-    body: 'Upon purchasing a template, you are granted a non-exclusive, non-transferable license to use the template for one commercial or personal project. Free templates may be used for unlimited personal and commercial projects. You may not resell, redistribute, or sublicense any template as a standalone product.',
+    body: 'Every template — free or paid — is covered by the single Templix Standard License. The purchaser may use the template in unlimited personal and commercial end-products and may modify it freely. You may not resell, redistribute, sublicense, or offer the template itself for download. Free templates carry the same usage terms with no purchase required. The full terms are set out on the License page.',
   },
   {
     title: '3. Intellectual Property',
@@ -48,7 +49,7 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="m-0 mb-8 font-mono text-[13px] text-text-tertiary" style={{ fontFeatureSettings: '"tnum"' }}>
-          Last updated: June 2024
+          Last updated: July 2026
         </p>
 
         <div className="hairline mb-12" />
@@ -63,11 +64,22 @@ export default function TermsPage() {
         ))}
 
         <div className="hairline mt-2 mb-8" />
+        <p className="m-0 mb-3 text-[13px] leading-[1.7] text-text-tertiary">
+          The full usage terms for every template are set out on the{' '}
+          <Link to="/license" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+            Templix Standard License
+          </Link>
+          {' '}page.
+        </p>
         <p className="m-0 text-[13px] text-text-tertiary">
           Questions about these terms? Reach us at{' '}
           <a href="mailto:legal@templix.com" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
             legal@templix.com
           </a>
+          {' '}or through{' '}
+          <Link to="/support" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+            Support
+          </Link>
           .
         </p>
 

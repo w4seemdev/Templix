@@ -3,22 +3,22 @@ import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent } from
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  Braces,
   Check,
   Download,
   Eye,
   FileArchive,
+  Infinity as InfinityIcon,
   MonitorPlay,
-  PenTool,
-  RefreshCw,
   Search,
   Sparkles,
-  Star,
 } from 'lucide-react';
 import type { Template } from '../types';
 import { templates, categories } from '../data/templates';
 import TemplateCard from '../components/ui/TemplateCard';
 import Container from '../components/ui/Container';
 import { useReveal } from '../hooks/useReveal';
+import { useSEO } from '../hooks/useSEO';
 
 /* Section rhythm — 96px desktop collapsing to 64px mobile (spec) */
 const sectionPad: CSSProperties = {
@@ -51,15 +51,17 @@ function spotlight(e: ReactPointerEvent<HTMLDivElement>) {
 }
 
 export default function HomePage() {
+  useSEO({
+    description: `Browse ${templates.length} production-ready React + TypeScript website templates. Preview live, buy once, and ship in minutes.`,
+  });
+
   return (
     <div className="bg-canvas">
       <HeroSection />
-      <MarqueeSection />
       <BentoSection />
       <FeaturedSection />
       <HowItWorksSection />
       <CategorySection />
-      <TestimonialsSection />
       <NewsletterSection />
     </div>
   );
@@ -70,9 +72,9 @@ export default function HomePage() {
    browser-frame showcase with floor reflection
 ───────────────────────────────────────────── */
 const trustBadges = [
-  { icon: <Download size={14} />,    label: '12,000+ downloads' },
-  { icon: <MonitorPlay size={14} />, label: `${templates.length} live previews` },
-  { icon: <Sparkles size={14} />,    label: `${freeCount} free template${freeCount !== 1 ? 's' : ''}` },
+  { icon: <FileArchive size={14} />, label: `${templates.length} templates` },
+  { icon: <Sparkles size={14} />,    label: `${freeCount} free to download` },
+  { icon: <MonitorPlay size={14} />, label: 'Live preview on every one' },
 ];
 
 function HeroSection() {
@@ -97,7 +99,7 @@ function HeroSection() {
         >
           <span className="tmx-pulse h-1.5 w-1.5 shrink-0 rounded-full bg-accent-2" />
           <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-secondary" style={tnum}>
-            {templates.length}+ templates · new drops weekly
+            {templates.length} templates · free &amp; premium
           </span>
         </div>
 
@@ -133,7 +135,7 @@ function HeroSection() {
           </Link>
         </div>
 
-        {/* Trust pills */}
+        {/* Trust pills — honest, catalog-derived facts only */}
         <div data-rise style={rise(350)} className="mt-10 flex flex-wrap justify-center gap-3">
           {trustBadges.map(b => (
             <span
@@ -198,8 +200,10 @@ function ShowcaseFrame({ shots }: { shots: Template[] }) {
             >
               <img
                 src={t.image}
-                alt={t.title}
+                alt={`${t.title} template preview`}
                 loading="lazy"
+                width={800}
+                height={500}
                 className="block aspect-[16/10] w-full object-cover shadow-thumb-frame"
               />
             </div>
@@ -207,38 +211,6 @@ function ShowcaseFrame({ shots }: { shots: Template[] }) {
         })}
       </div>
     </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   SOCIAL PROOF — grayscale wordmark marquee
-───────────────────────────────────────────── */
-const marqueeBrands = [
-  'Northbeam', 'Hexlab', 'Quantify', 'Vantage', 'Arclight',
-  'Polygon Studio', 'Driftwood', 'Lumen&Co', 'Basecoat', 'Fathom',
-];
-
-function MarqueeSection() {
-  return (
-    <section className="border-y border-border-subtle bg-canvas-raised">
-      <Container style={{ paddingTop: '40px', paddingBottom: '40px' }}>
-        <p className="mb-6 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-          Trusted by teams shipping with Templix
-        </p>
-        <div className="tmx-marquee">
-          <div className="tmx-marquee-track items-center gap-16 pr-16">
-            {[...marqueeBrands, ...marqueeBrands].map((name, i) => (
-              <span
-                key={`${name}-${i}`}
-                className="whitespace-nowrap text-[15px] font-semibold tracking-[0.02em] text-text-primary opacity-40 transition-opacity duration-150 hover:opacity-80"
-              >
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </Container>
-    </section>
   );
 }
 
@@ -260,7 +232,7 @@ function BentoSection() {
             Everything you need to ship faster
           </h2>
           <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
-            No subscriptions, no lock-in. Pay once, own it forever — with the files, license, and support to back it up.
+            No subscriptions, no lock-in. Pay once, own it forever — with the source, the license, and real support to back it up.
           </p>
         </div>
 
@@ -275,8 +247,8 @@ function BentoSection() {
                   Preview live before you buy
                 </h3>
                 <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
-                  Every template ships with a full live demo. Click through real pages,
-                  test the responsive layout, and know exactly what you are getting.
+                  Every template ships with a full live demo. Click through the real,
+                  interactive site, test the responsive layout, and know exactly what you are getting.
                 </p>
                 <Link to="/templates" className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover">
                   Explore the library
@@ -292,8 +264,10 @@ function BentoSection() {
                 {heroShot && (
                   <img
                     src={heroShot.image}
-                    alt={heroShot.title}
+                    alt={`${heroShot.title} template preview`}
                     loading="lazy"
+                    width={800}
+                    height={500}
                     className="block aspect-[16/10] w-full object-cover shadow-thumb-frame"
                   />
                 )}
@@ -305,24 +279,19 @@ function BentoSection() {
             </div>
           </div>
 
-          {/* Stat tile — rating (4 cols) */}
+          {/* Stat tile — real library counts (4 cols) */}
           <div className="bento-tile flex flex-col justify-between p-7 lg:col-span-4" onPointerMove={spotlight}>
             <div>
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Rated by builders</p>
-              <p className="text-gradient-brand font-mono text-[64px] font-semibold leading-none" style={tnum}>4.9</p>
-              <div className="mt-3 flex gap-1" aria-label="4.9 out of 5 stars">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={16} fill="#F5A623" color="#F5A623" strokeWidth={1} />
-                ))}
-              </div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">The library</p>
+              <p className="text-gradient-brand font-mono text-[64px] font-semibold leading-none" style={tnum}>{templates.length}</p>
               <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
-                Average rating across the entire library.
+                Production-ready templates — and counting.
               </p>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-4 border-t border-border-subtle pt-5">
               <div>
-                <p className="font-mono text-xl font-semibold text-text-primary" style={tnum}>{templates.length}+</p>
-                <p className="text-[13px] font-medium text-text-tertiary">Templates</p>
+                <p className="font-mono text-xl font-semibold text-success" style={tnum}>{freeCount}</p>
+                <p className="text-[13px] font-medium text-text-tertiary">Free to download</p>
               </div>
               <div>
                 <p className="font-mono text-xl font-semibold text-text-primary" style={tnum}>{categoryCount}</p>
@@ -342,7 +311,7 @@ function BentoSection() {
               Your files are ready the second checkout clears. Grab the zip and start building.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {['.zip', '.tsx', '.css', '.fig'].map(ext => (
+              {['.tsx', '.ts', '.css', '.md'].map(ext => (
                 <span key={ext} className="rounded-md border border-border-default bg-surface-2 px-2.5 py-1 font-mono text-[11px] text-text-tertiary">
                   {ext}
                 </span>
@@ -350,43 +319,42 @@ function BentoSection() {
             </div>
           </div>
 
-          {/* Lifetime updates */}
+          {/* Buy once, keep forever */}
           <div className="bento-tile p-7 lg:col-span-4" onPointerMove={spotlight}>
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
-              <RefreshCw size={20} />
+              <InfinityIcon size={20} />
             </div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Buy once</p>
-            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Lifetime updates</h3>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">No subscriptions</p>
+            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Buy once, keep it forever</h3>
             <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
-              Every improvement ships to you free — forever. No renewals, no subscription.
+              One flat price per template. No renewals, no seats, no recurring fees — download it and it is yours.
             </p>
             <div className="mt-5 space-y-2">
-              {[
-                { v: 'v2.1', note: 'New dashboard pages' },
-                { v: 'v2.0', note: 'Dark mode + a11y pass' },
-              ].map(r => (
-                <div key={r.v} className="flex items-center gap-3 text-[13px]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                  <span className="font-mono font-medium text-text-primary" style={tnum}>{r.v}</span>
-                  <span className="text-text-tertiary">{r.note}</span>
+              {['One-time payment', 'No subscription', 'Yours to keep'].map(item => (
+                <div key={item} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
+                  <Check size={14} className="shrink-0 text-success" />
+                  {item}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Figma + code */}
+          {/* React + TypeScript */}
           <div className="bento-tile p-7 lg:col-span-4" onPointerMove={spotlight}>
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg border border-accent-soft-border bg-accent-soft text-accent">
-              <PenTool size={20} />
+              <Braces size={20} />
             </div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Design + build</p>
-            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Figma & clean code</h3>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Clean by default</p>
+            <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">React &amp; TypeScript</h3>
             <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
-              Source design files alongside modern React, Next.js, and HTML — easy to read, easy to extend.
+              Every template is one responsive single-page site in modern React and TypeScript, bundled with Vite — easy to read, easy to extend.
             </p>
-            <div className="mt-5 grid grid-cols-2 gap-2">
-              <span className="rounded-md border border-border-default bg-surface-2 px-3 py-2 text-center text-[13px] font-medium text-text-secondary">Figma</span>
-              <span className="rounded-md border border-border-default bg-surface-2 px-3 py-2 text-center font-mono text-[13px] text-text-secondary">{'<code />'}</span>
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              {['React', 'TypeScript', 'Vite'].map(tech => (
+                <span key={tech} className="rounded-md border border-border-default bg-surface-2 px-2 py-2 text-center text-[12px] font-medium text-text-secondary">
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
 
@@ -455,7 +423,7 @@ const steps = [
     n: '02',
     icon: <Eye size={18} />,
     title: 'Preview the live demo',
-    desc: 'Every template ships with a full live preview. Click through real pages before you commit.',
+    desc: 'Every template ships with a full live preview. Click through the real site before you commit.',
   },
   {
     n: '03',
@@ -548,82 +516,6 @@ function CategorySection() {
 }
 
 /* ─────────────────────────────────────────────
-   TESTIMONIALS
-───────────────────────────────────────────── */
-const testimonials = [
-  {
-    quote: 'I shipped a client site over a single weekend with one of these templates. The code was so clean I barely had to touch it — just swapped the content and deployed.',
-    name: 'Maya Chen',
-    role: 'Frontend Developer, Nova Labs',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80',
-  },
-  {
-    quote: 'We launched our SaaS landing page in two days instead of two sprints. The live preview meant zero surprises — what we saw is exactly what we got.',
-    name: 'Daniel Okafor',
-    role: 'Founder, Brightstack',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=96&q=80',
-  },
-  {
-    quote: 'As a designer, I am picky about typography and spacing. These are the first templates I have bought that I did not feel the need to redesign from scratch.',
-    name: 'Sofia Marin',
-    role: 'Freelance Product Designer',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=96&q=80',
-  },
-];
-
-function TestimonialsSection() {
-  const [headingRef, headingCls] = useReveal<HTMLDivElement>();
-  const [gridRef, gridCls] = useReveal<HTMLDivElement>();
-
-  return (
-    <section className="border-t border-border-subtle">
-      <Container style={sectionPad}>
-
-        <div ref={headingRef} className={`reveal mb-12 text-center ${headingCls}`}>
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Social proof</p>
-          <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
-            Loved by builders worldwide
-          </h2>
-          <p className="mx-auto mt-3 max-w-[520px] text-[15px] leading-[1.6] text-text-secondary">
-            Developers, founders, and designers ship faster with Templix.
-          </p>
-        </div>
-
-        <div ref={gridRef} className={`reveal-group grid gap-6 md:grid-cols-3 ${gridCls}`}>
-          {testimonials.map(t => (
-            <figure key={t.name} className="sheen relative m-0 flex flex-col rounded-2xl border border-border-subtle bg-surface-1 p-7">
-              <div className="mb-4 flex gap-1">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={14} fill="#F5A623" color="#F5A623" strokeWidth={1} />
-                ))}
-              </div>
-              <blockquote className="m-0 flex-1 text-[15px] leading-[1.7] text-text-secondary">
-                “{t.quote}”
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3">
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                  className="h-10 w-10 rounded-full border border-border-default object-cover"
-                />
-                <div>
-                  <p className="m-0 text-[14px] font-semibold text-text-primary">{t.name}</p>
-                  <p className="m-0 mt-0.5 text-[13px] text-text-tertiary">{t.role}</p>
-                </div>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-
-      </Container>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────
    CTA BAND + NEWSLETTER
 ───────────────────────────────────────────── */
 function NewsletterSection() {
@@ -647,21 +539,23 @@ function NewsletterSection() {
 
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Stay in the loop</p>
           <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
-            New templates every month
+            Be the first to know when new templates drop
           </h2>
           <p className="mx-auto mt-3 max-w-[440px] text-[15px] leading-[1.6] text-text-secondary">
-            Subscribe and be the first to know when new templates drop. No spam, ever.
+            Leave your email and we will let you know when we add something new. No spam, ever.
           </p>
 
           <div className="mt-8">
             {submitted ? (
               <div className="inline-flex items-center gap-2.5 rounded-lg border border-success-soft-border bg-success-soft px-6 py-3 text-[15px] font-medium text-success">
                 <Check size={18} strokeWidth={2.5} />
-                You're on the list!
+                Thanks — we'll keep you posted!
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-wrap items-center justify-center gap-3">
+                <label htmlFor="home-newsletter" className="sr-only">Email address</label>
                 <input
+                  id="home-newsletter"
                   type="email"
                   required
                   placeholder="you@example.com"
@@ -670,7 +564,7 @@ function NewsletterSection() {
                   className="h-11 min-w-[260px] rounded-lg border border-border-default bg-surface-2 px-4 text-[15px] text-text-primary outline-none transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)]"
                 />
                 <button type="submit" className="btn btn-primary h-11">
-                  Subscribe
+                  Notify me
                 </button>
               </form>
             )}

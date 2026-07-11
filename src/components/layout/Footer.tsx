@@ -15,13 +15,14 @@ const linkColumns: { group: string; items: { label: string; to: string }[] }[] =
     group: 'Company',
     items: [
       { label: 'About', to: '/about' },
-      { label: 'Dashboard', to: '/dashboard' },
-      { label: 'Sign in', to: '/login' },
+      { label: 'Support', to: '/support' },
+      { label: 'FAQ', to: '/faq' },
     ],
   },
   {
     group: 'Legal',
     items: [
+      { label: 'License', to: '/license' },
       { label: 'Terms of Service', to: '/terms' },
       { label: 'Privacy Policy', to: '/privacy' },
     ],

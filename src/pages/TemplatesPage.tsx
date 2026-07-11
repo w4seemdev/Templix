@@ -4,6 +4,7 @@ import { Search, ArrowUpDown, ChevronDown, SearchX, X } from 'lucide-react';
 import TemplateCard from '../components/ui/TemplateCard';
 import { templates, categories } from '../data/templates';
 import Container from '../components/ui/Container';
+import { useSEO } from '../hooks/useSEO';
 
 type PriceFilter = 'all' | 'free' | 'premium';
 type SortOption  = 'featured' | 'price-low' | 'price-high' | 'newest';
@@ -25,6 +26,11 @@ const isPriceParam = (v: string | null): v is 'free' | 'premium' =>
 const TNUM = { fontFeatureSettings: '"tnum"' } as const;
 
 export default function TemplatesPage() {
+  useSEO({
+    title: 'Browse Templates',
+    description: 'Browse all Templix website templates — free and premium, filterable by category and price.',
+  });
+
   const [searchParams] = useSearchParams();
 
   const [search,         setSearch]         = useState('');

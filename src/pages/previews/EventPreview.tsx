@@ -1,107 +1,264 @@
-const speakers = [
-  { name: 'Dr. Lena Park', role: 'Head of AI, Google DeepMind', img: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=300&q=80', tag: 'Keynote' },
-  { name: 'James Thornton', role: 'CEO, Stripe', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80', tag: 'Keynote' },
-  { name: 'Aisha Rahman', role: 'Founder, Notion', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80', tag: 'Workshop' },
-  { name: 'Felix Gruber', role: 'CTO, Vercel', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80', tag: 'Panel' },
-  { name: 'Nina Scott', role: 'Design Partner, a16z', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80', tag: 'Workshop' },
-  { name: 'Omar Khalil', role: 'Author, Zero to One', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80', tag: 'Panel' },
+/* ============================================================
+   EVENTIDE — Event Planning & Celebrations Template
+   Midnight plum with champagne gold. Fully responsive.
+   ============================================================ */
+
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const C = {
+  bg: '#141019',
+  surface: '#1e1727',
+  ink: '#f4eff7',
+  muted: '#b3a7c0',
+  faint: '#7d7290',
+  line: 'rgba(205,170,106,0.16)',
+  gold: '#cdaa6a',
+};
+const serif = "'Playfair Display', Georgia, serif";
+const sans = "'Inter', system-ui, sans-serif";
+const container: React.CSSProperties = { maxWidth: '1160px', margin: '0 auto', width: '100%' };
+
+const kinds = ['Weddings', 'Corporate', 'Private', 'Galas'];
+const details: Record<string, { tagline: string; points: string[] }> = {
+  Weddings: { tagline: 'From intimate ceremonies to 300-guest celebrations.', points: ['Full planning & design', 'Venue & vendor sourcing', 'On-the-day coordination', 'Guest experience'] },
+  Corporate: { tagline: 'Launches, conferences and awards that mean business.', points: ['Brand-led production', 'Stage & AV management', 'Delegate registration', 'Catering & hospitality'] },
+  Private: { tagline: 'Milestone birthdays, anniversaries and dinner parties.', points: ['Theme & styling', 'Entertainment booking', 'Bespoke menus', 'Guest logistics'] },
+  Galas: { tagline: 'Fundraisers and ceremonies with a sense of occasion.', points: ['Run-of-show direction', 'Auction & donations', 'VIP & press handling', 'Full production crew'] },
+};
+
+const gallery = [
+  { name: 'The Hartley Wedding', place: 'Cotswolds · 180 guests', from: '#7a4a63', to: '#2e1826', big: true },
+  { name: 'Northwind Product Launch', place: 'London · 400 guests', from: '#3a4a6a', to: '#161f2e', big: false },
+  { name: 'Aurora Charity Gala', place: 'Edinburgh · 260 guests', from: '#b5893f', to: '#4a3312', big: false },
+  { name: 'The Vaughan 50th', place: 'Bath · 90 guests', from: '#5a4a7a', to: '#221a34', big: false },
+  { name: 'Meridian Awards Night', place: 'Manchester · 320 guests', from: '#7a3a4a', to: '#2e141c', big: true },
 ];
 
-const schedule = [
-  { time: '9:00 AM', title: 'Opening Keynote', speaker: 'Dr. Lena Park', track: 'Main Stage', duration: '45m' },
-  { time: '10:00 AM', title: 'Building the Next Billion-Dollar Startup', speaker: 'James Thornton', track: 'Main Stage', duration: '40m' },
-  { time: '11:00 AM', title: 'The Future of Remote Product Teams', speaker: 'Aisha Rahman', track: 'Workshop Hall A', duration: '60m' },
-  { time: '1:00 PM', title: 'Deployment at Scale', speaker: 'Felix Gruber', track: 'Tech Track', duration: '35m' },
-  { time: '2:30 PM', title: 'Founder Panel: Lessons from 0→1', speaker: 'Multiple Speakers', track: 'Main Stage', duration: '90m' },
+const packages = [
+  { name: 'Coordination', price: 'from £1,800', desc: 'On-the-day management for couples who have planned it all.', feats: ['Final-month handover', 'Timeline & run sheet', 'Vendor coordination', 'On-the-day team'], hot: false },
+  { name: 'Signature', price: 'from £4,500', desc: 'Our most-loved service — design and planning, start to finish.', feats: ['Full concept & design', 'Venue & vendor sourcing', 'Budget management', 'On-the-day direction'], hot: true },
+  { name: 'Bespoke', price: 'on request', desc: 'A blank canvas for the truly one-of-a-kind celebration.', feats: ['Everything in Signature', 'Custom builds & sets', 'Multi-day events', 'Dedicated producer'], hot: false },
 ];
 
 export default function EventPreview() {
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', background: '#050510', color: '#fafafa', minHeight: '100vh' }}>
-      {/* Nav */}
-      <nav style={{ background: 'rgba(5,5,16,0.95)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '0 2rem', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ fontSize: '20px' }}>⚡</div>
-          <span style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '-0.02em' }}>LaunchConf <span style={{ color: '#6366f1' }}>2025</span></span>
-        </div>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          {['Speakers', 'Schedule', 'Tickets', 'Venue', 'Sponsors'].map(item => (
-            <span key={item} style={{ fontSize: '13px', color: '#6b7280', cursor: 'pointer', fontWeight: 500 }}>{item}</span>
-          ))}
-        </div>
-        <button style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', border: 'none', borderRadius: '8px', padding: '9px 20px', fontSize: '13px', fontWeight: 700, color: '#fff', cursor: 'pointer' }}>
-          Get Tickets
-        </button>
-      </nav>
-
-      {/* Hero */}
-      <section style={{ position: 'relative', padding: '6rem 2rem 5rem', overflow: 'hidden', textAlign: 'center' }}>
-        {/* Grid background */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(99,102,241,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.07) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)', borderRadius: '50%' }} />
-        <div style={{ position: 'relative' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '9999px', padding: '6px 18px', marginBottom: '2rem' }}>
-            <span style={{ fontSize: '12px', color: '#818cf8', fontWeight: 700 }}>📍 San Francisco · Sept 18–20, 2025</span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1, margin: '0 0 1.5rem' }}>
-            Launch<span style={{ background: 'linear-gradient(135deg, #6366f1, #a78bfa, #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Conf</span><br />2025
-          </h1>
-          <p style={{ fontSize: '1.125rem', color: '#9ca3af', maxWidth: '560px', margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
-            The premier conference for founders, product leaders, and engineers building the next generation of software.
-          </p>
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', border: 'none', borderRadius: '10px', padding: '14px 32px', fontSize: '15px', fontWeight: 700, color: '#fff', cursor: 'pointer' }}>Register Now →</button>
-            <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '14px 32px', fontSize: '15px', fontWeight: 600, color: '#fafafa', cursor: 'pointer' }}>View Schedule</button>
-          </div>
-          <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', marginTop: '3rem' }}>
-            {[['60+', 'Speakers'], ['1,200', 'Attendees'], ['3', 'Days'], ['8', 'Tracks']].map(([v, l]) => (
-              <div key={l} style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: '1.5rem', fontWeight: 800, color: '#818cf8', margin: '0 0 2px' }}>{v}</p>
-                <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>{l}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Speakers */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 0.5rem', letterSpacing: '-0.02em' }}>Featured Speakers</h2>
-        <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 2rem' }}>World-class minds, one stage.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1.25rem' }}>
-          {speakers.map(sp => (
-            <div key={sp.name} style={{ background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '1.5rem', textAlign: 'center', cursor: 'pointer' }}>
-              <div style={{ width: '72px', height: '72px', borderRadius: '50%', overflow: 'hidden', margin: '0 auto 0.875rem', border: '2px solid rgba(99,102,241,0.3)' }}>
-                <img src={sp.img} alt={sp.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <span style={{ fontSize: '10px', fontWeight: 700, color: '#6366f1', background: 'rgba(99,102,241,0.12)', padding: '2px 10px', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{sp.tag}</span>
-              <h3 style={{ fontSize: '13px', fontWeight: 700, margin: '0.5rem 0 4px', color: '#f9fafb' }}>{sp.name}</h3>
-              <p style={{ fontSize: '11px', color: '#6b7280', margin: 0, lineHeight: 1.4 }}>{sp.role}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Schedule */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 2rem 4rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 0.5rem', letterSpacing: '-0.02em' }}>Day 1 Schedule</h2>
-        <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 1.5rem' }}>September 18, 2025</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {schedule.map(item => (
-            <div key={item.title} style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '1.125rem 1.25rem', cursor: 'pointer' }}>
-              <div style={{ minWidth: '80px', fontSize: '13px', fontWeight: 600, color: '#818cf8' }}>{item.time}</div>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 700, margin: '0 0 3px', color: '#f9fafb' }}>{item.title}</h3>
-                <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>{item.speaker}</p>
-              </div>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span style={{ fontSize: '11px', color: '#6366f1', background: 'rgba(99,102,241,0.1)', padding: '3px 10px', borderRadius: '9999px', fontWeight: 600, whiteSpace: 'nowrap' }}>{item.track}</span>
-                <span style={{ fontSize: '11px', color: '#4b5563', whiteSpace: 'nowrap' }}>{item.duration}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+    <div style={{ fontFamily: sans, background: C.bg, color: C.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav />
+      <Hero />
+      <Services />
+      <Gallery />
+      <Packages />
+      <Testimonials />
+      <Contact />
+      <Footer />
     </div>
+  );
+}
+
+function Nav() {
+  const m = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const links = ['Services', 'Events', 'Packages', 'Contact'];
+  const anchors = ['services', 'gallery', 'packages', 'contact'];
+  return (
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(20,16,25,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: '0 20px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#top" style={{ fontFamily: serif, fontSize: '23px', fontWeight: 700, letterSpacing: '0.06em', color: C.gold, textDecoration: 'none' }}>Eventide</a>
+        {!m && <nav style={{ display: 'flex', gap: '32px' }}>{links.map((l, i) => <a key={l} href={`#${anchors[i]}`} style={{ fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', color: C.muted, textDecoration: 'none' }}>{l}</a>)}</nav>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {!m && <a href="#contact" style={{ border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '2px', padding: '9px 20px', fontSize: '12px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>Enquire</a>}
+          {m && <button onClick={() => setOpen(!open)} aria-label="Menu" style={{ background: 'none', border: 'none', color: C.ink, cursor: 'pointer', padding: 0, display: 'flex' }}><svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">{open ? <path d="M18 6 6 18M6 6l12 12" /> : <><path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" /></>}</svg></button>}
+        </div>
+      </div>
+      {m && open && <nav style={{ borderTop: `1px solid ${C.line}`, padding: '8px 20px 16px', display: 'flex', flexDirection: 'column' }}>{links.map((l, i) => <a key={l} href={`#${anchors[i]}`} onClick={() => setOpen(false)} style={{ fontSize: '14px', color: C.muted, textDecoration: 'none', padding: '11px 0', borderBottom: `1px solid ${C.line}`, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{l}</a>)}</nav>}
+    </header>
+  );
+}
+
+function Hero() {
+  const m = useIsMobile();
+  return (
+    <section id="top" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(820px 440px at 75% 0%, rgba(205,170,106,0.16), transparent 60%)' }} />
+      <div style={{ ...container, padding: m ? '60px 20px 64px' : '104px 20px 112px', position: 'relative', textAlign: 'center' }}>
+        <span style={{ fontSize: '12px', letterSpacing: '0.28em', textTransform: 'uppercase', color: C.gold }}>Event planning & production</span>
+        <h1 style={{ fontFamily: serif, fontSize: m ? '2.9rem' : '5rem', fontWeight: 700, lineHeight: 1.02, margin: '22px auto 22px', maxWidth: '760px' }}>Occasions worth remembering.</h1>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.7, maxWidth: '520px', margin: '0 auto 34px' }}>We design, plan and produce weddings, celebrations and corporate events across the UK and beyond — so you can be a guest at your own party.</p>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="#contact" style={{ background: C.gold, color: '#141019', borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none' }}>Start planning</a>
+          <a href="#gallery" style={{ border: `1px solid ${C.line}`, color: C.ink, borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>See our events</a>
+        </div>
+        <div style={{ display: 'flex', gap: m ? '28px' : '52px', justifyContent: 'center', marginTop: '52px', flexWrap: 'wrap' }}>
+          {[['500+', 'Events produced'], ['12', 'Years planning'], ['4.9★', 'Client rating']].map(([n, l]) => (
+            <div key={l}><div style={{ fontFamily: serif, fontSize: m ? '1.7rem' : '2.2rem', fontWeight: 700, color: C.gold }}>{n}</div><div style={{ fontSize: '12px', color: C.muted, letterSpacing: '0.04em' }}>{l}</div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Services() {
+  const m = useIsMobile();
+  const [tab, setTab] = useState('Weddings');
+  const d = details[tab];
+  return (
+    <section id="services" style={{ background: C.surface, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+          <p style={{ fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', color: C.gold, margin: '0 0 10px' }}>What we do</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, margin: 0 }}>Events of every kind</h2>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '36px' }}>
+          {kinds.map((k) => (
+            <button key={k} onClick={() => setTab(k)} style={{ cursor: 'pointer', borderRadius: '2px', padding: '10px 22px', fontSize: '13px', letterSpacing: '0.05em', textTransform: 'uppercase', fontWeight: 600, border: `1px solid ${tab === k ? C.gold : C.line}`, background: tab === k ? C.gold : 'transparent', color: tab === k ? '#141019' : C.muted }}>{k}</button>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '28px' : '52px', alignItems: 'center' }}>
+          <div style={{ aspectRatio: m ? '16/9' : '4/3', borderRadius: '6px', background: 'linear-gradient(155deg,#7a4a63,#241628)' }} />
+          <div>
+            <h3 style={{ fontFamily: serif, fontSize: m ? '1.7rem' : '2.2rem', fontWeight: 700, margin: '0 0 14px' }}>{tab}</h3>
+            <p style={{ fontSize: '1.05rem', color: C.muted, lineHeight: 1.7, margin: '0 0 22px' }}>{d.tagline}</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              {d.points.map((p) => (
+                <li key={p} style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '14px', color: C.ink }}>
+                  <svg width="16" height="16" fill="none" stroke={C.gold} strokeWidth="2.2" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>{p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Gallery() {
+  const m = useIsMobile();
+  return (
+    <section id="gallery" style={{ ...container, padding: m ? '52px 20px' : '92px 20px' }}>
+      <h2 style={{ fontFamily: serif, fontSize: m ? '2.2rem' : '3rem', fontWeight: 700, textAlign: 'center', margin: '0 0 40px' }}>Recent events</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: m ? '16px' : '20px' }}>
+        {gallery.map((g) => (
+          <div key={g.name} style={{ gridColumn: !m && g.big ? 'span 2' : 'span 1', aspectRatio: !m && g.big ? '16/9' : '4/5', borderRadius: '6px', background: `linear-gradient(155deg,${g.from},${g.to})`, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '22px', background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%)' }}>
+              <span style={{ fontFamily: serif, color: '#fff', fontSize: '1.3rem', fontWeight: 700 }}>{g.name}</span>
+              <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '12px', marginTop: '4px' }}>{g.place}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Packages() {
+  const m = useIsMobile();
+  return (
+    <section id="packages" style={{ background: C.surface, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+          <p style={{ fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', color: C.gold, margin: '0 0 10px' }}>How we work together</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, margin: 0 }}>Planning packages</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: '22px', alignItems: 'stretch' }}>
+          {packages.map((p) => (
+            <div key={p.name} style={{ background: p.hot ? C.gold : C.bg, color: p.hot ? '#141019' : C.ink, border: `1px solid ${p.hot ? C.gold : C.line}`, borderRadius: '8px', padding: '32px', position: 'relative' }}>
+              {p.hot && <span style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(20,16,25,0.15)', borderRadius: '999px', padding: '4px 12px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.04em' }}>Most loved</span>}
+              <h3 style={{ fontFamily: serif, fontSize: '1.5rem', fontWeight: 700, margin: '0 0 6px' }}>{p.name}</h3>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, margin: '0 0 14px' }}>{p.price}</div>
+              <p style={{ fontSize: '14px', lineHeight: 1.6, margin: '0 0 22px', color: p.hot ? 'rgba(20,16,25,0.75)' : C.muted }}>{p.desc}</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 26px', display: 'flex', flexDirection: 'column', gap: '11px' }}>
+                {p.feats.map((f) => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '14px' }}>
+                    <svg width="16" height="16" fill="none" stroke={p.hot ? '#141019' : C.gold} strokeWidth="2.2" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>{f}
+                  </li>
+                ))}
+              </ul>
+              <a href="#contact" style={{ display: 'block', textAlign: 'center', background: p.hot ? '#141019' : C.gold, color: p.hot ? C.gold : '#141019', borderRadius: '2px', padding: '13px', fontSize: '13px', letterSpacing: '0.05em', textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none' }}>Enquire</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  const m = useIsMobile();
+  const data = [
+    { text: 'Eventide made our wedding utterly effortless. We genuinely enjoyed every second of the day.', a: 'Amara & Josh', c: 'Cotswolds wedding' },
+    { text: 'The most organised team we have worked with. Our product launch ran like clockwork.', a: 'Northwind', c: 'Corporate launch' },
+    { text: 'They thought of details we never would have. The gala raised a record amount this year.', a: 'Aurora Trust', c: 'Charity gala' },
+  ];
+  return (
+    <section style={{ ...container, padding: m ? '52px 20px' : '88px 20px' }}>
+      <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, textAlign: 'center', margin: '0 0 36px' }}>Kind words</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3,1fr)', gap: '20px' }}>
+        {data.map((r) => (
+          <figure key={r.a} style={{ margin: 0, background: C.surface, border: `1px solid ${C.line}`, borderRadius: '8px', padding: '28px' }}>
+            <span style={{ display: 'inline-flex', gap: '2px', marginBottom: '14px' }}>{[1, 2, 3, 4, 5].map((s) => <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill={C.gold} stroke={C.gold}><path d="M12 2l3 6.5 7 .8-5.2 4.8L18.2 22 12 18.3 5.8 22 7.2 14.1 2 9.3l7-.8z" /></svg>)}</span>
+            <blockquote style={{ fontFamily: serif, fontSize: '1.1rem', fontStyle: 'italic', lineHeight: 1.6, margin: '0 0 18px' }}>"{r.text}"</blockquote>
+            <figcaption style={{ fontSize: '13px', color: C.muted }}><b style={{ color: C.ink }}>{r.a}</b> · {r.c}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  const m = useIsMobile();
+  const field: React.CSSProperties = { background: C.surface, border: `1px solid ${C.line}`, borderRadius: '2px', padding: '13px 14px', color: C.ink, fontSize: '14px', width: '100%' };
+  return (
+    <section id="contact" style={{ background: C.surface, borderTop: `1px solid ${C.line}` }}>
+      <div style={{ ...container, padding: m ? '52px 20px' : '88px 20px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '36px' : '56px', alignItems: 'center' }}>
+        <div>
+          <p style={{ fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', color: C.gold, margin: '0 0 12px' }}>Let's talk</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 18px' }}>Tell us about your event</h2>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 24px' }}>Share a few details and we'll be in touch within two working days to arrange a call. Consultations are always complimentary.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: C.muted }}>
+            <span><b style={{ color: C.ink }}>Email</b> · hello@eventide.co</span>
+            <span><b style={{ color: C.ink }}>Studio</b> · 14 Lantern Court, London</span>
+            <span><b style={{ color: C.ink }}>Call</b> · +44 20 7946 0155</span>
+          </div>
+        </div>
+        <form onSubmit={(e) => e.preventDefault()} style={{ background: C.bg, border: `1px solid ${C.line}`, borderRadius: '6px', padding: m ? '22px' : '30px', display: 'flex', flexDirection: 'column', gap: '13px' }}>
+          <input placeholder="Your name" style={field} />
+          <input type="email" placeholder="Email address" style={field} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <select style={field} defaultValue=""><option value="" disabled>Event type</option>{kinds.map((k) => <option key={k}>{k}</option>)}</select>
+            <input type="date" style={field} />
+          </div>
+          <textarea placeholder="A little about your event" rows={3} style={{ ...field, resize: 'vertical' }} />
+          <button type="submit" style={{ background: C.gold, color: '#141019', border: 'none', borderRadius: '2px', padding: '14px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 700, cursor: 'pointer' }}>Send enquiry</button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  const m = useIsMobile();
+  return (
+    <footer style={{ padding: '44px 20px 28px' }}>
+      <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
+        <span style={{ fontFamily: serif, fontSize: '20px', fontWeight: 700, letterSpacing: '0.06em', color: C.gold, width: m ? '100%' : 'auto' }}>Eventide</span>
+        <span style={{ fontSize: '14px', color: C.muted }}>Weddings · Corporate · Private · Galas</span>
+        <span style={{ fontSize: '13px', color: C.faint }}>© {new Date().getFullYear()} Eventide Events</span>
+      </div>
+    </footer>
   );
 }

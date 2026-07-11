@@ -1,157 +1,124 @@
 /* ============================================================
-   AGENCY PRO — Agency Website Template
-   Pure black with electric blue accent — bold & modern
+   KINETIC — Digital Agency Template
+   Near-black with electric lime accent — bold & editorial.
+   Self-contained, inline styles only, fully responsive.
    ============================================================ */
 
+import { useState, useEffect } from 'react';
+
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
+
+const T = { bg: '#0a0a0a', panel: '#121212', line: 'rgba(255,255,255,0.1)', ink: '#fafafa', mut: '#a3a3a3', dim: '#6b6b6b', a: '#a3e635' };
+const NAV = [['Work', 'work'], ['Services', 'services'], ['Process', 'process'], ['Contact', 'contact']] as const;
+
 export default function AgencyProPreview() {
+  const mobile = useIsMobile();
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#000000', color: '#ffffff', minHeight: '100vh' }}>
-      <AgencyNav />
-      <AgencyHero />
-      <ClientLogos />
-      <ServicesSection />
-      <StatsBar />
-      <WorkSection />
-      <TestimonialsAgency />
-      <TeamSection />
-      <AgencyCTA />
-      <AgencyFooter />
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: T.bg, color: T.ink, minHeight: '100vh', overflowX: 'hidden' }}>
+      <Nav mobile={mobile} />
+      <Hero mobile={mobile} />
+      <Marquee mobile={mobile} />
+      <Work mobile={mobile} />
+      <Services mobile={mobile} />
+      <Process mobile={mobile} />
+      <Stats mobile={mobile} />
+      <Contact mobile={mobile} />
+      <Foot mobile={mobile} />
     </div>
   );
 }
 
-function AgencyNav() {
+function Nav({ mobile }: { mobile: boolean }) {
+  const [open, setOpen] = useState(false);
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(16px)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '28px', height: '28px', background: '#3b82f6', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${T.line}`, background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(14px)' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 66, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 30, height: 30, borderRadius: 8, background: T.a, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20L20 4M9 4h11v11" /></svg>
           </div>
-          <span style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em' }}>VOLT STUDIO</span>
+          <span style={{ fontSize: 19, fontWeight: 900, letterSpacing: '-0.03em' }}>KINETIC</span>
         </div>
-        <nav style={{ display: 'flex', gap: '2.5rem' }}>
-          {['Work', 'Services', 'About', 'Journal'].map(l => (
-            <a key={l} href="#" style={{ fontSize: '14px', color: '#737373', textDecoration: 'none' }}>{l}</a>
-          ))}
-        </nav>
-        <a href="#" style={{ background: '#3b82f6', borderRadius: '8px', padding: '9px 20px', fontSize: '14px', fontWeight: 600, color: '#ffffff', textDecoration: 'none' }}>
-          Start a project
-        </a>
+        {!mobile && <nav style={{ display: 'flex', gap: 30 }}>{NAV.map(([l, h]) => <a key={l} href={`#${h}`} style={{ fontSize: 14, fontWeight: 500, color: T.mut, textDecoration: 'none' }}>{l}</a>)}</nav>}
+        {!mobile ? (
+          <a href="#contact" style={{ background: T.a, borderRadius: 9999, padding: '9px 20px', fontSize: 14, fontWeight: 700, color: '#0a0a0a', textDecoration: 'none' }}>Start a project</a>
+        ) : (
+          <button aria-label="Menu" onClick={() => setOpen(o => !o)} style={{ background: 'transparent', border: `1px solid ${T.line}`, borderRadius: 8, padding: 8, cursor: 'pointer' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d={open ? 'M6 6l12 12M6 18L18 6' : 'M3 6h18M3 12h18M3 18h18'} /></svg></button>
+        )}
       </div>
+      {mobile && open && <div style={{ padding: '8px 24px 18px', borderTop: `1px solid ${T.line}`, display: 'flex', flexDirection: 'column', gap: 4 }}>{NAV.map(([l, h]) => <a key={l} href={`#${h}`} onClick={() => setOpen(false)} style={{ padding: '10px 0', fontSize: 15, color: T.mut, textDecoration: 'none' }}>{l}</a>)}<a href="#contact" onClick={() => setOpen(false)} style={{ marginTop: 8, textAlign: 'center', background: T.a, borderRadius: 9999, padding: 11, fontSize: 14, fontWeight: 700, color: '#0a0a0a', textDecoration: 'none' }}>Start a project</a></div>}
     </header>
   );
 }
 
-function AgencyHero() {
+function Hero({ mobile }: { mobile: boolean }) {
   return (
-    <section style={{ padding: '7rem 2rem 5rem', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 0, right: 0, width: '600px', height: '600px', background: 'radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(59,130,246,0.3)', background: 'rgba(59,130,246,0.08)', borderRadius: '9999px', padding: '5px 14px', marginBottom: '2rem' }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6' }} />
-          <span style={{ fontSize: '13px', color: '#93c5fd' }}>Now booking for Q3 2024</span>
-        </div>
-        <h1 style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.95, margin: '0 0 2rem', maxWidth: '900px' }}>
-          We build brands<br />
-          <span style={{ color: '#3b82f6' }}>people remember.</span>
+    <section style={{ padding: mobile ? '52px 24px 40px' : '92px 24px 60px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: T.a, textTransform: 'uppercase', letterSpacing: '0.14em' }}>Brand · Web · Product</span>
+        <h1 style={{ fontSize: mobile ? '3rem' : '6rem', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.95, margin: '18px 0 0', textTransform: 'uppercase' }}>
+          We build<br />brands that <span style={{ color: T.a }}>move</span>
         </h1>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center', maxWidth: '900px' }}>
-          <p style={{ fontSize: '1.0625rem', color: '#737373', lineHeight: 1.75, margin: 0 }}>
-            Volt Studio is a full-service creative agency specializing in brand identity, digital design, and web development for ambitious companies.
+        <div style={{ display: mobile ? 'block' : 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 30, gap: 24 }}>
+          <p style={{ fontSize: mobile ? '1.05rem' : '1.2rem', color: T.mut, lineHeight: 1.6, maxWidth: 460, margin: 0 }}>
+            Kinetic is an independent design studio crafting brand identities, websites, and digital products for ambitious companies.
           </p>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="#" style={{ background: '#3b82f6', borderRadius: '10px', padding: '14px 28px', fontSize: '15px', fontWeight: 700, color: '#ffffff', textDecoration: 'none' }}>See our work ↓</a>
-            <a href="#" style={{ border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '14px 28px', fontSize: '15px', fontWeight: 600, color: '#ffffff', textDecoration: 'none' }}>Our services</a>
-          </div>
+          <a href="#work" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: mobile ? 24 : 0, background: T.a, borderRadius: 9999, padding: '14px 26px', fontSize: 15, fontWeight: 700, color: '#0a0a0a', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            See our work <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
         </div>
       </div>
     </section>
   );
 }
 
-function ClientLogos() {
-  const logos = ['Spotify', 'Airbnb', 'Shopify', 'Figma', 'Notion', 'Linear'];
+function Marquee({ mobile }: { mobile: boolean }) {
+  const words = ['Strategy', 'Branding', 'Web Design', 'Development', 'Motion', 'Art Direction'];
   return (
-    <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2rem 0' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '3rem', alignItems: 'center' }}>
-        {logos.map(l => <span key={l} style={{ fontSize: '15px', fontWeight: 700, color: '#262626', letterSpacing: '-0.02em' }}>{l}</span>)}
+    <div style={{ borderTop: `1px solid ${T.line}`, borderBottom: `1px solid ${T.line}`, padding: '18px 0', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', gap: 40, justifyContent: 'center', flexWrap: 'wrap', padding: '0 24px' }}>
+        {words.map(w => <span key={w} style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontSize: mobile ? 15 : 18, fontWeight: 700, color: T.dim, textTransform: 'uppercase', letterSpacing: '-0.01em' }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: T.a }} />{w}</span>)}
       </div>
-    </section>
+    </div>
   );
 }
 
-function ServicesSection() {
-  const services = [
-    { num: '01', title: 'Brand Identity', desc: 'Strategy, naming, logo design, visual systems, and full brand guidelines.' },
-    { num: '02', title: 'Web Design', desc: 'Beautiful, high-converting websites built on modern technology.' },
-    { num: '03', title: 'Development', desc: 'React, Next.js, and headless CMS solutions built to scale.' },
-    { num: '04', title: 'Motion & Video', desc: 'Brand films, animations, and social content that moves people.' },
+function Work({ mobile }: { mobile: boolean }) {
+  const projects: [string, string, string][] = [
+    ['Nova Health', 'Brand + Web', 'linear-gradient(135deg,#a3e635,#22c55e)'],
+    ['Fable Studios', 'Identity', 'linear-gradient(135deg,#f472b6,#a855f7)'],
+    ['Voyage', 'Product Design', 'linear-gradient(135deg,#38bdf8,#6366f1)'],
+    ['Ember Coffee', 'Brand + Packaging', 'linear-gradient(135deg,#fb923c,#ef4444)'],
   ];
   return (
-    <section style={{ padding: '6rem 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.04em', margin: 0 }}>What we do</h2>
-          <a href="#" style={{ fontSize: '14px', color: '#3b82f6', textDecoration: 'none' }}>All services →</a>
+    <section id="work" style={{ padding: mobile ? '52px 24px' : '84px 24px', borderTop: `1px solid ${T.line}` }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 34 }}>
+          <h2 style={{ fontSize: mobile ? '2rem' : '3rem', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: 0 }}>Selected work</h2>
+          <span style={{ fontSize: 13, color: T.dim }}>2024 — 2025</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1px', background: 'rgba(255,255,255,0.06)' }}>
-          {services.map(s => (
-            <div key={s.num} style={{ background: '#000000', padding: '2.5rem 2rem' }}>
-              <span style={{ display: 'block', fontSize: '12px', color: '#3b82f6', fontWeight: 700, marginBottom: '1.25rem', letterSpacing: '0.05em' }}>{s.num}</span>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '0.75rem', color: '#ffffff' }}>{s.title}</h3>
-              <p style={{ fontSize: '14px', color: '#525252', lineHeight: 1.75 }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function StatsBar() {
-  const stats = [['150+', 'Projects Delivered'], ['8', 'Years in Business'], ['40+', 'Happy Clients'], ['12', 'Awards Won']];
-  return (
-    <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem 0', background: '#050505' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem', display: 'flex', justifyContent: 'center', gap: '5rem', flexWrap: 'wrap' }}>
-        {stats.map(([v, l]) => (
-          <div key={l} style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '2.25rem', fontWeight: 900, margin: '0 0 4px', letterSpacing: '-0.04em', color: '#3b82f6' }}>{v}</p>
-            <p style={{ fontSize: '12px', color: '#404040', margin: 0, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{l}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-const works = [
-  { title: 'Aura — Brand Identity', type: 'Branding', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80' },
-  { title: 'Crest — Web Design', type: 'Web', img: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&q=80' },
-  { title: 'Meld — App UI', type: 'Product', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80' },
-  { title: 'Orca — E-Commerce', type: 'E-Commerce', img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80' },
-  { title: 'Grove — Campaign', type: 'Campaign', img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80' },
-  { title: 'Flux — Motion', type: 'Motion', img: 'https://images.unsplash.com/photo-1574717024453-354056afd6fc?w=600&q=80' },
-];
-
-function WorkSection() {
-  return (
-    <section style={{ padding: '2rem 0 6rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.04em', margin: 0 }}>Selected work</h2>
-          <a href="#" style={{ fontSize: '14px', color: '#3b82f6', textDecoration: 'none' }}>All projects →</a>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
-          {works.map(w => (
-            <a key={w.title} href="#" style={{ display: 'block', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', position: 'relative', aspectRatio: '4/3' }}>
-              <img src={w.img} alt={w.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, transition: 'opacity 0.3s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLImageElement).style.opacity = '0.7'}
-                onMouseLeave={e => (e.currentTarget as HTMLImageElement).style.opacity = '0.5'}
-              />
-              <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>{w.title}</h3>
-                <span style={{ fontSize: '12px', background: 'rgba(59,130,246,0.2)', color: '#93c5fd', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '6px', padding: '3px 10px' }}>{w.type}</span>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(2,1fr)', gap: 20 }}>
+          {projects.map(([name, tag, bg]) => (
+            <a key={name} href="#work" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{ borderRadius: 18, background: bg, height: mobile ? 200 : 280, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'flex-end', padding: 22 }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55))' }} />
+                <div style={{ position: 'relative' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(0,0,0,0.4)', color: '#fff', borderRadius: 9999, padding: '4px 12px' }}>{tag}</span>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
+                <span style={{ fontSize: 18, fontWeight: 700 }}>{name}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={T.a} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M8 7h9v9" /></svg>
               </div>
             </a>
           ))}
@@ -161,32 +128,24 @@ function WorkSection() {
   );
 }
 
-function TestimonialsAgency() {
-  const testi = [
-    { quote: "Volt Studio transformed our brand completely. The new identity tripled our conversion rate in just two months.", name: 'Claire Fontaine', role: 'CEO, Aura', avatar: 'CF' },
-    { quote: "They delivered a world-class website in under 6 weeks. The attention to detail was extraordinary.", name: 'James Park', role: 'Founder, Crest', avatar: 'JP' },
-    { quote: "Best agency we've ever worked with. The team is brilliant, responsive, and genuinely passionate.", name: 'Nadia Osei', role: 'CMO, Grove', avatar: 'NO' },
+function Services({ mobile }: { mobile: boolean }) {
+  const services: [string, string, string[]][] = [
+    ['01', 'Brand strategy', ['Positioning', 'Naming', 'Messaging', 'Guidelines']],
+    ['02', 'Visual identity', ['Logo systems', 'Type & color', 'Art direction', 'Collateral']],
+    ['03', 'Web & product', ['UX/UI design', 'Development', 'CMS & commerce', 'Motion']],
   ];
   return (
-    <section style={{ padding: '6rem 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '3rem' }}>
-          What clients say
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1.5rem' }}>
-          {testi.map(t => (
-            <div key={t.name} style={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', background: '#050505', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', gap: '3px' }}>
-                {[1,2,3,4,5].map(s => <span key={s} style={{ color: '#3b82f6', fontSize: '14px' }}>★</span>)}
-              </div>
-              <p style={{ fontSize: '15px', color: '#a3a3a3', lineHeight: 1.75, margin: 0, flex: 1 }}>"{t.quote}"</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#fff', flexShrink: 0 }}>{t.avatar}</div>
-                <div>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', margin: 0 }}>{t.name}</p>
-                  <p style={{ fontSize: '12px', color: '#404040', margin: 0 }}>{t.role}</p>
-                </div>
-              </div>
+    <section id="services" style={{ padding: mobile ? '52px 24px' : '84px 24px', borderTop: `1px solid ${T.line}`, background: T.panel }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <h2 style={{ fontSize: mobile ? '2rem' : '3rem', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: '0 0 34px' }}>What we do</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: 20 }}>
+          {services.map(([n, title, items]) => (
+            <div key={n} style={{ borderRadius: 18, border: `1px solid ${T.line}`, background: T.bg, padding: 26 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: T.a, marginBottom: 16 }}>{n}</div>
+              <h3 style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 16px' }}>{title}</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {items.map(it => <li key={it} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: T.mut, paddingBottom: 10, borderBottom: `1px solid ${T.line}` }}><span style={{ width: 5, height: 5, borderRadius: '50%', background: T.a }} />{it}</li>)}
+              </ul>
             </div>
           ))}
         </div>
@@ -195,25 +154,23 @@ function TestimonialsAgency() {
   );
 }
 
-function TeamSection() {
-  const team = [
-    { name: 'Marco Torres', role: 'Creative Director', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
-    { name: 'Yuki Tanaka', role: 'Lead Designer', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
-    { name: 'Dev Patel', role: 'Head of Dev', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
-    { name: 'Ines Leroy', role: 'Brand Strategist', img: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&q=80' },
+function Process({ mobile }: { mobile: boolean }) {
+  const steps: [string, string, string][] = [
+    ['Discover', 'We dig into your goals, audience, and market to find the real opportunity.', '01'],
+    ['Define', 'We shape a clear strategy and creative direction everyone can rally behind.', '02'],
+    ['Design', 'We craft the identity and experience, refining every detail with you.', '03'],
+    ['Deliver', 'We build, launch, and hand over a system your team can run with.', '04'],
   ];
   return (
-    <section style={{ padding: '5rem 0', borderTop: '1px solid rgba(255,255,255,0.06)', background: '#050505' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
-        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.5rem)', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '3rem' }}>The team</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1.5rem' }}>
-          {team.map(t => (
-            <div key={t.name}>
-              <div style={{ borderRadius: '12px', overflow: 'hidden', aspectRatio: '1/1', marginBottom: '1rem', background: '#111' }}>
-                <img src={t.img} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(20%)' }} />
-              </div>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', marginBottom: '2px' }}>{t.name}</h3>
-              <p style={{ fontSize: '13px', color: '#525252' }}>{t.role}</p>
+    <section id="process" style={{ padding: mobile ? '52px 24px' : '84px 24px', borderTop: `1px solid ${T.line}` }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <h2 style={{ fontSize: mobile ? '2rem' : '3rem', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: '0 0 34px' }}>How we work</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(4,1fr)', gap: mobile ? 20 : 24 }}>
+          {steps.map(([t, d, n]) => (
+            <div key={n} style={{ borderTop: `2px solid ${T.a}`, paddingTop: 18 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: T.dim, marginBottom: 10 }}>{n}</div>
+              <h3 style={{ fontSize: 19, fontWeight: 700, margin: '0 0 10px' }}>{t}</h3>
+              <p style={{ fontSize: 14, color: T.mut, lineHeight: 1.65, margin: 0 }}>{d}</p>
             </div>
           ))}
         </div>
@@ -222,29 +179,46 @@ function TeamSection() {
   );
 }
 
-function AgencyCTA() {
+function Stats({ mobile }: { mobile: boolean }) {
+  const stats: [string, string][] = [['120+', 'Projects shipped'], ['14', 'Design awards'], ['40+', 'Happy clients'], ['9 yrs', 'In business']];
   return (
-    <section style={{ padding: '6rem 2rem', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.95, margin: '0 0 2rem' }}>
-        Ready to build<br /><span style={{ color: '#3b82f6' }}>something great?</span>
-      </h2>
-      <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#3b82f6', borderRadius: '12px', padding: '16px 36px', fontSize: '16px', fontWeight: 700, color: '#ffffff', textDecoration: 'none', boxShadow: '0 0 60px rgba(59,130,246,0.3)' }}>
-        Let's talk →
-      </a>
+    <section style={{ padding: mobile ? '44px 24px' : '64px 24px', borderTop: `1px solid ${T.line}`, background: T.a }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 24 }}>
+        {stats.map(([v, l]) => (
+          <div key={l}>
+            <div style={{ fontSize: mobile ? '2.4rem' : '3.4rem', fontWeight: 900, letterSpacing: '-0.04em', color: '#0a0a0a' }}>{v}</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(10,10,10,0.7)' }}>{l}</div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
 
-function AgencyFooter() {
+function Contact({ mobile }: { mobile: boolean }) {
   return (
-    <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '2rem 0' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-        <span style={{ fontSize: '16px', fontWeight: 800, letterSpacing: '-0.02em' }}>VOLT STUDIO</span>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          {['Work', 'Services', 'About', 'Contact'].map(l => <a key={l} href="#" style={{ fontSize: '13px', color: '#404040', textDecoration: 'none' }}>{l}</a>)}
-        </div>
-        <span style={{ fontSize: '13px', color: '#262626' }}>© {new Date().getFullYear()} Volt Studio</span>
+    <section id="contact" style={{ padding: mobile ? '56px 24px' : '96px 24px', borderTop: `1px solid ${T.line}`, textAlign: 'center' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: T.a, textTransform: 'uppercase', letterSpacing: '0.14em' }}>Let's talk</span>
+        <h2 style={{ fontSize: mobile ? '2.4rem' : '4rem', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', lineHeight: 1, margin: '16px 0 22px' }}>Have a project<br />in mind?</h2>
+        <p style={{ fontSize: '1.1rem', color: T.mut, maxWidth: 460, margin: '0 auto 30px' }}>Tell us what you're building. We reply to every inquiry within one business day.</p>
+        <a href="#contact" style={{ display: 'inline-block', background: T.a, borderRadius: 9999, padding: '16px 34px', fontSize: 16, fontWeight: 700, color: '#0a0a0a', textDecoration: 'none' }}>hello@kinetic.studio</a>
       </div>
+    </section>
+  );
+}
+
+function Foot({ mobile }: { mobile: boolean }) {
+  return (
+    <footer style={{ borderTop: `1px solid ${T.line}`, background: T.bg, padding: '40px 24px 28px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: mobile ? 'block' : 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20 }}>
+        <div style={{ marginBottom: mobile ? 20 : 0 }}>
+          <span style={{ fontSize: 19, fontWeight: 900, letterSpacing: '-0.03em' }}>KINETIC</span>
+          <p style={{ fontSize: 13, color: T.dim, marginTop: 6 }}>Independent design studio. Everywhere & remote.</p>
+        </div>
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>{['Instagram', 'Behance', 'Dribbble', 'LinkedIn'].map(s => <a key={s} href="#work" style={{ fontSize: 14, color: T.mut, textDecoration: 'none' }}>{s}</a>)}</div>
+      </div>
+      <div style={{ maxWidth: 1200, margin: '24px auto 0', paddingTop: 20, borderTop: `1px solid ${T.line}`, fontSize: 13, color: T.dim }}>© {new Date().getFullYear()} Kinetic Studio. All rights reserved.</div>
     </footer>
   );
 }

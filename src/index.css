@@ -28,7 +28,9 @@
   /* Text ramp */
   --color-text-primary: #F7F8F8;
   --color-text-secondary: #A6ADBB;
-  --color-text-tertiary: #697077;
+  /* Tertiary lightened from #697077 (~4.0:1) to meet WCAG AA 4.5:1 on canvas
+     and surfaces — it labels real 13–15px text (placeholders, meta, helper). */
+  --color-text-tertiary: #8A929E;
   --color-text-disabled: #494E56;
 
   /* Accent — Templix Violet (chrome only, never on merchandise imagery) */
@@ -81,6 +83,9 @@
 :root {
   color-scheme: dark;
   --gradient-brand: linear-gradient(135deg, #A78BFA 0%, #7C5CFC 50%, #38BDF8 100%);
+  /* CTA gradient clamped to the violet range: white labels stay >=4.5:1 across
+     the whole fill (the brand gradient's cyan edge fails AA under white text). */
+  --gradient-cta: linear-gradient(135deg, #7350EE 0%, #5E42DC 100%);
   --gradient-headline: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.62) 100%);
   --gradient-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 36%);
   --gradient-hairline: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
@@ -119,6 +124,14 @@ body {
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* The <main> landmark is focused programmatically on route change (see
+   ScrollToTop) purely to move the a11y focus point — suppress its outline so
+   the whole content region doesn't get ringed. Interactive controls keep the
+   :focus-visible ring above. */
+main[tabindex="-1"]:focus {
+  outline: none;
 }
 
 ::placeholder {

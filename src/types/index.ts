@@ -11,5 +11,8 @@ export interface Template {
   isPremium: boolean;
   demoUrl: string;
   techStack?: string[];
+  // On-page sections of the single-page template (e.g. Hero, Features, Footer)
   pages?: string[];
+  // Truthful "What's included" deliverables list
+  included: string[];
 }

@@ -74,7 +74,7 @@ export default function CategoriesPage() {
                 key={cat.id}
                 to={`/templates?category=${cat.id}`}
                 onPointerMove={trackSpotlight}
-                className="bento-tile group flex flex-col p-6 no-underline"
+                className="bento-tile group flex flex-col p-6 no-underline focus-visible:[outline:2px_solid_var(--color-border-accent)] focus-visible:outline-offset-2"
               >
                 {/* Icon + name + count */}
                 <div className="mb-5 flex items-center gap-3.5">
@@ -99,15 +99,17 @@ export default function CategoriesPage() {
 
                 {/* Mini preview strip — thumbnails on a lighter well, 1px inset frame */}
                 <div className="flex gap-2">
-                  {previews.map(t => (
+                  {previews.length > 0 ? previews.map(t => (
                     <div
                       key={t.id}
                       className="relative aspect-[16/10] flex-1 overflow-hidden rounded-lg bg-surface-2"
                     >
                       <img
                         src={t.image}
-                        alt={t.title}
+                        alt={`${t.title} template preview`}
                         loading="lazy"
+                        width={320}
+                        height={200}
                         className="block h-full w-full object-cover opacity-75 transition-opacity duration-200 group-hover:opacity-100"
                       />
                       <div
@@ -116,7 +118,11 @@ export default function CategoriesPage() {
                         style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06)' }}
                       />
                     </div>
-                  ))}
+                  )) : (
+                    <div className="flex aspect-[16/10] flex-1 items-center justify-center rounded-lg border border-dashed border-border-default bg-surface-2 text-[13px] text-text-tertiary">
+                      Coming soon
+                    </div>
+                  )}
                 </div>
 
                 {/* CTA row */}
