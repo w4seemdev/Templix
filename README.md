@@ -42,6 +42,10 @@ Template marketplaces live or die on trust: buyers want to see exactly what they
 
 ## Screenshots
 
+![Templix home: beautifully engineered templates for your next launch](docs/screenshots/01-home-hero.png)
+
+![The template library: 61 templates with categories, pricing, and live previews](docs/screenshots/02-catalog.png)
+
 A few of the 61 template covers from the catalog:
 
 | | | |
