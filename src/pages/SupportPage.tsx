@@ -1,10 +1,9 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Clock, MessageSquare, Check, ArrowRight } from 'lucide-react';
 import { useSEO } from '../hooks/useSEO';
 import Container from '../components/ui/Container';
-
-const SUPPORT_EMAIL = 'support@templix.com';
+import { CONTACT_EMAIL } from '../lib/constants';
 
 const topics = [
   'Pre-sale question',
@@ -26,6 +25,13 @@ export default function SupportPage() {
   const [topic, setTopic]     = useState<string>(topics[0]);
   const [message, setMessage] = useState('');
   const [sent, setSent]       = useState(false);
+  const sentHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Submitting unmounts the focused button and navigates to a mail client, so
+  // move focus onto the confirmation heading once it renders.
+  useEffect(() => {
+    if (sent) sentHeadingRef.current?.focus();
+  }, [sent]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -34,7 +40,7 @@ export default function SupportPage() {
     // prefilled message rather than silently discarding the request.
     const subject = `[${topic}] Support request from ${name.trim()}`;
     const body = `${message.trim()}\n\n— ${name.trim()} (${email.trim()})`;
-    const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
   };
@@ -62,15 +68,17 @@ export default function SupportPage() {
           {/* Contact form */}
           <div className="sheen rounded-2xl border border-border-subtle bg-surface-1 p-6 sm:p-8">
             {sent ? (
-              <div className="flex flex-col items-center py-10 text-center">
+              <div role="status" className="flex flex-col items-center py-10 text-center">
                 <div className="mb-5 grid h-12 w-12 place-items-center rounded-full border border-success-soft-border bg-success-soft">
                   <Check size={22} className="text-success" aria-hidden="true" />
                 </div>
-                <h2 className="m-0 text-lg font-semibold text-text-primary">Your message is ready to send</h2>
+                <h2 ref={sentHeadingRef} tabIndex={-1} className="m-0 text-lg font-semibold text-text-primary outline-none">
+                  Your message is ready to send
+                </h2>
                 <p className="m-0 mt-2 max-w-[42ch] text-[15px] leading-[1.6] text-text-secondary">
                   We opened your email app with the details filled in. If nothing happened, email us directly at{' '}
-                  <a href={`mailto:${SUPPORT_EMAIL}`} className="font-medium text-accent no-underline hover:underline">
-                    {SUPPORT_EMAIL}
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-accent no-underline hover:underline">
+                    {CONTACT_EMAIL}
                   </a>
                   .
                 </p>
@@ -131,8 +139,8 @@ export default function SupportPage() {
                 <Mail size={20} aria-hidden="true" />
               </div>
               <h2 className="m-0 mb-1.5 text-[15px] font-semibold text-text-primary">Email us directly</h2>
-              <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[14px] font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
-                {SUPPORT_EMAIL}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="text-[14px] font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+                {CONTACT_EMAIL}
               </a>
             </div>
 

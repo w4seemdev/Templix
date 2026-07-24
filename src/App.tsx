@@ -6,6 +6,7 @@ import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import ScrollToTop from './components/ui/ScrollToTop';
+import Container from './components/ui/Container';
 import HomePage from './pages/HomePage';
 
 // Secondary pages — lazy so the initial bundle stays small (homepage only).
@@ -89,23 +90,28 @@ const PawsPetCarePreview       = lazy(() => import('./pages/previews/PawsPetCare
 const HavenInteriorPreview     = lazy(() => import('./pages/previews/HavenInteriorPreview'));
 const DailyNewsPreview         = lazy(() => import('./pages/previews/DailyNewsPreview'));
 
+// Route fallback — echoes the catalog shell (title, toolbar, card grid) so a
+// lazy chunk settles into the real layout instead of swapping a bare spinner
+// for a full page. Blocks are decorative; the wrapper carries the a11y status.
 function PageFallback() {
   return (
     <div
-      className="flex min-h-[60vh] items-center justify-center"
       role="status"
       aria-label="Loading"
+      className="animate-pulse motion-reduce:animate-none"
     >
-      <div
-        style={{
-          width: 28,
-          height: 28,
-          border: '2px solid var(--color-border-strong)',
-          borderTopColor: 'var(--color-accent)',
-          borderRadius: '9999px',
-          animation: 'spin 0.7s linear infinite',
-        }}
-      />
+      <Container style={{ paddingTop: 'clamp(48px, 8vw, 80px)', paddingBottom: '96px' }}>
+        <div className="mb-10 h-11 w-[min(320px,60%)] rounded-lg bg-surface-2" />
+        <div className="mb-8 h-11 rounded-lg border border-border-subtle bg-surface-2" />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 min-[1440px]:grid-cols-4">
+          {Array.from({ length: 8 }, (_, i) => (
+            <div
+              key={i}
+              className="aspect-[16/10] rounded-xl border border-border-subtle bg-surface-2"
+            />
+          ))}
+        </div>
+      </Container>
     </div>
   );
 }

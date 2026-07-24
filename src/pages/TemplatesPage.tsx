@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useDeferredValue } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, ArrowUpDown, ChevronDown, SearchX, X } from 'lucide-react';
 import TemplateCard from '../components/ui/TemplateCard';
@@ -23,6 +23,12 @@ const isValidCategory = (v: string | null): v is string =>
 const isPriceParam = (v: string | null): v is 'free' | 'premium' =>
   v === 'free' || v === 'premium';
 
+const isSortParam = (v: string | null): v is SortOption =>
+  v === 'featured' || v === 'price-low' || v === 'price-high' || v === 'newest';
+
+/** Debounce before the typed query reaches the URL, so typing never drives navigation. */
+const SEARCH_SYNC_MS = 300;
+
 const TNUM = { fontFeatureSettings: '"tnum"' } as const;
 
 export default function TemplatesPage() {
@@ -31,31 +37,46 @@ export default function TemplatesPage() {
     description: 'Browse all Templix website templates — free and premium, filterable by category and price.',
   });
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [search,         setSearch]         = useState('');
-  const [activeCategory, setActiveCategory] = useState(() => {
-    const c = searchParams.get('category');
-    return isValidCategory(c) ? c : 'all';
-  });
-  const [priceFilter,    setPriceFilter]    = useState<PriceFilter>(() => {
-    const f = searchParams.get('filter');
-    return isPriceParam(f) ? f : 'all';
-  });
-  const [sortBy,         setSortBy]         = useState<SortOption>('featured');
-  const [searchFocused,  setSearchFocused]  = useState(false);
+  // The URL is the single source of truth for category / price / sort, so deep
+  // links (/templates?category=saas), shared URLs and Back/Forward all restore
+  // the same view instead of silently drifting from the visible chips.
+  const categoryParam = searchParams.get('category');
+  const filterParam   = searchParams.get('filter');
+  const sortParam     = searchParams.get('sort');
+  const activeCategory          = isValidCategory(categoryParam) ? categoryParam : 'all';
+  const priceFilter: PriceFilter = isPriceParam(filterParam)     ? filterParam   : 'all';
+  const sortBy:      SortOption  = isSortParam(sortParam)        ? sortParam     : 'featured';
 
-  // Keep deep links live: /templates?category=saas and /templates?filter=free
-  // (HomePage + CategoriesPage link here with query params). State is adjusted
-  // during render on param change — no effect, no cascading re-render.
-  const [prevParams, setPrevParams] = useState(searchParams);
-  if (searchParams !== prevParams) {
-    setPrevParams(searchParams);
-    const c = searchParams.get('category');
-    if (isValidCategory(c)) setActiveCategory(c);
-    const f = searchParams.get('filter');
-    if (isPriceParam(f)) setPriceFilter(f);
-  }
+  // Typing stays on local state (urgent lane); the grid re-filters at deferred
+  // priority and the URL catches up debounced.
+  const [search,        setSearch]        = useState(() => searchParams.get('search') ?? '');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const deferredSearch = useDeferredValue(search);
+
+  /** Write one filter key to the URL, dropping it when it holds the default value. */
+  const writeParam = (key: string, value: string | null) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (value) next.set(key, value); else next.delete(key);
+      return next;
+    }, { replace: true });
+  };
+
+  // Mirror the query into ?search= so a filtered view can be shared or bookmarked.
+  useEffect(() => {
+    const q = search.trim();
+    if ((searchParams.get('search') ?? '') === q) return;
+    const id = setTimeout(() => {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev);
+        if (q) next.set('search', q); else next.delete('search');
+        return next;
+      }, { replace: true });
+    }, SEARCH_SYNC_MS);
+    return () => clearTimeout(id);
+  }, [search, searchParams, setSearchParams]);
 
   // Per-category counts, derived from the data so new templates are picked up automatically.
   const categoryCounts = useMemo(() => {
@@ -69,8 +90,8 @@ export default function TemplatesPage() {
     if (activeCategory !== 'all')  result = result.filter(t => t.category === activeCategory);
     if (priceFilter === 'free')    result = result.filter(t => t.isFree);
     if (priceFilter === 'premium') result = result.filter(t => !t.isFree);
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
+    if (deferredSearch.trim()) {
+      const q = deferredSearch.trim().toLowerCase();
       result = result.filter(t =>
         t.title.toLowerCase().includes(q) ||
         t.description.toLowerCase().includes(q) ||
@@ -83,14 +104,19 @@ export default function TemplatesPage() {
     if (sortBy === 'price-high') result.sort((a, b) => b.price - a.price);
     if (sortBy === 'newest')     result.sort((a, b) => idNum(b.id) - idNum(a.id));
     return result;
-  }, [search, activeCategory, priceFilter, sortBy]);
+  }, [deferredSearch, activeCategory, priceFilter, sortBy]);
 
   const hasActiveFilters = search.trim() !== '' || activeCategory !== 'all' || priceFilter !== 'all';
 
   const clearFilters = () => {
     setSearch('');
-    setActiveCategory('all');
-    setPriceFilter('all');
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete('category');
+      next.delete('filter');
+      next.delete('search');
+      return next;
+    }, { replace: true });
   };
 
   return (
@@ -107,7 +133,7 @@ export default function TemplatesPage() {
           </h1>
           <p className="mt-3 max-w-[52ch] text-[15px] text-text-secondary">
             <span className="font-mono font-medium text-text-primary" style={TNUM}>{templates.length}</span>
-            {' '}production-ready templates — free &amp; premium, lifetime updates included.
+            {' '}production-ready templates — free &amp; premium, buy once, keep forever.
           </p>
         </header>
 
@@ -121,7 +147,8 @@ export default function TemplatesPage() {
               className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-150 ${searchFocused ? 'text-accent-hover' : 'text-text-tertiary'}`}
             />
             <input
-              type="text"
+              type="search"
+              aria-label="Search templates"
               placeholder="Search templates, tags, keywords…"
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -158,7 +185,7 @@ export default function TemplatesPage() {
                 key={p.id}
                 type="button"
                 aria-pressed={priceFilter === p.id}
-                onClick={() => setPriceFilter(p.id)}
+                onClick={() => writeParam('filter', p.id === 'all' ? null : p.id)}
                 className={`h-full cursor-pointer rounded-md px-4 text-[13px] font-medium transition-colors duration-150 ${
                   priceFilter === p.id
                     ? 'border border-border-strong bg-surface-3 text-text-primary'
@@ -175,7 +202,7 @@ export default function TemplatesPage() {
             <ArrowUpDown size={14} className="pointer-events-none shrink-0 text-text-tertiary" />
             <select
               value={sortBy}
-              onChange={e => setSortBy(e.target.value as SortOption)}
+              onChange={e => writeParam('sort', e.target.value === 'featured' ? null : e.target.value)}
               aria-label="Sort templates"
               className="h-full cursor-pointer appearance-none border-0 bg-transparent pr-9 text-[13px] font-medium text-text-secondary"
             >
@@ -196,7 +223,7 @@ export default function TemplatesPage() {
               type="button"
               className="chip"
               aria-pressed={activeCategory === cat.id}
-              onClick={() => setActiveCategory(cat.id)}
+              onClick={() => writeParam('category', cat.id === 'all' ? null : cat.id)}
             >
               {cat.label}
               <span className="font-mono text-[11px] text-text-tertiary" style={TNUM}>
@@ -211,13 +238,14 @@ export default function TemplatesPage() {
         {/* Results */}
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-border-default px-6 py-24 text-center">
+            <span role="status" aria-live="polite" className="sr-only">No templates found</span>
             <div className="mb-5 grid h-12 w-12 place-items-center rounded-full border border-accent-soft-border bg-accent-soft">
               <SearchX size={22} className="text-accent-text" />
             </div>
             <h2 className="text-lg font-semibold text-text-primary">No templates found</h2>
             <p className="mt-1.5 max-w-[40ch] text-[15px] text-text-secondary">
-              {search.trim()
-                ? <>Nothing matches <span className="text-text-primary">“{search.trim()}”</span> with the current filters.</>
+              {deferredSearch.trim()
+                ? <>Nothing matches <span className="text-text-primary">“{deferredSearch.trim()}”</span> with the current filters.</>
                 : 'Try adjusting your filters.'}
             </p>
             {hasActiveFilters && (
@@ -229,7 +257,7 @@ export default function TemplatesPage() {
         ) : (
           <>
             <div className="mb-6 flex items-center justify-between gap-3">
-              <p className="text-[13px] text-text-tertiary">
+              <p role="status" aria-live="polite" className="text-[13px] text-text-tertiary">
                 Showing{' '}
                 <span className="font-mono font-medium text-text-secondary" style={TNUM}>{filtered.length}</span>
                 {' '}of{' '}

@@ -31,7 +31,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-6 text-center text-text-primary">
-        <div className="w-full max-w-md">
+        <div role="alert" className="w-full max-w-md">
           <p className="font-mono text-sm text-accent-text">Error</p>
           <h1 className="mt-3 text-2xl font-semibold">Something went wrong</h1>
           <p className="mt-3 text-text-secondary">

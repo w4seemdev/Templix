@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent } from 'react';
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -43,6 +42,13 @@ const rise = (delay: number): CSSProperties => ({
   animationDelay: `${delay}ms`,
 });
 
+/* LCP-safe entrance — same travel, no opacity ramp and no delay, so the
+   headline and the showcase image are painted in the first frame instead of
+   fading in up to a second later. Keyframe is defined in HeroSection. */
+const riseVisible: CSSProperties = {
+  animation: 'tmx-rise-visible 600ms var(--ease-out-quint) both',
+};
+
 /* Bento cursor spotlight — .bento-tile::after reads --spot-x / --spot-y */
 function spotlight(e: ReactPointerEvent<HTMLDivElement>) {
   const rect = e.currentTarget.getBoundingClientRect();
@@ -62,7 +68,7 @@ export default function HomePage() {
       <FeaturedSection />
       <HowItWorksSection />
       <CategorySection />
-      <NewsletterSection />
+      <ClosingCtaSection />
     </div>
   );
 }
@@ -82,10 +88,16 @@ function HeroSection() {
 
   return (
     <section className="aurora grain relative overflow-hidden">
-      {/* Reduced-motion: swap entrance rises for simple fades */}
+      {/* LCP candidates rise without the opacity ramp; reduced-motion swaps
+          entrance rises for simple fades and drops the LCP travel entirely. */}
       <style>{`
+        @keyframes tmx-rise-visible {
+          from { transform: translateY(16px); }
+          to   { transform: translateY(0); }
+        }
         @media (prefers-reduced-motion: reduce) {
           [data-rise] { animation: tmx-fade 200ms ease-out both !important; }
+          [data-rise-lcp] { animation: none !important; }
         }
       `}</style>
 
@@ -105,8 +117,8 @@ function HeroSection() {
 
         {/* Headline — white fade with one gradient moment */}
         <h1
-          data-rise
-          style={rise(100)}
+          data-rise-lcp
+          style={riseVisible}
           className="max-w-[880px] text-[clamp(44px,6vw,68px)] font-semibold leading-[1.05] tracking-[-0.035em]"
         >
           <span className="headline-fade">Beautifully engineered templates for your </span>
@@ -150,8 +162,8 @@ function HeroSection() {
         </div>
 
         {/* Product showcase — browser frame + masked floor reflection */}
-        <div data-rise style={rise(400)} className="relative mt-16 w-full max-w-[1080px]">
-          <ShowcaseFrame shots={shots} />
+        <div data-rise-lcp style={riseVisible} className="relative mt-16 w-full max-w-[1080px]">
+          <ShowcaseFrame shots={shots} priority />
           <div
             aria-hidden
             className="pointer-events-none absolute left-0 right-0 top-full h-40 select-none overflow-hidden"
@@ -173,7 +185,9 @@ function HeroSection() {
   );
 }
 
-function ShowcaseFrame({ shots }: { shots: Template[] }) {
+/* `priority` marks the real (non-reflected) frame — its center shot is the
+   desktop LCP candidate, so it loads eagerly at high priority. */
+function ShowcaseFrame({ shots, priority = false }: { shots: Template[]; priority?: boolean }) {
   return (
     <div className="sheen overflow-hidden rounded-3xl border border-border-strong bg-surface-1 shadow-lg">
       {/* Browser chrome bar */}
@@ -182,13 +196,14 @@ function ShowcaseFrame({ shots }: { shots: Template[] }) {
         <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
         <span className="ml-3 hidden rounded-md border border-border-subtle bg-surface-2 px-3 py-1 font-mono text-[11px] text-text-tertiary sm:inline-block">
-          templix.market
+          templix
         </span>
       </div>
       {/* 3-up staggered collage — center card larger + glowing */}
       <div className="flex items-end justify-center gap-3 p-4 sm:gap-5 sm:p-7">
         {shots.map((t, i) => {
           const isCenter = i === 1;
+          const isLcp = priority && isCenter;
           return (
             <div
               key={t.id}
@@ -201,7 +216,9 @@ function ShowcaseFrame({ shots }: { shots: Template[] }) {
               <img
                 src={t.image}
                 alt={`${t.title} template preview`}
-                loading="lazy"
+                loading={isLcp ? 'eager' : 'lazy'}
+                fetchPriority={isLcp ? 'high' : 'auto'}
+                decoding="async"
                 width={800}
                 height={500}
                 className="block aspect-[16/10] w-full object-cover shadow-thumb-frame"
@@ -516,18 +533,12 @@ function CategorySection() {
 }
 
 /* ─────────────────────────────────────────────
-   CTA BAND + NEWSLETTER
+   CLOSING CTA BAND
+   No email capture until a real subscriber list exists — a success message
+   for a form that discards the address would be a false claim.
 ───────────────────────────────────────────── */
-function NewsletterSection() {
-  const [email, setEmail]         = useState('');
-  const [submitted, setSubmitted] = useState(false);
+function ClosingCtaSection() {
   const [panelRef, panelCls] = useReveal<HTMLDivElement>();
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
-  };
 
   return (
     <section className="border-t border-border-subtle">
@@ -537,42 +548,17 @@ function NewsletterSection() {
           className={`reveal aurora aurora--dim grain relative overflow-hidden rounded-3xl border border-border-subtle bg-canvas-raised px-6 py-16 text-center sm:px-12 ${panelCls}`}
         >
 
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Stay in the loop</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Always shipping</p>
           <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
-            Be the first to know when new templates drop
+            The library keeps growing
           </h2>
           <p className="mx-auto mt-3 max-w-[440px] text-[15px] leading-[1.6] text-text-secondary">
-            Leave your email and we will let you know when we add something new. No spam, ever.
+            New templates land regularly — every one with a live preview before you spend anything.
           </p>
-
-          <div className="mt-8">
-            {submitted ? (
-              <div className="inline-flex items-center gap-2.5 rounded-lg border border-success-soft-border bg-success-soft px-6 py-3 text-[15px] font-medium text-success">
-                <Check size={18} strokeWidth={2.5} />
-                Thanks — we'll keep you posted!
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-wrap items-center justify-center gap-3">
-                <label htmlFor="home-newsletter" className="sr-only">Email address</label>
-                <input
-                  id="home-newsletter"
-                  type="email"
-                  required
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="h-11 min-w-[260px] rounded-lg border border-border-default bg-surface-2 px-4 text-[15px] text-text-primary outline-none transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)]"
-                />
-                <button type="submit" className="btn btn-primary h-11">
-                  Notify me
-                </button>
-              </form>
-            )}
-          </div>
 
           <div className="mt-10">
             <div className="hairline mx-auto mb-8 max-w-[480px]" />
-            <Link to="/templates" className="btn btn-secondary">
+            <Link to="/templates" className="btn btn-primary btn-lg" style={tnum}>
               Browse all {templates.length} templates
               <ArrowRight size={15} strokeWidth={2.5} />
             </Link>

@@ -4,16 +4,10 @@ import Container from '../components/ui/Container';
 import { templates } from '../data/templates';
 import { useReveal } from '../hooks/useReveal';
 
-const team = [
-  { name: 'Alex Rivera', role: 'Founder & Designer', avatar: 'AR' },
-  { name: 'Sam Chen', role: 'Lead Developer', avatar: 'SC' },
-  { name: 'Jordan Lee', role: 'Template Creator', avatar: 'JL' },
-];
-
 const values = [
   {
     title: 'Quality first',
-    desc: 'Every template goes through a rigorous design and code review before it reaches our marketplace.',
+    desc: 'Every template is designed, coded, and tested end to end — layout, responsiveness, and code quality — before it goes on sale.',
     icon: (
       <svg width="20" height="20" fill="none" stroke="var(--color-accent)" strokeWidth="1.75" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -53,10 +47,10 @@ const templateCount = templates.length;
 const freeCount = templates.filter(t => t.isFree).length;
 
 export default function AboutPage() {
-  useSEO({ title: 'About', description: 'Learn about Templix — who we are, our mission, and the team behind the templates.' });
+  useSEO({ title: 'About', description: 'Learn about Templix — the mission, the principles, and the maker behind the templates.' });
 
   const [valuesGridRef, valuesGridCls] = useReveal<HTMLDivElement>();
-  const [teamRowRef, teamRowCls] = useReveal<HTMLDivElement>();
+  const [makerRowRef, makerRowCls] = useReveal<HTMLDivElement>();
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -114,7 +108,7 @@ export default function AboutPage() {
                 Skip the boilerplate. Ship the product.
               </h3>
               <p className="m-0 max-w-[52ch] text-[15px] leading-relaxed text-text-secondary">
-                Every hour spent wiring up auth screens and pricing pages is an hour not spent on the thing that makes your product different. We handle the first mile.
+                Every hour spent rebuilding hero sections, pricing tables, and contact pages is an hour not spent on the thing that makes your product different. We handle the first mile.
               </p>
             </div>
 
@@ -138,32 +132,31 @@ export default function AboutPage() {
 
       <div className="hairline" />
 
-      {/* Team */}
+      {/* The maker */}
       <section className="bg-canvas-raised">
         <Container style={{ paddingTop: '6rem', paddingBottom: '6rem' }}>
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">The people</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">The maker</p>
           <h2 className="m-0 mb-10 text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-text-primary">
-            The team
+            Built by one person, on purpose
           </h2>
-          <div ref={teamRowRef} className={`reveal-group flex flex-wrap gap-6 ${teamRowCls}`}>
-            {team.map(member => (
+          <div ref={makerRowRef} className={`reveal-group flex flex-col items-start gap-6 ${makerRowCls}`}>
+            <div className="sheen flex min-w-[240px] items-center gap-4 rounded-2xl border border-border-subtle bg-surface-1 px-6 py-5 transition-colors duration-200 hover:border-border-strong">
               <div
-                key={member.name}
-                className="sheen flex min-w-[240px] items-center gap-4 rounded-2xl border border-border-subtle bg-surface-1 px-6 py-5 transition-colors duration-200 hover:border-border-strong"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
+                style={{ background: 'var(--gradient-brand)' }}
+                aria-hidden="true"
               >
-                <div
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
-                  style={{ background: 'var(--gradient-brand)' }}
-                  aria-hidden="true"
-                >
-                  {member.avatar}
-                </div>
-                <div>
-                  <p className="m-0 text-[15px] font-semibold text-text-primary">{member.name}</p>
-                  <p className="m-0 mt-0.5 text-[13px] text-text-tertiary">{member.role}</p>
-                </div>
+                WA
               </div>
-            ))}
+              <div>
+                <p className="m-0 text-[15px] font-semibold text-text-primary">Waseem Abu Fares</p>
+                <p className="m-0 mt-0.5 text-[13px] text-text-tertiary">Design &amp; Engineering</p>
+              </div>
+            </div>
+            <p className="m-0 max-w-[62ch] text-[15px] leading-relaxed text-text-secondary">
+              Every template here is designed, coded, and supported by one person — no outsourced work, no stock
+              designs. When you email support, you reach the person who built the template.
+            </p>
           </div>
         </Container>
       </section>

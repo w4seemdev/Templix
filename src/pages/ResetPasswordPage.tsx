@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useSEO } from '../hooks/useSEO';
 
 const inputClass =
-  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)] focus:outline-none';
+  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.45)] focus:outline-none';
+
+const MIN_PASSWORD_LENGTH = 8;
+const REDIRECT_DELAY_MS = 2500;
 
 export default function ResetPasswordPage() {
   useSEO({ title: 'Reset Password' });
@@ -14,22 +17,36 @@ export default function ResetPasswordPage() {
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState('');
   const [success, setSuccess]       = useState(false);
-  const [validSession, setValidSession] = useState(false);
+  // null = still checking. Without the third state a valid recovery link flashes
+  // the "Link expired" card until getSession() resolves.
+  const [validSession, setValidSession] = useState<boolean | null>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Supabase sets a session from the URL hash automatically
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setValidSession(true);
+    let cancelled = false;
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!cancelled) setValidSession(Boolean(session));
     });
+    return () => { cancelled = true; };
   }, []);
+
+  // Announce the result, then hand the user over to the dashboard. The timeout
+  // is cleared on unmount so leaving early doesn't yank them back.
+  useEffect(() => {
+    if (!success) return;
+    successHeadingRef.current?.focus();
+    const timer = setTimeout(() => navigate('/dashboard'), REDIRECT_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [success, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
       return;
     }
     if (password !== confirm) {
@@ -44,7 +61,6 @@ export default function ResetPasswordPage() {
       setLoading(false);
     } else {
       setSuccess(true);
-      setTimeout(() => navigate('/dashboard'), 2500);
     }
   };
 
@@ -69,16 +85,34 @@ export default function ResetPasswordPage() {
         <div className="glass p-8 max-sm:p-6">
 
           {success ? (
-            <div className="py-4 text-center">
+            <div role="status" className="py-4 text-center">
               <div className="mx-auto mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full border border-success-soft-border bg-success-soft">
                 <svg width="22" height="22" fill="none" stroke="var(--color-success)" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <h2 className="mb-2 text-xl font-semibold tracking-[-0.015em] text-text-primary">
+              <h2
+                ref={successHeadingRef}
+                tabIndex={-1}
+                className="mb-2 text-xl font-semibold tracking-[-0.015em] text-text-primary"
+              >
                 Password updated!
               </h2>
               <p className="text-sm text-text-tertiary">Redirecting you to the dashboard…</p>
+            </div>
+          ) : validSession === null ? (
+            <div className="flex justify-center py-10" role="status" aria-label="Checking your reset link">
+              <div
+                aria-hidden="true"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  border: '3px solid var(--color-surface-3)',
+                  borderTopColor: 'var(--color-accent)',
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                }}
+              />
             </div>
           ) : !validSession ? (
             <div className="py-4 text-center">
@@ -109,7 +143,7 @@ export default function ResetPasswordPage() {
               </p>
 
               {error && (
-                <div className="mb-4 rounded-lg border border-danger-soft-border bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">
+                <div role="alert" aria-live="assertive" className="mb-4 rounded-lg border border-danger-soft-border bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">
                   {error}
                 </div>
               )}
@@ -124,7 +158,7 @@ export default function ResetPasswordPage() {
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="At least 6 characters"
+                    placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`}
                     required
                     className={inputClass}
                   />

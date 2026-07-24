@@ -2,18 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
+import type { Purchase } from '../lib/supabase';
 import { templates } from '../data/templates';
 import type { Template } from '../types';
 import Container from '../components/ui/Container';
 import { useWishlist } from '../hooks/useWishlist';
-import { getTemplateDownloadUrl } from '../lib/downloads';
-
-interface Purchase {
-  id: string;
-  template_id: string;
-  amount: number;
-  created_at: string;
-}
+import { downloadTemplateZip } from '../lib/downloads';
+import { useSEO } from '../hooks/useSEO';
 
 interface OwnedItem {
   purchase: Purchase;
@@ -22,10 +17,15 @@ interface OwnedItem {
 
 const mono = { fontFeatureSettings: '"tnum"' } as const;
 
+const MIN_PASSWORD_LENGTH = 8;
+const freeCount = templates.filter(t => t.isFree).length;
+
 const inputClass =
-  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)] focus:outline-none';
+  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.45)] focus:outline-none';
 
 export default function DashboardPage() {
+  useSEO({ title: 'Dashboard' });
+
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { wishlist } = useWishlist();
@@ -47,6 +47,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- enter the loading state before the library query
     setLoading(true);
     setLoadError('');
     supabase
@@ -54,6 +55,7 @@ export default function DashboardPage() {
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
+      .returns<Purchase[]>()
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) {
@@ -103,7 +105,7 @@ export default function DashboardPage() {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword.length < 6) { setPasswordMsg({ ok: false, text: 'Password must be at least 6 characters.' }); return; }
+    if (newPassword.length < MIN_PASSWORD_LENGTH) { setPasswordMsg({ ok: false, text: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.` }); return; }
     if (newPassword !== confirmPassword) { setPasswordMsg({ ok: false, text: 'Passwords do not match.' }); return; }
     setSavingPassword(true);
     setPasswordMsg(null);
@@ -175,13 +177,15 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Tabs */}
-        <div className="mb-8 flex gap-7 border-b border-border-subtle" role="tablist">
+        {/* Section switcher — plain toggle buttons, not ARIA tabs: the tabs
+            pattern promises arrow-key navigation we don't implement, and
+            announcing a contract that doesn't work is worse than none. */}
+        <div className="mb-8 flex gap-7 border-b border-border-subtle">
           {(['purchases', 'settings'] as const).map(tab => (
             <button
               key={tab}
-              role="tab"
-              aria-selected={activeTab === tab}
+              type="button"
+              aria-pressed={activeTab === tab}
               onClick={() => setActiveTab(tab)}
               className={`-mb-px cursor-pointer border-0 border-b-2 border-solid bg-transparent pb-3 text-sm font-medium capitalize transition-colors duration-150 ${
                 activeTab === tab
@@ -217,7 +221,8 @@ export default function DashboardPage() {
                 </div>
                 <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-text-primary">No purchases yet</h2>
                 <p className="mb-6 text-sm leading-relaxed text-text-secondary">
-                  Browse our templates and find the perfect one for your project.
+                  Templates you buy will live here, ready to re-download anytime. Start with one of
+                  the {freeCount} free templates — no payment needed — or browse the full library.
                 </p>
                 <Link to="/templates" className="btn btn-primary glow-cta">
                   Browse templates
@@ -381,13 +386,11 @@ function DownloadButton({ template }: { template: Template }) {
   const handleDownload = async () => {
     setError('');
     setDownloading(true);
-    const fileName = `${template.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
 
     try {
       // Ownership is verified server-side (edge function) before a signed URL
       // is minted — no public-path fallback for paid templates.
-      const url = await getTemplateDownloadUrl(template.id, template.isFree);
-      triggerDownload(url, fileName);
+      await downloadTemplateZip(template);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Download unavailable. Please try again.');
     } finally {
@@ -426,13 +429,4 @@ function DownloadButton({ template }: { template: Template }) {
       )}
     </div>
   );
-}
-
-function triggerDownload(url: string, filename: string) {
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
 }

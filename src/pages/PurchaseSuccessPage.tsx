@@ -4,22 +4,13 @@ import { Check, Clock, Download, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { templates } from '../data/templates';
-import { getTemplateDownloadUrl } from '../lib/downloads';
+import { downloadTemplateZip } from '../lib/downloads';
 import { useSEO } from '../hooks/useSEO';
 
 type Status = 'confirming' | 'confirmed' | 'timeout' | 'signedout';
 
 const CONFIRM_TIMEOUT_MS = 20_000;
 const POLL_INTERVAL_MS = 1_800;
-
-function triggerBrowserDownload(url: string, filename: string) {
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
 
 export default function PurchaseSuccessPage() {
   const [searchParams] = useSearchParams();
@@ -41,6 +32,7 @@ export default function PurchaseSuccessPage() {
      Ownership is NEVER granted from the client — we only read. */
   useEffect(() => {
     if (authLoading) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resolve the poll status once auth settles
     if (!user) { setStatus('signedout'); return; }
     if (!sessionId && !templateId) { setStatus('timeout'); return; }
 
@@ -76,10 +68,8 @@ export default function PurchaseSuccessPage() {
     if (!template) return;
     setDownloadError('');
     setDownloading(true);
-    const fileName = `${template.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
     try {
-      const url = await getTemplateDownloadUrl(template.id, template.isFree);
-      triggerBrowserDownload(url, fileName);
+      await downloadTemplateZip(template);
       setDownloaded(true);
     } catch (e) {
       setDownloadError(e instanceof Error ? e.message : 'Download failed. Please try again.');

@@ -255,6 +255,18 @@
   opacity: 1;
 }
 
+/* ── Mobile nav sheet (Navbar) ── */
+.tmx-sheet {
+  animation: tmx-sheet-in 320ms var(--ease-sheet);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The slide becomes a plain fade — the global guard only collapses
+     transitions, not named animations. */
+  .tmx-sheet {
+    animation: tmx-fade 150ms ease-out;
+  }
+}
+
 /* ── Marquee (logo strip) ── */
 .tmx-marquee {
   overflow: hidden;
@@ -313,6 +325,10 @@
 }
 @keyframes tmx-marquee {
   to { transform: translateX(-50%); }
+}
+@keyframes tmx-sheet-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 @keyframes tmx-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }

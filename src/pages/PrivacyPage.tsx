@@ -1,5 +1,6 @@
 import { useSEO } from '../hooks/useSEO';
 import Container from '../components/ui/Container';
+import { CONTACT_EMAIL } from '../lib/constants';
 
 const sections = [
   {
@@ -8,7 +9,7 @@ const sections = [
   },
   {
     title: '2. How We Use Your Information',
-    body: 'We use the information we collect to provide, maintain, and improve our services; process transactions and send related information such as purchase confirmations and invoices; send promotional communications (you may opt out at any time); respond to your comments, questions, and support requests; and monitor and analyze usage and trends to improve your experience.',
+    body: 'We use the information we collect to provide, maintain, and improve our services; process transactions and send related information such as purchase confirmations and invoices; respond to your comments, questions, and support requests; and monitor and analyze usage and trends to improve your experience.',
   },
   {
     title: '3. Information Sharing',
@@ -19,8 +20,8 @@ const sections = [
     body: 'All payment processing is handled securely by Stripe. We do not store your full credit card number, CVV, or other sensitive payment details on our servers. Stripe\'s privacy policy governs the collection and use of your payment information. We only receive confirmation of successful transactions and basic billing information.',
   },
   {
-    title: '5. Cookies',
-    body: 'We use cookies and similar tracking technologies to improve your experience on our platform, remember your preferences, and collect usage analytics. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, some platform features may not function properly without cookies.',
+    title: '5. Cookies and Browser Storage',
+    body: 'We use browser storage (localStorage) to keep you signed in and to store your wishlist on your device. We do not run third-party analytics or advertising trackers. Our payment provider, Stripe, may set its own cookies on its checkout pages — see Stripe\'s privacy policy for details.',
   },
   {
     title: '6. Data Retention',
@@ -32,7 +33,7 @@ const sections = [
   },
   {
     title: '8. Your Rights',
-    body: 'Depending on your location, you may have the right to access, correct, or delete your personal data; object to or restrict its processing; and receive a portable copy of your data. To exercise any of these rights, please contact us at privacy@templix.com. We will respond within 30 days.',
+    body: `Depending on your location, you may have the right to access, correct, or delete your personal data; object to or restrict its processing; and receive a portable copy of your data. To exercise any of these rights, please contact us at ${CONTACT_EMAIL}. We will respond within 30 days.`,
   },
   {
     title: '9. Children\'s Privacy',
@@ -40,7 +41,7 @@ const sections = [
   },
   {
     title: '10. Contact Us',
-    body: 'If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@templix.com. We are committed to resolving any concerns you may have about your privacy.',
+    body: `If you have any questions about this Privacy Policy or our data practices, please contact us at ${CONTACT_EMAIL}. We are committed to resolving any concerns you may have about your privacy.`,
   },
 ];
 
@@ -56,7 +57,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="m-0 mb-8 font-mono text-[13px] text-text-tertiary" style={{ fontFeatureSettings: '"tnum"' }}>
-          Last updated: June 2024
+          Last updated: July 2026
         </p>
 
         <div className="hairline mb-12" />
@@ -73,8 +74,8 @@ export default function PrivacyPage() {
         <div className="hairline mt-2 mb-8" />
         <p className="m-0 text-[13px] text-text-tertiary">
           Questions about your data? Reach us at{' '}
-          <a href="mailto:privacy@templix.com" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
-            privacy@templix.com
+          <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+            {CONTACT_EMAIL}
           </a>
           .
         </p>

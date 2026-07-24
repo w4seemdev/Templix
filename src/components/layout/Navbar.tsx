@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Heart, Menu, Search, X } from 'lucide-react';
 import clsx from 'clsx';
@@ -10,10 +10,6 @@ const navLinks = [
   { label: 'Categories', to: '/categories' },
   { label: 'About',      to: '/about'      },
 ];
-
-// Keep in sync with the storage key inside src/hooks/useWishlist.ts —
-// the hook holds per-instance state, so the navbar re-reads storage to stay live.
-const WISHLIST_STORAGE_KEY = 'templix_wishlist';
 
 const MOBILE_BREAKPOINT = '(max-width: 860px)';
 
@@ -49,8 +45,28 @@ export default function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
+  // useWishlist is backed by a shared external store, so the badge tracks a
+  // heart click anywhere on the page without re-reading localStorage.
   const { wishlist } = useWishlist();
-  const [wishlistCount, setWishlistCount] = useState(wishlist.length);
+  const wishlistCount = wishlist.length;
+
+  const menuToggleRef    = useRef<HTMLButtonElement>(null);
+  const sheetRef         = useRef<HTMLDivElement>(null);
+  const sheetCloseRef    = useRef<HTMLButtonElement>(null);
+  const userMenuRef      = useRef<HTMLDivElement>(null);
+  const userMenuBtnRef   = useRef<HTMLButtonElement>(null);
+
+  // Closing a disclosure must hand focus back to the control that opened it,
+  // otherwise keyboard users are dumped on <body>.
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    menuToggleRef.current?.focus();
+  }, []);
+
+  const closeUserMenu = useCallback(() => {
+    setUserMenuOpen(false);
+    userMenuBtnRef.current?.focus();
+  }, []);
 
   // Track viewport so the hamburger / desktop nav swap correctly.
   useEffect(() => {
@@ -67,12 +83,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Make the advertised ⌘K / Ctrl-K search hint real: jump to the catalog search.
+  // Make the advertised ⌘K / Ctrl-K search hint real: jump to the catalog and
+  // ask TemplatesPage to focus its search input (location.state.focusSearch).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        navigate('/templates');
+        navigate('/templates', { state: { focusSearch: true } });
       }
     };
     window.addEventListener('keydown', onKey);
@@ -91,14 +108,29 @@ export default function Navbar() {
   useEffect(() => {
     if (!menuOpen && !userMenuOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMenuOpen(false);
-        setUserMenuOpen(false);
-      }
+      if (e.key !== 'Escape') return;
+      if (menuOpen) closeMenu();
+      if (userMenuOpen) closeUserMenu();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [menuOpen, userMenuOpen]);
+  }, [menuOpen, userMenuOpen, closeMenu, closeUserMenu]);
+
+  // A11y: aria-modal only holds if focus actually enters the sheet.
+  useEffect(() => {
+    if (!(isMobile && menuOpen)) return;
+    sheetCloseRef.current?.focus();
+  }, [isMobile, menuOpen]);
+
+  // Dropdowns close when the user clicks or tabs away, not only on Escape.
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!userMenuRef.current?.contains(e.target as Node)) setUserMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, [userMenuOpen]);
 
   // Lock body scroll while the mobile sheet is open.
   useEffect(() => {
@@ -110,28 +142,27 @@ export default function Navbar() {
     };
   }, [isMobile, menuOpen]);
 
-  // Keep the wishlist badge fresh: re-read on navigation, cross-tab storage
-  // events, and window focus (useWishlist state is local to each consumer).
-  useEffect(() => {
-    const readCount = () => {
-      try {
-        const stored = localStorage.getItem(WISHLIST_STORAGE_KEY);
-        setWishlistCount(stored ? (JSON.parse(stored) as string[]).length : 0);
-      } catch {
-        setWishlistCount(0);
-      }
-    };
-    readCount();
-    window.addEventListener('storage', readCount);
-    window.addEventListener('focus', readCount);
-    return () => {
-      window.removeEventListener('storage', readCount);
-      window.removeEventListener('focus', readCount);
-    };
-  }, [pathname]);
-
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
   const initials    = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+
+  // Focus trap: aria-modal="true" claims the rest of the page is inert, so Tab
+  // has to cycle inside the sheet instead of escaping into the scrimmed page.
+  const handleSheetKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab') return;
+    const focusable = sheetRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    if (!focusable || focusable.length === 0) return;
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -156,8 +187,11 @@ export default function Navbar() {
     >
       <Heart size={16} fill={wishlistActive ? 'currentColor' : 'none'} aria-hidden="true" />
       {wishlistCount > 0 && (
+        /* aria-hidden: the Link's aria-label already announces the count.
+           accent-pressed keeps white text at ~5.5:1 (accent is ~4.4:1). */
         <span
-          className="absolute -right-1.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold leading-none text-white"
+          aria-hidden="true"
+          className="absolute -right-1.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-accent-pressed px-1 text-[10px] font-semibold leading-none text-white"
           style={{ boxShadow: '0 0 0 2px var(--color-canvas)' }}
         >
           {wishlistCount > 99 ? '99+' : wishlistCount}
@@ -219,6 +253,7 @@ export default function Navbar() {
           {!isMobile && (
             <Link
               to="/templates"
+              state={{ focusSearch: true }}
               aria-label="Search templates"
               className="group flex h-9 w-[200px] items-center gap-2 rounded-lg border border-border-default bg-surface-2 px-3 no-underline transition-colors duration-150 hover:border-border-strong"
             >
@@ -236,11 +271,17 @@ export default function Navbar() {
 
           {!isMobile && (user ? (
             /* ── Logged in: avatar + dropdown ── */
-            <div className="relative">
+            <div
+              ref={userMenuRef}
+              onBlur={e => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setUserMenuOpen(false);
+              }}
+              className="relative"
+            >
               <button
+                ref={userMenuBtnRef}
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 aria-expanded={userMenuOpen}
-                aria-haspopup="menu"
                 className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-default bg-surface-2 py-1 pl-1 pr-2.5 transition-colors duration-150 hover:border-border-strong"
               >
                 <div
@@ -309,7 +350,8 @@ export default function Navbar() {
           {/* ── Mobile toggle ── */}
           {isMobile && (
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
+              ref={menuToggleRef}
+              onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
               className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border-default bg-surface-2 p-0 text-text-secondary transition-colors duration-150 hover:border-border-strong hover:text-text-primary"
@@ -324,24 +366,26 @@ export default function Navbar() {
       {/* ── Mobile menu: glass sheet sliding from the right ── */}
       {isMobile && menuOpen && (
         <>
-          <style>{'@keyframes tmx-sheet-in { from { transform: translateX(100%); } to { transform: translateX(0); } }'}</style>
           <div
             className="fixed inset-0 z-[60] bg-black/50"
             style={{ animation: 'tmx-fade 200ms ease-out' }}
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
             aria-hidden="true"
           />
           <div
+            ref={sheetRef}
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
-            className="glass fixed right-0 top-0 z-[70] flex h-dvh w-[280px] flex-col gap-1 overflow-y-auto p-5"
-            style={{ borderRadius: 0, borderTop: 'none', borderBottom: 'none', borderRight: 'none', animation: 'tmx-sheet-in 320ms var(--ease-sheet)' }}
+            onKeyDown={handleSheetKeyDown}
+            className="glass tmx-sheet fixed right-0 top-0 z-[70] flex h-dvh w-[280px] flex-col gap-1 overflow-y-auto p-5"
+            style={{ borderRadius: 0, borderTop: 'none', borderBottom: 'none', borderRight: 'none' }}
           >
             <div className="mb-4 flex items-center justify-between">
               <Logo />
               <button
-                onClick={() => setMenuOpen(false)}
+                ref={sheetCloseRef}
+                onClick={closeMenu}
                 aria-label="Close menu"
                 className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-border-default bg-surface-2 p-0 text-text-secondary hover:text-text-primary"
               >
@@ -349,40 +393,52 @@ export default function Navbar() {
               </button>
             </div>
 
-            {navLinks.map(link => (
+            <nav aria-label="Primary" className="flex flex-col gap-1">
               <Link
-                key={link.to}
-                to={link.to}
+                to="/templates"
+                state={{ focusSearch: true }}
                 onClick={() => setMenuOpen(false)}
-                aria-current={isActive(link.to) ? 'page' : undefined}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-[15px] font-medium text-text-secondary no-underline transition-colors duration-150 hover:bg-white/[0.05] hover:text-text-primary"
+              >
+                <Search size={16} aria-hidden="true" />
+                Search templates
+              </Link>
+
+              {navLinks.map(link => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMenuOpen(false)}
+                  aria-current={isActive(link.to) ? 'page' : undefined}
+                  className={clsx(
+                    'rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
+                    isActive(link.to)
+                      ? 'bg-accent-soft text-accent-text'
+                      : 'text-text-secondary hover:bg-white/[0.05] hover:text-text-primary',
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              <Link
+                to="/wishlist"
+                onClick={() => setMenuOpen(false)}
                 className={clsx(
-                  'rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
-                  isActive(link.to)
+                  'flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
+                  wishlistActive
                     ? 'bg-accent-soft text-accent-text'
                     : 'text-text-secondary hover:bg-white/[0.05] hover:text-text-primary',
                 )}
               >
-                {link.label}
+                Wishlist
+                {wishlistCount > 0 && (
+                  <span className="min-w-[20px] rounded-full border border-accent-soft-border bg-accent-soft px-2 py-px text-center text-xs font-semibold text-accent-text">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
-            ))}
-
-            <Link
-              to="/wishlist"
-              onClick={() => setMenuOpen(false)}
-              className={clsx(
-                'flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-150',
-                wishlistActive
-                  ? 'bg-accent-soft text-accent-text'
-                  : 'text-text-secondary hover:bg-white/[0.05] hover:text-text-primary',
-              )}
-            >
-              Wishlist
-              {wishlistCount > 0 && (
-                <span className="min-w-[20px] rounded-full border border-accent-soft-border bg-accent-soft px-2 py-px text-center text-xs font-semibold text-accent-text">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
+            </nav>
 
             <div className="hairline my-3" />
 

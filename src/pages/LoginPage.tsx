@@ -1,14 +1,24 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabase';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { useSEO } from '../hooks/useSEO';
 
 const inputClass =
-  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.18)] focus:outline-none';
+  'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.45)] focus:outline-none';
+
+const MIN_PASSWORD_LENGTH = 8;
+
+// signIn/signUp reject only when the auth client itself never loaded — a stale
+// cached index.html after a deploy, or the chunk request being blocked.
+const AUTH_UNREACHABLE_MESSAGE =
+  'We couldn’t reach the sign-in service. Reload the page and try again.';
 
 const isUnconfirmed = (msg: string) => /not confirmed|confirm your email/i.test(msg);
 
 export default function LoginPage() {
+  useSEO({ title: 'Sign in' });
+
   const [mode, setMode]         = useState<'login' | 'register'>('login');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +36,10 @@ export default function LoginPage() {
   const location = useLocation();
 
   // Return-intent: a buy action navigates to /login with { state: { next } }.
+  // Only same-origin absolute paths are honoured — '//evil.example' is
+  // protocol-relative and would leave the site, so it falls back to /dashboard.
   const next = (location.state as { next?: string } | null)?.next ?? '/dashboard';
+  const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
 
   const resetBanners = () => { setError(''); setSuccess(''); setNeedsConfirm(false); };
 
@@ -35,26 +48,33 @@ export default function LoginPage() {
     resetBanners();
     setLoading(true);
 
-    if (mode === 'login') {
-      const { error } = await signIn(email, password);
-      setLoading(false);
-      if (error) {
-        if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Please confirm your email before signing in.'); }
-        else setError(error);
-        return;
+    try {
+      if (mode === 'login') {
+        const { error } = await signIn(email, password);
+        if (error) {
+          if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Please confirm your email before signing in.'); }
+          else setError(error);
+          return;
+        }
+        navigate(safeNext, { replace: true });
+      } else {
+        if (!name.trim()) { setError('Please enter your full name.'); return; }
+        if (password.length < MIN_PASSWORD_LENGTH) { setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`); return; }
+        const { error } = await signUp(email, password, name);
+        if (error) {
+          if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Almost there — confirm your email to finish creating your account.'); }
+          else setError(error);
+          return;
+        }
+        navigate(safeNext, { replace: true });
       }
-      navigate(next, { replace: true });
-    } else {
-      if (!name.trim()) { setError('Please enter your full name.'); setLoading(false); return; }
-      if (password.length < 6) { setError('Password must be at least 6 characters.'); setLoading(false); return; }
-      const { error } = await signUp(email, password, name);
+    } catch {
+      // A rejection here means the auth client never loaded, so there is no
+      // Supabase error message to show. Never leave the button stuck on
+      // "Please wait..." with a silent unhandled rejection.
+      setError(AUTH_UNREACHABLE_MESSAGE);
+    } finally {
       setLoading(false);
-      if (error) {
-        if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Almost there — confirm your email to finish creating your account.'); }
-        else setError(error);
-        return;
-      }
-      navigate(next, { replace: true });
     }
   };
 
@@ -63,10 +83,9 @@ export default function LoginPage() {
     setGoogleLoading(true);
     // OAuth does a full-page redirect, so the return-intent must ride on
     // redirectTo. Preserve the live origin (localhost / preview / prod).
-    const redirectPath = next.startsWith('/') ? next : '/dashboard';
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}${redirectPath}` },
+      options: { redirectTo: `${window.location.origin}${safeNext}` },
     });
     if (error) { setError(error.message); setGoogleLoading(false); }
     // On success the browser is redirected away; no further state needed.
@@ -136,11 +155,21 @@ export default function LoginPage() {
             {mode === 'login' ? 'Welcome back' : 'Create your account'}
           </h1>
           <p className="mb-6 text-[13px] text-text-tertiary">
-            {mode === 'login' ? 'Sign in to access your templates and purchases.' : 'Start browsing and buying templates today.'}
+            {mode === 'login'
+              ? 'Sign in to access your templates and purchases.'
+              : 'Create an account to buy templates and re-download them anytime.'}
           </p>
 
+          {/* Misconfigured deploy: fail loudly here instead of letting every
+              request die with an opaque network error. */}
+          {!isSupabaseConfigured && (
+            <div role="alert" className="mb-5 rounded-lg border border-warning-soft-border bg-warning-soft px-3.5 py-2.5 text-[13px] text-warning">
+              Sign-in is temporarily unavailable. Please try again shortly.
+            </div>
+          )}
+
           {/* OAuth first */}
-          <button onClick={handleGoogle} disabled={googleLoading} className="btn btn-secondary mb-5 h-11 w-full">
+          <button onClick={handleGoogle} disabled={googleLoading || !isSupabaseConfigured} className="btn btn-secondary mb-5 h-11 w-full">
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -198,7 +227,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={handleForgotPassword}
-                    disabled={resetLoading}
+                    disabled={resetLoading || !isSupabaseConfigured}
                     className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-accent transition-colors duration-150 hover:text-accent-hover hover:underline disabled:opacity-60"
                   >
                     {resetLoading ? 'Sending…' : 'Forgot password?'}
@@ -208,7 +237,7 @@ export default function LoginPage() {
               <input id="tmx-password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} required className={inputClass} />
             </div>
 
-            <button type="submit" disabled={loading} className="btn btn-primary glow-cta mt-2 h-11 w-full">
+            <button type="submit" disabled={loading || !isSupabaseConfigured} className="btn btn-primary glow-cta mt-2 h-11 w-full">
               {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
             </button>
           </form>

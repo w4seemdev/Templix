@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   ChevronRight, ExternalLink, Check, Monitor, Zap, Star, LifeBuoy,
-  ShieldCheck, Download, X, Loader2, ArrowRight, FileCode2, Layers,
+  ShieldCheck, Download, X, Loader2, ArrowRight, FileCode2, Layers, RotateCcw,
 } from 'lucide-react';
 import { templates } from '../data/templates';
 import Container from '../components/ui/Container';
@@ -11,59 +11,94 @@ import { useAuth } from '../context/AuthContext';
 import { usePurchases } from '../hooks/usePurchases';
 import { useSEO } from '../hooks/useSEO';
 import { supabase } from '../lib/supabase';
-import { getTemplateDownloadUrl } from '../lib/downloads';
+import { downloadTemplateZip } from '../lib/downloads';
 
 const MONO_TNUM = { fontFeatureSettings: '"tnum"' } as const;
+
+/** Elements the preview dialog cycles focus through while it is open. */
+const DIALOG_FOCUSABLES = 'a[href], button:not([disabled]), iframe';
 
 export default function TemplateDetailPage() {
   const { id } = useParams<{ id: string }>();
   const template = templates.find(t => t.id === id);
-  const [previewOpen,  setPreviewOpen]  = useState(false);
-  const [buying,       setBuying]       = useState(false);
-  const [downloading,  setDownloading]  = useState(false);
+  const [previewOpen,   setPreviewOpen]   = useState(false);
+  const [buying,        setBuying]        = useState(false);
+  const [downloading,   setDownloading]   = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const hasLivePreview = template?.demoUrl && template.demoUrl !== '#';
   const { user }         = useAuth();
-  const { hasPurchased } = usePurchases();
+  const { hasPurchased, loading: purchasesLoading, error: purchasesError } = usePurchases();
   const navigate         = useNavigate();
   const { pathname }     = useLocation();
   const alreadyOwned     = template ? (template.isFree || hasPurchased(template.id)) : false;
   const includedItems    = template?.included ?? [];
 
-  useSEO({ title: template?.title, description: template?.description });
+  // Ownership is unknown until the purchases query settles. Showing "Buy now" in
+  // that window lets an existing owner pay twice, so the CTA waits it out.
+  const ownershipPending = Boolean(user) && !template?.isFree && purchasesLoading;
 
-  // A11y: Escape closes the full-screen preview; lock body scroll while open.
+  // The query settled but failed (expired token, network drop, RLS rejection).
+  // An empty library and an unreadable one look identical from `purchasedIds`,
+  // so treat this as unknown ownership too — never as "not owned yet".
+  const ownershipUnknown = Boolean(user) && !template?.isFree && purchasesError;
+
+  useSEO({
+    title: template?.title ?? 'Template not found',
+    description: template?.description,
+  });
+
+  const closePreview = useCallback(() => setPreviewOpen(false), []);
+
+  // Product + BreadcrumbList rich results. No aggregateRating/review nodes —
+  // there is no review system, and fabricating one would be dishonest.
   useEffect(() => {
-    if (!previewOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setPreviewOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [previewOpen]);
+    if (!template) return;
+    const origin  = window.location.origin;
+    const pageUrl = `${origin}${pathname}`;
+    const node = document.createElement('script');
+    node.type = 'application/ld+json';
+    node.textContent = JSON.stringify([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: template.title,
+        description: template.description,
+        image: `${origin}${template.image}`,
+        category: template.category,
+        brand: { '@type': 'Brand', name: 'Templix' },
+        offers: {
+          '@type': 'Offer',
+          price: template.price,
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          url: pageUrl,
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',      item: `${origin}/` },
+          { '@type': 'ListItem', position: 2, name: 'Templates', item: `${origin}/templates` },
+          { '@type': 'ListItem', position: 3, name: template.title, item: pageUrl },
+        ],
+      },
+    ]);
+    document.head.appendChild(node);
+    return () => { node.remove(); };
+  }, [template, pathname]);
 
   /** Trigger a direct browser download of the zip via the shared, ownership-aware resolver. */
   const downloadZip = async (tpl: typeof template) => {
     if (!tpl) return;
     setDownloading(true);
-    const fileName = `${tpl.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.zip`;
+    setPurchaseError(null);
 
     try {
       // Free -> public URL; paid -> ownership-verified signed URL (throws if not owned).
-      const url = await getTemplateDownloadUrl(tpl.id, tpl.isFree);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.rel = 'noopener';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      await downloadTemplateZip(tpl);
     } catch (err) {
-      alert((err as Error).message || 'Download failed. Please try again.');
+      setPurchaseError((err as Error).message || 'Download failed.');
     } finally {
       setDownloading(false);
     }
@@ -81,6 +116,7 @@ export default function TemplateDetailPage() {
     }
 
     setBuying(true);
+    setPurchaseError(null);
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
@@ -93,7 +129,7 @@ export default function TemplateDetailPage() {
       if (error || !data?.url) throw new Error(error?.message ?? 'Failed to create checkout');
       window.location.assign(data.url);
     } catch (err) {
-      alert((err as Error).message);
+      setPurchaseError((err as Error).message || 'Could not start checkout.');
       setBuying(false);
     }
   };
@@ -103,9 +139,9 @@ export default function TemplateDetailPage() {
       <div className="min-h-screen bg-canvas flex items-center justify-center p-8 text-center">
         <div className="max-w-[420px]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary mb-4">Error 404</p>
-          <h2 className="text-[32px] leading-[1.15] font-semibold tracking-[-0.02em] text-text-primary mb-3">
+          <h1 className="text-[32px] leading-[1.15] font-semibold tracking-[-0.02em] text-text-primary mb-3">
             Template not found
-          </h2>
+          </h1>
           <p className="text-[15px] leading-relaxed text-text-secondary mb-8">
             This template doesn't exist or was removed from the catalog.
           </p>
@@ -122,44 +158,11 @@ export default function TemplateDetailPage() {
 
       {/* ── Full-screen iframe overlay ── */}
       {previewOpen && hasLivePreview && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${template.title} live preview`}
-          className="fixed inset-0 z-[9999] bg-canvas flex flex-col"
-        >
-          {/* Preview bar */}
-          <div className="glass-nav flex items-center justify-between px-6 h-[56px] shrink-0">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-soft border border-accent-soft-border">
-                <Monitor size={14} className="text-accent-text" />
-              </span>
-              <span className="text-[13px] font-semibold text-text-primary truncate">{template.title}</span>
-              <span className="hidden sm:inline text-xs text-text-tertiary">— Live preview</span>
-            </div>
-            <div className="flex items-center gap-2.5 shrink-0">
-              <a
-                href={template.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1.5 text-[13px] text-text-tertiary hover:text-text-primary transition-colors duration-150"
-              >
-                <ExternalLink size={14} /> Open in new tab
-              </a>
-              <button
-                onClick={() => setPreviewOpen(false)}
-                className="btn btn-secondary btn-sm"
-              >
-                <X size={14} /> Close preview
-              </button>
-            </div>
-          </div>
-          <iframe
-            src={template.demoUrl}
-            className="flex-1 w-full border-none bg-white"
-            title={`${template.title} preview`}
-          />
-        </div>
+        <PreviewOverlay
+          title={template.title}
+          demoUrl={template.demoUrl}
+          onClose={closePreview}
+        />
       )}
 
       <Container style={{ paddingTop: '3rem', paddingBottom: '6rem' }}>
@@ -174,7 +177,7 @@ export default function TemplateDetailPage() {
             Templates
           </Link>
           <ChevronRight size={13} className="text-text-disabled shrink-0" />
-          <span className="text-text-primary font-medium truncate max-w-[360px]">{template.title}</span>
+          <span aria-current="page" className="text-text-primary font-medium truncate max-w-[360px]">{template.title}</span>
         </nav>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_380px] items-start">
@@ -186,6 +189,10 @@ export default function TemplateDetailPage() {
               <img
                 src={template.image}
                 alt={template.title}
+                width={800}
+                height={500}
+                fetchPriority="high"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
               {/* sheen */}
@@ -235,10 +242,10 @@ export default function TemplateDetailPage() {
               {template.techStack && template.techStack.length > 0 && (
                 <div className="mt-10">
                   <div className="hairline mb-8" />
-                  <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                  <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                     <FileCode2 size={16} className="text-accent-text" />
                     Tech stack
-                  </h3>
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {template.techStack.map(tech => (
                       <span
@@ -256,10 +263,10 @@ export default function TemplateDetailPage() {
               {template.pages && template.pages.length > 0 && (
                 <div className="mt-10">
                   <div className="hairline mb-8" />
-                  <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                  <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                     <Layers size={16} className="text-accent-text" />
                     Sections
-                  </h3>
+                  </h2>
                   <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
                     {template.pages.map(page => (
                       <div
@@ -277,10 +284,10 @@ export default function TemplateDetailPage() {
               {/* License — identical Templix Standard License on every template */}
               <div className="mt-10">
                 <div className="hairline mb-8" />
-                <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                   <ShieldCheck size={16} className="text-accent-text" />
                   License
-                </h3>
+                </h2>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
                   <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
                     <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">What you can do</p>
@@ -317,10 +324,10 @@ export default function TemplateDetailPage() {
               {/* Reviews — honest placeholder; no ratings system exists yet */}
               <div className="mt-10">
                 <div className="hairline mb-8" />
-                <h3 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
+                <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
                   <Star size={16} className="text-accent-text" />
                   Reviews
-                </h3>
+                </h2>
                 <div className="flex flex-col items-center rounded-xl border border-dashed border-border-default bg-surface-1 px-6 py-10 text-center">
                   <div className="mb-3 flex gap-1" aria-hidden="true">
                     {Array.from({ length: 5 }, (_, i) => (
@@ -328,8 +335,9 @@ export default function TemplateDetailPage() {
                     ))}
                   </div>
                   <p className="m-0 text-[14px] font-medium text-text-secondary">No reviews yet</p>
-                  <p className="m-0 mt-1 text-[13px] text-text-tertiary">
-                    Buy this template and you can be the first to review it.
+                  <p className="m-0 mt-1 max-w-[46ch] text-[13px] leading-[1.6] text-text-tertiary">
+                    No stars until real buyers leave them.
+                    {hasLivePreview && ' Open the live preview instead — it’s the full template, running.'}
                   </p>
                 </div>
               </div>
@@ -365,8 +373,51 @@ export default function TemplateDetailPage() {
                 </p>
               )}
 
+              {/* Checkout / download failures land here, not in a native alert box. */}
+              {purchaseError && (
+                <div
+                  role="alert"
+                  className="mb-3 rounded-lg border border-danger-soft-border bg-danger-soft px-4 py-3 text-[13px] text-danger"
+                >
+                  <p className="m-0 font-medium">{purchaseError}</p>
+                  <p className="m-0 mt-1 text-text-tertiary">
+                    Please try again, or{' '}
+                    <Link to="/support" className="text-accent-text no-underline hover:underline">contact support</Link>
+                    {' '}if it keeps happening.
+                  </p>
+                </div>
+              )}
+
               {/* ── Buy / Download button ── */}
-              {alreadyOwned ? (
+              {ownershipPending ? (
+                /* Ownership still resolving — never offer a second purchase in this window */
+                <button disabled className="btn btn-lg w-full btn-secondary">
+                  <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                  Checking your library…
+                </button>
+              ) : ownershipUnknown ? (
+                /* Library lookup failed — offering checkout here would charge an owner twice */
+                <div
+                  role="alert"
+                  className="rounded-xl border border-danger-soft-border bg-danger-soft px-4 py-4 text-center"
+                >
+                  <p className="m-0 text-[14px] font-medium text-text-primary">
+                    We couldn't verify your library right now
+                  </p>
+                  <p className="m-0 mt-1.5 text-[13px] leading-[1.6] text-text-tertiary">
+                    You may already own this template, so we're holding off on checkout.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <button onClick={() => window.location.reload()} className="btn btn-secondary btn-sm">
+                      <RotateCcw size={13} />
+                      Retry
+                    </button>
+                    <Link to="/dashboard" className="btn btn-secondary btn-sm">
+                      Go to my library
+                    </Link>
+                  </div>
+                </div>
+              ) : alreadyOwned ? (
                 /* Already owned (free or purchased) → direct download */
                 <button
                   onClick={() => downloadZip(template)}
@@ -414,6 +465,13 @@ export default function TemplateDetailPage() {
                 </button>
               )}
 
+              {/* Payment-processor microcopy — Stripe is the real checkout path */}
+              {!template.isFree && !alreadyOwned && !ownershipPending && !ownershipUnknown && (
+                <p className="m-0 mt-2.5 text-center text-[12px] text-text-tertiary">
+                  Secure checkout via Stripe
+                </p>
+              )}
+
               {/* Preview button */}
               {hasLivePreview ? (
                 <button
@@ -424,7 +482,7 @@ export default function TemplateDetailPage() {
                   Live preview
                 </button>
               ) : (
-                <div className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-lg border border-border-subtle px-4 py-3 text-[14px] text-text-disabled">
+                <div className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-lg border border-border-subtle px-4 py-3 text-[14px] text-text-tertiary">
                   Preview coming soon
                 </div>
               )}
@@ -443,6 +501,10 @@ export default function TemplateDetailPage() {
                   <LifeBuoy size={13} className="shrink-0 text-accent-text" />
                   Email support
                 </Link>
+                <Link to="/terms" className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary no-underline transition-colors duration-150 hover:text-text-secondary">
+                  <RotateCcw size={13} className="shrink-0 text-accent-text" />
+                  7-day refund review
+                </Link>
               </div>
 
               {/* Included — sourced from the catalog so it stays truthful per template */}
@@ -450,9 +512,9 @@ export default function TemplateDetailPage() {
                 <>
                   <div className="hairline my-6" />
                   <div>
-                    <h4 className="m-0 mb-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+                    <h3 className="m-0 mb-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
                       What's included
-                    </h4>
+                    </h3>
                     <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
                       {includedItems.map(item => (
                         <li key={item} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
@@ -470,7 +532,7 @@ export default function TemplateDetailPage() {
               <div className="text-[13px] text-text-tertiary">
                 Category:{' '}
                 <Link
-                  to="/templates"
+                  to={`/templates?category=${template.category}`}
                   className="capitalize text-accent-text no-underline transition-colors duration-150 hover:text-accent-hover"
                 >
                   {template.category}
@@ -493,6 +555,88 @@ export default function TemplateDetailPage() {
 
       {/* Related Templates */}
       <RelatedTemplates currentId={template.id} category={template.category} tags={template.tags} />
+    </div>
+  );
+}
+
+/**
+ * Full-screen live preview dialog. Owns the modal a11y contract: focus moves in
+ * on open, Tab cycles inside, Escape closes, and focus returns to the trigger.
+ */
+function PreviewOverlay({ title, demoUrl, onClose }: { title: string; demoUrl: string; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef  = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const trigger = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key !== 'Tab') return;
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(DIALOG_FOCUSABLES);
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last  = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+      trigger?.focus();
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${title} live preview`}
+      className="fixed inset-0 z-[9999] bg-canvas flex flex-col"
+    >
+      {/* Preview bar */}
+      <div className="glass-nav flex items-center justify-between px-6 h-[56px] shrink-0">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-soft border border-accent-soft-border">
+            <Monitor size={14} className="text-accent-text" />
+          </span>
+          <span className="text-[13px] font-semibold text-text-primary truncate">{title}</span>
+          <span className="hidden sm:inline text-xs text-text-tertiary">— Live preview</span>
+        </div>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 text-[13px] text-text-tertiary hover:text-text-primary transition-colors duration-150"
+          >
+            <ExternalLink size={14} /> Open in new tab
+          </a>
+          <button
+            ref={closeRef}
+            onClick={onClose}
+            className="btn btn-secondary btn-sm"
+          >
+            <X size={14} /> Close preview
+          </button>
+        </div>
+      </div>
+      <iframe
+        src={demoUrl}
+        className="flex-1 w-full border-none bg-white"
+        title={`${title} preview`}
+      />
     </div>
   );
 }

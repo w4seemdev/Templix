@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useSEO } from '../hooks/useSEO';
 import Container from '../components/ui/Container';
+import { CONTACT_EMAIL } from '../lib/constants';
 
 const sections = [
   {
@@ -32,8 +33,12 @@ const sections = [
     body: 'Templix shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform or templates, even if advised of the possibility of such damages. Our total liability shall not exceed the amount paid for the specific template in question.',
   },
   {
-    title: '8. Contact',
-    body: 'If you have any questions about these Terms of Service, please contact us at legal@templix.com.',
+    title: '8. Governing Law',
+    body: 'These Terms are governed by the laws of the seller\'s country of residence (the Hashemite Kingdom of Jordan), without regard to conflict-of-law rules. Any dispute will first be addressed informally through support before any formal proceeding.',
+  },
+  {
+    title: '9. Contact',
+    body: `If you have any questions about these Terms of Service, please contact us at ${CONTACT_EMAIL}.`,
   },
 ];
 
@@ -73,8 +78,8 @@ export default function TermsPage() {
         </p>
         <p className="m-0 text-[13px] text-text-tertiary">
           Questions about these terms? Reach us at{' '}
-          <a href="mailto:legal@templix.com" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
-            legal@templix.com
+          <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">
+            {CONTACT_EMAIL}
           </a>
           {' '}or through{' '}
           <Link to="/support" className="font-medium text-accent no-underline transition-colors duration-150 hover:text-accent-hover hover:underline">

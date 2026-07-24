@@ -51,6 +51,16 @@ const faqs: Faq[] = [
     ),
   },
   {
+    q: 'How do I pay?',
+    a: (
+      <>
+        Checkout is handled by Stripe. All major credit and debit cards are accepted, and prices are listed in USD.
+        Payment happens entirely on Stripe&apos;s secure checkout page — we never see or store your card details — and
+        Stripe emails you a receipt automatically after purchase.
+      </>
+    ),
+  },
+  {
     q: 'How do I download after purchasing?',
     a: (
       <>
