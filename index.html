@@ -9,22 +9,29 @@
     <meta name="description" content="Browse professionally designed, fully responsive website templates built with React, TypeScript, and Vite. Buy once, use forever." />
     <meta name="keywords" content="website templates, react templates, typescript templates, vite templates, buy templates, web design" />
     <meta name="author" content="Templix" />
+
+    <!-- Pre-hydration defaults for "/" only. useSEO rewrites canonical, og:url and the
+         title/description pairs on every route change (see src/hooks/useSEO.ts). -->
     <link rel="canonical" href="https://templix-peach.vercel.app/" />
 
     <!-- Open Graph -->
-    <meta property="og:site_name"   content="Templix" />
-    <meta property="og:title"       content="Templix — Website Templates for Developers" />
-    <meta property="og:description" content="Browse professionally designed, fully responsive React + TypeScript website templates. Buy once, use forever." />
-    <meta property="og:type"        content="website" />
-    <meta property="og:url"         content="https://templix-peach.vercel.app/" />
-    <meta property="og:image"       content="https://templix-peach.vercel.app/favicon.svg" />
-    <meta property="og:image:alt"   content="Templix — website template marketplace" />
+    <meta property="og:site_name"     content="Templix" />
+    <meta property="og:title"         content="Templix — Website Templates for Developers" />
+    <meta property="og:description"   content="Browse professionally designed, fully responsive React + TypeScript website templates. Buy once, use forever." />
+    <meta property="og:type"          content="website" />
+    <meta property="og:url"           content="https://templix-peach.vercel.app/" />
+    <meta property="og:image"         content="https://templix-peach.vercel.app/og-image.png" />
+    <meta property="og:image:type"    content="image/png" />
+    <meta property="og:image:width"   content="1200" />
+    <meta property="og:image:height"  content="630" />
+    <meta property="og:image:alt"     content="Templix — website template marketplace" />
 
     <!-- Twitter -->
     <meta name="twitter:card"        content="summary_large_image" />
     <meta name="twitter:title"       content="Templix — Website Templates" />
     <meta name="twitter:description" content="Browse professionally designed, fully responsive React + TypeScript website templates. Buy once, use forever." />
-    <meta name="twitter:image"       content="https://templix-peach.vercel.app/favicon.svg" />
+    <meta name="twitter:image"       content="https://templix-peach.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt"   content="Templix — website template marketplace" />
 
     <!-- Fonts: Inter (UI/display, max weight 600) + JetBrains Mono (prices, stats, keys) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,6 +40,29 @@
 
     <!-- Prevent white flash before CSS loads -->
     <style>html { background-color: #07080a; color-scheme: dark; }</style>
+
+    <!-- Brand entity for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://templix-peach.vercel.app/#website",
+            "name": "Templix",
+            "url": "https://templix-peach.vercel.app/",
+            "publisher": { "@id": "https://templix-peach.vercel.app/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://templix-peach.vercel.app/#organization",
+            "name": "Templix",
+            "url": "https://templix-peach.vercel.app/",
+            "logo": "https://templix-peach.vercel.app/og-image.png"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

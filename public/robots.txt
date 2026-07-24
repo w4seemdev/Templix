@@ -1,11 +1,9 @@
 User-agent: *
 Allow: /
 
-# Private / account routes and duplicate-content preview shells stay out of the index.
-Disallow: /dashboard
-Disallow: /wishlist
-Disallow: /reset-password
-Disallow: /purchase-success
-Disallow: /preview/
+# Private / account routes and the duplicate-content preview shells are kept out of
+# the index by an `X-Robots-Tag: noindex` response header (see vercel.json) rather
+# than by Disallow: a blocked crawl can never see a noindex signal, so an externally
+# linked URL could still be indexed URL-only. Crawling them is allowed on purpose.
 
 Sitemap: https://templix-peach.vercel.app/sitemap.xml
