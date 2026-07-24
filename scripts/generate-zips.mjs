@@ -89,76 +89,58 @@ const SLUG_TO_FILE = {
 };
 
 // ─── Template metadata (id, title, demoUrl, description) ─────────────────────
-// SOURCE OF TRUTH: src/data/templates.ts. This is a build-time mirror of the
-// title/description/slug for each template — keep it in sync with that file.
+// SOURCE OF TRUTH: src/data/templates.ts. Title, description and demo slug are
+// parsed out of that file at run time rather than mirrored here, so renaming a
+// template in the catalog can never leave the shipped zip selling a
+// differently-named product. templates.ts is TypeScript and this is a plain
+// .mjs script, so it cannot be imported — the object literal is parsed instead.
+// The parser is deliberately strict and throws unless it recovers exactly
+// EXPECTED_TEMPLATE_COUNT entries, which makes silent drift impossible.
 // Every template's TRUE stack is React 19 + TypeScript + Vite (see TRUE_STACK
-// below); there is intentionally NO techStack/pages field here because those
-// earlier per-template stacks (Next.js/Tailwind/Stripe/…) and multi-page lists
-// were inaccurate. Each template is ONE responsive single-page site made of
-// sections, not a multi-route app.
-const TEMPLATES = [
-  { id: '1',  title: 'Luminary — SaaS',              demoUrl: '/preview/luminary',          description: 'A clean, modern SaaS landing page with pricing, features, and testimonial sections.' },
-  { id: '2',  title: 'Folio — Portfolio',            demoUrl: '/preview/folio',             description: 'Minimal and elegant portfolio template for designers and developers.' },
-  { id: '3',  title: 'ShopDrop — Ecommerce',         demoUrl: '/preview/shopdrop',          description: 'Full-featured ecommerce template with product, cart, and checkout sections.' },
-  { id: '4',  title: 'Bloom — Blog',                 demoUrl: '/preview/bloom',             description: 'Beautiful blog template with article listing, categories, and newsletter signup.' },
-  { id: '5',  title: 'Agency Pro',                   demoUrl: '/preview/agency-pro',        description: 'Bold and professional agency website with case studies and team sections.' },
-  { id: '6',  title: 'StartKit — Startup',           demoUrl: '/preview/startkit',          description: 'Free startup landing page with hero, features, and call-to-action sections.' },
-  { id: '7',  title: 'LaunchPad — Landing Page',     demoUrl: '/preview/launchpad',         description: 'High-converting landing page template with hero, social proof, and CTA sections.' },
-  { id: '8',  title: 'Dashify — Dashboard',          demoUrl: '/preview/dashify',           description: 'Modern admin dashboard UI with charts, tables, and data-visualization sections.' },
-  { id: '9',  title: 'Saveur — Restaurant',          demoUrl: '/preview/saveur',            description: 'Elegant restaurant website with menu, reservations, and gallery sections.' },
-  { id: '10', title: 'Nexus — Corporate',            demoUrl: '/preview/nexus',             description: 'Professional corporate website with services, team, and contact sections.' },
-  { id: '11', title: 'MedCare — Healthcare',         demoUrl: '/preview/medcare',           description: 'Clean and trustworthy healthcare website for clinics and medical practices.' },
-  { id: '12', title: 'Coursify — Education',         demoUrl: '/preview/coursify',          description: 'Feature-rich online course and education platform with enrollment and progress sections.' },
-  { id: '13', title: 'Estatly — Real Estate',        demoUrl: '/preview/estatly',           description: 'Sophisticated real estate listing website with property search and agents.' },
-  { id: '14', title: 'Lens — Photography',           demoUrl: '/preview/photography',       description: 'Stunning photography portfolio with gallery grid, lightbox, and booking sections.' },
-  { id: '15', title: 'Eventful — Events',            demoUrl: '/preview/event',             description: 'Beautiful event and conference website with schedule, speakers, and tickets.' },
-  { id: '16', title: 'Relate — CRM',                 demoUrl: '/preview/crm',               description: 'Full-featured CRM dashboard UI with contacts, pipeline, and activity sections.' },
-  { id: '17', title: 'Maison — Fashion Store',       demoUrl: '/preview/fashion',           description: 'Sleek and minimal fashion ecommerce store with lookbook and cart sections.' },
-  { id: '18', title: 'Floww — App Landing',          demoUrl: '/preview/app-landing',       description: 'High-converting app landing page with download buttons and reviews.' },
-  { id: '19', title: 'Grind & Co. — Coffee Shop',    demoUrl: '/preview/coffee',            description: 'Warm and inviting coffee shop website with menu and online-ordering sections.' },
-  { id: '20', title: 'DevLog — Tech Blog',           demoUrl: '/preview/techblog',          description: 'Developer-focused tech blog with featured posts, categories, and newsletter.' },
-  { id: '21', title: 'Vault — Finance SaaS',         demoUrl: '/preview/vault-finance',     description: 'Modern personal finance dashboard with budgets and investment-tracking sections.' },
-  { id: '22', title: 'Pixel — Creative Studio',      demoUrl: '/preview/creative-studio',   description: 'Bold and creative studio portfolio with case studies and animated sections.' },
-  { id: '23', title: 'Scout — Job Board',            demoUrl: '/preview/job-board',         description: 'Clean job board UI with listings, filters, and company-profile sections.' },
-  { id: '24', title: 'Pulse — Analytics SaaS',       demoUrl: '/preview/pulse-analytics',   description: 'Beautiful web analytics dashboard with real-time visitors and funnel sections.' },
-  { id: '25', title: 'Nomad — Travel Blog',          demoUrl: '/preview/travel-blog',       description: 'Visually stunning travel blog with destination guides and photo stories.' },
-  { id: '26', title: 'Brix — Construction',          demoUrl: '/preview/construction',      description: 'Strong and professional construction company website with project sections.' },
-  { id: '27', title: 'Glow — Beauty & Spa',          demoUrl: '/preview/beauty-spa',        description: 'Elegant beauty salon and spa website with service menu and booking sections.' },
-  { id: '28', title: 'Brick — Newsletter',           demoUrl: '/preview/newsletter',        description: 'Clean and minimal newsletter landing page optimized for email list growth.' },
-  { id: '29', title: 'Atlas — Map SaaS',             demoUrl: '/preview/atlas-maps',        description: 'Location intelligence SaaS UI with map, data-layer, and territory sections.' },
-  { id: '30', title: 'Forge — Dev Tools',            demoUrl: '/preview/forge-devtools',    description: 'Technical SaaS landing page for developer tools with code-preview sections.' },
-  { id: '31', title: 'Ora — Productivity App',       demoUrl: '/preview/productivity',      description: 'Pomodoro and time-tracking app landing with dashboard preview and feature sections.' },
-  { id: '32', title: 'Luxe — Hotel',                 demoUrl: '/preview/hotel',             description: 'Sophisticated luxury hotel website with rooms, amenities, and reservation sections.' },
-  { id: '33', title: 'Fit — Gym & Fitness',          demoUrl: '/preview/fitness',           description: 'High-energy gym and fitness website with classes and membership sections.' },
-  { id: '34', title: 'Archi — Architecture',         demoUrl: '/preview/architecture',      description: 'Minimalist architecture firm portfolio with projects, process, and team sections.' },
-  { id: '35', title: 'Crypto — Web3 Landing',        demoUrl: '/preview/web3',              description: 'Web3 and crypto project landing page with tokenomics and roadmap sections.' },
-  { id: '36', title: 'Shelf — Bookstore',            demoUrl: '/preview/bookstore',         description: 'Charming online bookstore with categories, featured books, and reading-list sections.' },
-  { id: '37', title: 'Verde — Eco & Sustainability', demoUrl: '/preview/verde-eco',         description: 'Clean and purpose-driven sustainability brand website with impact-metric sections.' },
-  { id: '38', title: 'Swift — Delivery App',         demoUrl: '/preview/swift-delivery',    description: 'Food delivery app landing page with restaurant listings and app-preview sections.' },
-  { id: '39', title: 'Law & Co — Legal Firm',        demoUrl: '/preview/legal',             description: 'Professional law firm website with practice areas, attorneys, and results sections.' },
-  { id: '40', title: 'Spark — Email Marketing',      demoUrl: '/preview/email-marketing',   description: 'Email marketing SaaS UI with campaign builder, analytics, and audience sections.' },
-  { id: '41', title: 'NestFind — Real Estate',       demoUrl: '/preview/real-estate',       description: 'Premium real estate marketplace with property listings and agent-profile sections.' },
-  { id: '42', title: 'IronPeak — Gym & Fitness',     demoUrl: '/preview/ironpeak',          description: 'Modern gym and fitness studio website with class booking and plan sections.' },
-  { id: '43', title: 'Signal — Podcast',             demoUrl: '/preview/podcast',           description: 'Sleek podcast website with episode player, guests, and newsletter sections.' },
-  { id: '44', title: 'LaunchConf — Event',           demoUrl: '/preview/launchconf',        description: 'Conference and event landing page with speakers, schedule, and ticket sections.' },
-  { id: '45', title: 'Bloom — Wedding',              demoUrl: '/preview/wedding',           description: 'Romantic wedding website with ceremony details, gallery, and RSVP sections.' },
-  { id: '46', title: 'Vega — Music Artist',          demoUrl: '/preview/music',             description: 'Striking music artist website with discography, tour dates, and merch sections.' },
-  { id: '47', title: 'Aria — Photography',           demoUrl: '/preview/aria-photography',  description: 'Stunning masonry portfolio for photographers with gallery and booking sections.' },
-  { id: '48', title: 'Finwise — Personal Finance',   demoUrl: '/preview/finance-dashboard', description: 'Personal finance dashboard UI with budgeting, expense, and investment sections.' },
-  { id: '49', title: 'Petal — Florist',              demoUrl: '/preview/florist',           description: 'Beautiful floral shop with seasonal collections and same-day delivery sections.' },
-  { id: '50', title: 'Nomad — Remote Jobs',          demoUrl: '/preview/nomad-jobs',        description: 'Remote job board for digital nomads with filters and company-profile sections.' },
-  { id: '51', title: 'Verse — Poetry & Lit',         demoUrl: '/preview/verse-lit',         description: 'Literary magazine template with featured poems and author-profile sections.' },
-  { id: '52', title: 'Roam — Airbnb Style',          demoUrl: '/preview/roam-rentals',      description: 'Vacation rental platform UI with map search, property cards, and booking sections.' },
-  { id: '53', title: 'Clinic — Healthcare',          demoUrl: '/preview/healthcare',        description: 'Healthcare clinic website with doctor profiles and appointment-booking sections.' },
-  { id: '54', title: 'Pixel — Game Studio',          demoUrl: '/preview/pixel-games',       description: 'Video game studio website with game showcases, trailers, and press-kit sections.' },
-  { id: '55', title: 'Scout — Talent Agency',        demoUrl: '/preview/scout-talent',      description: 'Talent and modeling agency website with portfolio grid and booking sections.' },
-  { id: '56', title: 'Hope — Nonprofit & Charity',   demoUrl: '/preview/hope-nonprofit',    description: 'Heartfelt nonprofit and charity website with causes, donation tiers, and impact stories.' },
-  { id: '57', title: 'Neuron — AI Platform',         demoUrl: '/preview/neuron-ai',         description: 'Futuristic AI platform landing page with playground demo, benchmarks, and pricing sections.' },
-  { id: '58', title: 'Velocity — Auto Dealership',   demoUrl: '/preview/velocity-auto',     description: 'High-octane car dealership website with inventory, financing, and test-drive sections.' },
-  { id: '59', title: 'Paws — Pet Care & Vet',        demoUrl: '/preview/paws-petcare',      description: 'Friendly veterinary clinic and pet care website with services, team, and booking sections.' },
-  { id: '60', title: 'Haven — Interior Design',      demoUrl: '/preview/haven-interior',    description: 'Elegant interior design studio portfolio with projects, process, and consultation sections.' },
-  { id: '61', title: 'The Daily — News & Magazine',  demoUrl: '/preview/daily-news',        description: 'Classic news and magazine template with breaking stories, category sections, and trending list.' },
-];
+// below); techStack/pages are deliberately NOT read from the catalog because
+// those earlier per-template stacks (Next.js/Tailwind/Stripe/…) and multi-page
+// lists were inaccurate. Each template is ONE responsive single-page site made
+// of sections, not a multi-route app.
+const DATA_FILE = join(ROOT, 'src', 'data', 'templates.ts');
+const EXPECTED_TEMPLATE_COUNT = 61;
+
+// A single-quoted TypeScript string literal, escape sequences included.
+const TS_STRING = String.raw`'((?:[^'\\]|\\.)*)'`;
+// One catalog entry. `[^{}]` cannot run past the end of an entry (no entry
+// contains a nested object literal), so demoUrl always belongs to this entry.
+const ENTRY_RE = new RegExp(
+  `\\{\\s*id: ${TS_STRING},\\s*title: ${TS_STRING},\\s*description: ${TS_STRING},[^{}]*?demoUrl: ${TS_STRING},`,
+  'g',
+);
+
+function unescapeTsString(s) {
+  return s.replace(/\\(.)/g, '$1');
+}
+
+function readTemplates() {
+  const source = readFileSync(DATA_FILE, 'utf8');
+  const templates = [];
+
+  for (const m of source.matchAll(ENTRY_RE)) {
+    templates.push({
+      id:          unescapeTsString(m[1]),
+      title:       unescapeTsString(m[2]),
+      description: unescapeTsString(m[3]),
+      demoUrl:     unescapeTsString(m[4]),
+    });
+  }
+
+  if (templates.length !== EXPECTED_TEMPLATE_COUNT) {
+    throw new Error(
+      `Parsed ${templates.length} templates from src/data/templates.ts, expected ${EXPECTED_TEMPLATE_COUNT}. ` +
+      `The catalog's shape changed — fix this parser before regenerating, or buyers get mislabelled downloads.`,
+    );
+  }
+
+  return templates;
+}
+
+const TEMPLATES = readTemplates();
 
 // The one true stack of every downloadable template.
 const TRUE_STACK = ['React 19', 'TypeScript', 'Vite'];

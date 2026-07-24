@@ -48,24 +48,43 @@ Deno.serve(async (req) => {
       const userId     = session.metadata?.user_id;
       const amount     = (session.amount_total ?? 0) / 100;
 
-      if (templateId && userId) {
-        // Idempotent on the Stripe session id — webhook retries must not create
-        // duplicate rows. Recommended DB hardening: a UNIQUE constraint on
-        // purchases.stripe_session_id so concurrent retries can't both insert.
-        const { data: existing } = await supabase
-          .from('purchases')
-          .select('id')
-          .eq('stripe_session_id', session.id)
-          .maybeSingle();
+      // The money is already captured at this point, so a session we cannot
+      // attribute is a delivery failure, not something to skip quietly.
+      if (!templateId || !userId) {
+        console.error(
+          '[stripe-webhook] paid session missing metadata',
+          { sessionId: session.id, templateId, userId },
+        );
+        return new Response('Session metadata incomplete', { status: 500 });
+      }
 
-        if (!existing) {
-          await supabase.from('purchases').insert({
+      // Idempotent on the Stripe session id — webhook retries must not create
+      // duplicate rows. This relies on the UNIQUE constraint added in
+      // supabase/migrations/20260724120000_enable_rls_purchases_profiles.sql:
+      // a check-then-insert would still race two concurrent retries, whereas
+      // ON CONFLICT DO NOTHING is resolved by the database.
+      const { error: upsertErr } = await supabase
+        .from('purchases')
+        .upsert(
+          {
             user_id:           userId,
             template_id:       templateId,
             stripe_session_id: session.id,
             amount,
-          });
-        }
+          },
+          { onConflict: 'stripe_session_id', ignoreDuplicates: true },
+        );
+
+      // Never swallow this. A 200 tells Stripe delivery succeeded and it stops
+      // retrying — the buyer would be charged and never granted the download,
+      // with nothing left to replay. A 500 hands the problem to Stripe's own
+      // retry schedule, which is the only safety net we have here.
+      if (upsertErr) {
+        console.error(
+          '[stripe-webhook] purchase upsert failed',
+          { sessionId: session.id, templateId, userId, error: upsertErr },
+        );
+        return new Response('Failed to record purchase', { status: 500 });
       }
     }
   }
