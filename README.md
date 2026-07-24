@@ -26,7 +26,7 @@ Template marketplaces live or die on trust: buyers want to see exactly what they
 - **Ownership-gated downloads**: premium zips live in a private storage bucket and are released only via short-lived signed URLs after a purchase check
 - **Account system**: email sign-up, login, and password reset backed by Supabase Auth, with a protected purchases dashboard
 - **Wishlist**: save templates for later without an account round-trip
-- **Free tier**: 9 templates are free to download, so visitors can evaluate quality before spending anything
+- **Free tier**: a set of templates (currently 9) is completely free to download, so visitors can evaluate quality before spending anything
 - **Polished UX details**: skip-to-content link, error boundaries, per-page SEO metadata, sitemap and robots.txt, custom 404
 
 ## Tech Stack

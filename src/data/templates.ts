@@ -1,15 +1,19 @@
-import type { Template } from '../types';
+import type { Template, TemplateCategory } from '../types';
 
 // Every template ships the same true stack and deliverables — see CANONICAL FACTS.
-const STACK = ['React', 'TypeScript', 'Vite', 'Responsive'];
+// Frozen with `as const` because both arrays are shared by reference across all entries.
+const STACK = ['React', 'TypeScript', 'Vite', 'Responsive'] as const;
 const INCLUDED = [
   'Complete React + TypeScript source (Vite)',
   'Fully responsive mobile-first layout',
   'Quick-start README with setup steps',
   'Templix Standard License',
-];
+] as const;
 
-export const templates: Template[] = [
+// Premium badge rule: isPremium === (price >= 59). It is a price tier, not a
+// curation flag — keep it in sync when adding or repricing a template.
+// Every `pages` list below names sections that exist in that template's preview.
+export const templates: readonly Template[] = [
   {
     id: '1',
     title: 'Luminary — SaaS',
@@ -61,7 +65,7 @@ export const templates: Template[] = [
   {
     id: '4',
     title: 'Bloom — Blog',
-    description: 'Single-page blog home template with a featured post, article grid, categories, and newsletter section.',
+    description: 'Single-page blog home template with a featured post, latest-stories grid, about, and newsletter sections.',
     category: 'blog',
     price: 39,
     image: '/covers/bloom.png',
@@ -71,7 +75,7 @@ export const templates: Template[] = [
     isPremium: false,
     demoUrl: '/preview/bloom',
     techStack: STACK,
-    pages: ['Hero', 'Featured Post', 'Article Grid', 'Categories', 'Newsletter', 'Footer'],
+    pages: ['Hero', 'Featured Post', 'Latest Stories', 'About', 'Newsletter', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -116,7 +120,7 @@ export const templates: Template[] = [
     tags: ['Landing Page', 'Marketing'],
     isFree: false,
     isFeatured: true,
-    isPremium: true,
+    isPremium: false,
     demoUrl: '/preview/launchpad',
     techStack: STACK,
     pages: ['Hero', 'Benefits', 'Social Proof', 'Pricing', 'FAQ', 'CTA', 'Footer'],
@@ -173,7 +177,7 @@ export const templates: Template[] = [
   {
     id: '11',
     title: 'MedCare — Healthcare',
-    description: 'Clean, trustworthy single-page healthcare template with services, doctor profiles, and contact sections.',
+    description: 'Clean, trustworthy single-page medical centre template with specialist departments, doctor profiles, a four-step booking flow, and insurance and contact sections.',
     category: 'corporate',
     price: 69,
     image: '/covers/medcare.png',
@@ -183,7 +187,7 @@ export const templates: Template[] = [
     isPremium: true,
     demoUrl: '/preview/medcare',
     techStack: STACK,
-    pages: ['Hero', 'Services', 'Doctors', 'Why Us', 'Testimonials', 'Contact', 'Footer'],
+    pages: ['Hero', 'Departments', 'Doctors', 'Booking', 'Patients', 'Contact', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -205,23 +209,23 @@ export const templates: Template[] = [
   {
     id: '13',
     title: 'Estatly — Real Estate',
-    description: 'Sophisticated single-page real-estate template with property listing cards, search UI, and agent sections.',
+    description: 'Sophisticated single-page brokerage template built around neighbourhood guides — featured properties, a why-us story, agent profiles, and a home-valuation call to action.',
     category: 'landing',
     price: 69,
     image: '/covers/estatly.png',
-    tags: ['Real Estate', 'Property', 'Listings'],
+    tags: ['Real Estate', 'Brokerage', 'Listings'],
     isFree: false,
     isFeatured: false,
     isPremium: true,
     demoUrl: '/preview/estatly',
     techStack: STACK,
-    pages: ['Hero', 'Featured Listings', 'Search Filters', 'Neighborhoods', 'Agents', 'Contact', 'Footer'],
+    pages: ['Hero', 'Featured Properties', 'Neighborhoods', 'Why Us', 'Agents', 'Home Valuation', 'Footer'],
     included: INCLUDED,
   },
   {
     id: '14',
     title: 'Lens — Photography',
-    description: 'Stunning single-page photography portfolio with gallery grid, about, services, and contact sections.',
+    description: 'Editorial single-page photography portfolio with a gallery grid, selected series, a fine-art print shop, and contact sections.',
     category: 'portfolio',
     price: 0,
     image: '/covers/photography.png',
@@ -231,23 +235,23 @@ export const templates: Template[] = [
     isPremium: false,
     demoUrl: '/preview/photography',
     techStack: STACK,
-    pages: ['Hero', 'Gallery', 'About', 'Services', 'Contact', 'Footer'],
+    pages: ['Hero', 'Portfolio', 'Selected Series', 'Fine-Art Prints', 'Contact', 'Footer'],
     included: INCLUDED,
   },
   {
     id: '15',
-    title: 'Eventful — Events',
-    description: 'Beautiful single-page event and conference template with schedule, speakers, tickets, and venue sections.',
+    title: 'Eventide — Event Planning',
+    description: 'Elegant single-page event planning and celebrations template with services, events gallery, packages, testimonials, and contact sections.',
     category: 'landing',
     price: 49,
     image: '/covers/event.png',
-    tags: ['Events', 'Conference', 'Tickets'],
+    tags: ['Events', 'Event Planner', 'Weddings'],
     isFree: false,
     isFeatured: true,
     isPremium: false,
     demoUrl: '/preview/event',
     techStack: STACK,
-    pages: ['Hero', 'Schedule', 'Speakers', 'Tickets', 'Venue', 'FAQ', 'Footer'],
+    pages: ['Hero', 'Services', 'Events Gallery', 'Packages', 'Testimonials', 'Contact', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -292,7 +296,7 @@ export const templates: Template[] = [
     tags: ['App', 'Mobile', 'Landing Page'],
     isFree: false,
     isFeatured: true,
-    isPremium: true,
+    isPremium: false,
     demoUrl: '/preview/app-landing',
     techStack: STACK,
     pages: ['Hero', 'Features', 'App Preview', 'Reviews', 'Download', 'FAQ', 'Footer'],
@@ -348,7 +352,7 @@ export const templates: Template[] = [
   },
   {
     id: '22',
-    title: 'Pixel — Creative Studio',
+    title: 'Form& — Creative Studio',
     description: 'Bold, creative single-page studio portfolio with work grid, services, process, and contact sections.',
     category: 'agency',
     price: 49,
@@ -356,7 +360,7 @@ export const templates: Template[] = [
     tags: ['Studio', 'Creative', 'Portfolio'],
     isFree: false,
     isFeatured: false,
-    isPremium: true,
+    isPremium: false,
     demoUrl: '/preview/creative-studio',
     techStack: STACK,
     pages: ['Hero', 'Work', 'Services', 'Process', 'About', 'Contact', 'Footer'],
@@ -364,8 +368,8 @@ export const templates: Template[] = [
   },
   {
     id: '23',
-    title: 'Scout — Job Board',
-    description: 'Clean single-page job board template with listing cards, categories, how-it-works, and company sections (front-end UI only).',
+    title: 'RemoteBase — Job Board',
+    description: 'Free single-page remote tech job board template with a role search bar, listing cards, category browsing, and hiring-company sections (front-end UI only).',
     category: 'saas',
     price: 0,
     image: '/covers/job-board.png',
@@ -375,14 +379,14 @@ export const templates: Template[] = [
     isPremium: false,
     demoUrl: '/preview/job-board',
     techStack: STACK,
-    pages: ['Hero', 'Job Listings', 'Categories', 'How It Works', 'Companies', 'Footer'],
+    pages: ['Hero', 'Job Search', 'Job Listings', 'Categories', 'Companies', 'Footer'],
     included: INCLUDED,
   },
   {
     id: '24',
     title: 'Pulse — Analytics SaaS',
     description: 'Single-page web-analytics dashboard UI with realtime cards, charts, traffic sources, and funnel sections (front-end only).',
-    category: 'saas',
+    category: 'dashboard',
     price: 79,
     image: '/covers/pulse-analytics.png',
     tags: ['Analytics', 'SaaS', 'Data'],
@@ -396,7 +400,7 @@ export const templates: Template[] = [
   },
   {
     id: '25',
-    title: 'Nomad — Travel Blog',
+    title: 'Wanderline — Travel Blog',
     description: 'Visually rich single-page travel blog template with featured destinations, stories, photo grid, and newsletter sections.',
     category: 'blog',
     price: 39,
@@ -548,7 +552,7 @@ export const templates: Template[] = [
     tags: ['Architecture', 'Portfolio', 'Minimal'],
     isFree: false,
     isFeatured: false,
-    isPremium: true,
+    isPremium: false,
     demoUrl: '/preview/architecture',
     techStack: STACK,
     pages: ['Hero', 'Projects', 'Studio', 'Process', 'Contact', 'Footer'],
@@ -573,7 +577,7 @@ export const templates: Template[] = [
   {
     id: '36',
     title: 'Shelf — Bookstore',
-    description: 'Charming single-page online-bookstore template with featured books, categories, and reading-list sections (front-end UI only).',
+    description: 'Charming single-page independent-bookstore template with a genre-filtered shelf, staff picks, events, and newsletter sections (front-end UI only).',
     category: 'ecommerce',
     price: 49,
     image: '/covers/bookstore.png',
@@ -583,7 +587,7 @@ export const templates: Template[] = [
     isPremium: false,
     demoUrl: '/preview/bookstore',
     techStack: STACK,
-    pages: ['Hero', 'Featured Books', 'Categories', 'Bestsellers', 'Reading List', 'Newsletter', 'Footer'],
+    pages: ['Hero', 'On the Shelf', 'Staff Picks', 'Events', 'Newsletter', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -612,7 +616,7 @@ export const templates: Template[] = [
     tags: ['Delivery', 'Food', 'App'],
     isFree: false,
     isFeatured: false,
-    isPremium: true,
+    isPremium: false,
     demoUrl: '/preview/swift-delivery',
     techStack: STACK,
     pages: ['Hero', 'How It Works', 'Featured Restaurants', 'App Preview', 'Download', 'FAQ', 'Footer'],
@@ -653,17 +657,17 @@ export const templates: Template[] = [
   {
     id: '41',
     title: 'NestFind — Real Estate',
-    description: 'Premium single-page real-estate template with listing cards, search UI, neighborhoods, and agent sections (front-end UI only).',
-    category: 'ecommerce',
+    description: 'Premium single-page property-search template led by a buy/rent/sell search bar — just-listed cards, a how-it-works walkthrough, top agents, and a seller call to action (front-end UI only).',
+    category: 'landing',
     price: 79,
     image: '/covers/real-estate.png',
-    tags: ['Real Estate', 'Property', 'Listings'],
+    tags: ['Real Estate', 'Property Search', 'Listings'],
     isFree: false,
     isFeatured: true,
     isPremium: true,
     demoUrl: '/preview/real-estate',
     techStack: STACK,
-    pages: ['Hero', 'Featured Listings', 'Search', 'Neighborhoods', 'Agents', 'Contact', 'Footer'],
+    pages: ['Hero', 'Search Bar', 'Just Listed', 'How It Works', 'Agents', 'Seller CTA', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -716,7 +720,7 @@ export const templates: Template[] = [
   },
   {
     id: '45',
-    title: 'Bloom — Wedding',
+    title: 'Evelyn — Wedding',
     description: 'Romantic single-page wedding template with our-story, gallery, schedule, and RSVP sections.',
     category: 'landing',
     price: 0,
@@ -749,17 +753,17 @@ export const templates: Template[] = [
   {
     id: '47',
     title: 'Aria — Photography',
-    description: 'Stunning single-page photography portfolio with masonry gallery, about, services, and contact sections.',
+    description: 'Wedding-focused single-page photography portfolio with a masonry gallery, a day-of experience story, an investment pricing section, and enquiry contact.',
     category: 'portfolio',
     price: 49,
     image: '/covers/aria-photography.png',
-    tags: ['Photography', 'Portfolio', 'Gallery'],
+    tags: ['Photography', 'Weddings', 'Gallery'],
     isFree: false,
     isFeatured: false,
     isPremium: false,
     demoUrl: '/preview/aria-photography',
     techStack: STACK,
-    pages: ['Hero', 'Portfolio', 'About', 'Services', 'Testimonials', 'Contact', 'Footer'],
+    pages: ['Hero', 'Portfolio', 'Weddings', 'Testimonial', 'Investment', 'Contact', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -797,7 +801,7 @@ export const templates: Template[] = [
   {
     id: '50',
     title: 'Nomad — Remote Jobs',
-    description: 'Single-page remote job board template with listing cards, filters, and company sections (front-end UI only).',
+    description: 'Single-page remote-work job board template with destination-flavoured search, salary insights, an employer walkthrough, and testimonial sections (front-end UI only).',
     category: 'saas',
     price: 59,
     image: '/covers/nomad-jobs.png',
@@ -807,7 +811,7 @@ export const templates: Template[] = [
     isPremium: true,
     demoUrl: '/preview/nomad-jobs',
     techStack: STACK,
-    pages: ['Hero', 'Job Listings', 'Filters', 'Companies', 'How It Works', 'Footer'],
+    pages: ['Hero', 'Job Board', 'Companies', 'For Employers', 'Salary Insights', 'Testimonials', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -845,7 +849,7 @@ export const templates: Template[] = [
   {
     id: '53',
     title: 'Clinic — Healthcare',
-    description: 'Single-page healthcare clinic template with services, doctor profiles, and contact sections.',
+    description: 'Warm, sky-blue single-page family clinic template with a care-team lineup, patient-portal preview, patient reviews, and contact sections.',
     category: 'corporate',
     price: 69,
     image: '/covers/healthcare.png',
@@ -855,13 +859,13 @@ export const templates: Template[] = [
     isPremium: true,
     demoUrl: '/preview/healthcare',
     techStack: STACK,
-    pages: ['Hero', 'Services', 'Doctors', 'Why Us', 'Testimonials', 'Contact', 'Footer'],
+    pages: ['Hero', 'Services', 'Care Team', 'Patients', 'Reviews', 'Contact', 'Footer'],
     included: INCLUDED,
   },
   {
     id: '54',
-    title: 'Pixel — Game Studio',
-    description: 'Single-page video game studio template with game showcase, trailers, studio, and press sections.',
+    title: 'PixelForge — Game Studio',
+    description: 'Single-page video game studio template with a featured-title spotlight, game library, community, and wishlist sections.',
     category: 'agency',
     price: 59,
     image: '/covers/pixel-games.png',
@@ -871,7 +875,7 @@ export const templates: Template[] = [
     isPremium: true,
     demoUrl: '/preview/pixel-games',
     techStack: STACK,
-    pages: ['Hero', 'Featured Games', 'Trailers', 'Studio', 'Press', 'Footer'],
+    pages: ['Hero', 'Featured Game', 'Game Library', 'Community', 'Wishlist', 'Footer'],
     included: INCLUDED,
   },
   {
@@ -988,15 +992,17 @@ export const templates: Template[] = [
   },
 ];
 
-export const categories = [
-  { id: 'all',        label: 'All Templates' },
-  { id: 'saas',       label: 'SaaS'          },
-  { id: 'portfolio',  label: 'Portfolio'      },
-  { id: 'ecommerce',  label: 'Ecommerce'      },
-  { id: 'blog',       label: 'Blog'           },
-  { id: 'agency',     label: 'Agency'         },
-  { id: 'landing',    label: 'Landing Page'   },
-  { id: 'dashboard',  label: 'Dashboard'      },
-  { id: 'restaurant', label: 'Restaurant'     },
-  { id: 'corporate',  label: 'Corporate'      },
+// Filter UI list. Typed against TemplateCategory so a typo here — or in any
+// template's `category` — fails the build instead of rendering an empty page.
+export const categories: ReadonlyArray<{ id: TemplateCategory | 'all'; label: string }> = [
+  { id: 'all',        label: 'All Templates'            },
+  { id: 'saas',       label: 'SaaS'                     },
+  { id: 'portfolio',  label: 'Portfolio'                },
+  { id: 'ecommerce',  label: 'Ecommerce'                },
+  { id: 'blog',       label: 'Blog'                     },
+  { id: 'agency',     label: 'Agency'                   },
+  { id: 'landing',    label: 'Landing Page'             },
+  { id: 'dashboard',  label: 'Dashboard'                },
+  { id: 'restaurant', label: 'Restaurant & Hospitality' },
+  { id: 'corporate',  label: 'Corporate'                },
 ];
