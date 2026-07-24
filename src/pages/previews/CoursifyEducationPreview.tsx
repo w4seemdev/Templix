@@ -12,7 +12,7 @@ const ink = '#1e1b2e';
 const muted = '#6b6685';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -106,7 +106,7 @@ export default function CoursifyEducationPreview() {
             <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: `linear-gradient(135deg, ${violet}, #a855f7)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: '17px', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}>C</div>
             <span style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.03em' }}>Coursify</span>
           </div>
-          {!m && <nav style={{ display: 'flex', gap: '1.9rem' }}>{['Courses', 'Paths', 'Instructors', 'Pricing', 'For Teams'].map(l => <a key={l} href="#courses" style={{ fontSize: '14px', fontWeight: 500, color: muted, textDecoration: 'none' }}>{l}</a>)}</nav>}
+          {!m && <nav style={{ display: 'flex', gap: '1.9rem' }}>{['Courses', 'Paths', 'Instructors', 'Pricing', 'For Teams'].map(l => <a key={l} href={l === 'Pricing' ? '#Pricing' : '#courses'} style={{ fontSize: '14px', fontWeight: 500, color: muted, textDecoration: 'none' }}>{l}</a>)}</nav>}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {!m && <a href="#" style={{ fontSize: '14px', fontWeight: 600, color: ink, textDecoration: 'none' }}>Log in</a>}
             <a href="#" style={{ background: violet, color: '#fff', borderRadius: '9999px', padding: m ? '9px 16px' : '10px 22px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 18px rgba(124,58,237,0.3)' }}>Start free</a>

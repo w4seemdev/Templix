@@ -13,7 +13,7 @@ const MUTED = '#5b7287';
 const BORDER = '#e4ecf2';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -87,6 +87,7 @@ export default function MedCareHealthcarePreview() {
   const m = useIsMobile();
   const [dept, setDept] = useState('Cardiology');
   const [slot, setSlot] = useState('10:30');
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 2rem';
   const docFor = (d: string) => d === 'Cardiology' ? 'Dr. Rachel Kim' : d === 'Neurology' ? 'Dr. James Osei' : d === 'Pediatrics' ? 'Dr. Priya Nair' : 'Dr. Daniel Mercer';
 
@@ -102,8 +103,20 @@ export default function MedCareHealthcarePreview() {
             <span style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>Med<span style={{ color: TEAL }}>Care</span></span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.75rem' }}>{nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <button style={{ background: TEAL, color: '#fff', border: 'none', borderRadius: '10px', padding: m ? '9px 14px' : '10px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 6px 16px rgba(13,148,136,0.25)' }}>{m ? 'Book' : 'Book appointment'}</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: TEAL, color: '#fff', border: 'none', borderRadius: '10px', padding: m ? '9px 14px' : '10px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 6px 16px rgba(13,148,136,0.25)' }}>{m ? 'Book' : 'Book appointment'}</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '10px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: NAVY, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {nav.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: NAVY, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero + booking */}

@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 900px)');
     const on = () => setM(mq.matches);

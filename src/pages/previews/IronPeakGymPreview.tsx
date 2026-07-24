@@ -17,7 +17,7 @@ const display = "'Oswald', 'Arial Narrow', Impact, sans-serif";
 const body = "'Inter', system-ui, sans-serif";
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -130,6 +130,7 @@ function TrainerArt({ c1, c2, name }: { c1: string; c2: string; name: string }) 
 export default function IronPeakGymPreview() {
   const m = useIsMobile();
   const [activeDay, setActiveDay] = useState<Day>('Mon');
+  const [open, setOpen] = useState(false);
   const slots = schedule[activeDay];
   const pad = m ? '0 1.25rem' : '0 2rem';
 
@@ -145,8 +146,20 @@ export default function IronPeakGymPreview() {
             <span style={{ fontFamily: display, fontSize: '22px', fontWeight: 900, letterSpacing: '0.02em', textTransform: 'uppercase' }}>Iron<span style={{ color: LIME }}>Peak</span></span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.8rem' }}>{navLinks.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: MUTED, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <a href="#Book" style={{ background: LIME, color: BLACK, padding: m ? '9px 14px' : '11px 24px', fontSize: '13px', fontWeight: 900, letterSpacing: '0.06em', textTransform: 'uppercase', textDecoration: 'none', transform: 'skewX(-8deg)', display: 'inline-block' }}><span style={{ display: 'inline-block', transform: 'skewX(8deg)' }}>Free week →</span></a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <a href="#Book" style={{ background: LIME, color: BLACK, padding: m ? '9px 14px' : '11px 24px', fontSize: '13px', fontWeight: 900, letterSpacing: '0.06em', textTransform: 'uppercase', textDecoration: 'none', transform: 'skewX(-8deg)', display: 'inline-block' }}><span style={{ display: 'inline-block', transform: 'skewX(8deg)' }}>Free week →</span></a>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: BORDER, padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: LIME, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: BORDER }}>
+            {navLinks.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '13px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#f5f5f4', textDecoration: 'none', borderBottom: BORDER }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

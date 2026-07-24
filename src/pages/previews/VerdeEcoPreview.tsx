@@ -16,7 +16,7 @@ const BORDER = '#e4ddcf';
 const SERIF = "Georgia, 'Times New Roman', serif";
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -27,7 +27,7 @@ function useIsMobile() {
   return m;
 }
 
-const navLinks = ['Mission', 'Products', 'Impact', 'Journal', 'Contact'];
+const navLinks = ['Mission', 'Products', 'Impact', 'Contact'];
 
 const missionPillars = [
   { icon: 'leaf', title: 'Regenerative by design', desc: 'Every Verde product is made from materials that give back — organic cotton from regenerative farms, fast-regrowing bamboo, and ocean-bound plastic intercepted before it reaches the sea.' },
@@ -100,6 +100,7 @@ export default function VerdeEcoPreview() {
   const m = useIsMobile();
   const [cat, setCat] = useState('All');
   const [subscribed, setSubscribed] = useState(false);
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 1.5rem';
   const visible = cat === 'All' ? products : products.filter(p => p.category === cat);
 
@@ -115,8 +116,20 @@ export default function VerdeEcoPreview() {
             <span style={{ fontSize: '21px', fontWeight: 700, fontFamily: SERIF, color: FOREST_DARK }}>Verde</span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.6rem' }}>{navLinks.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <a href="#Products" style={{ background: FOREST, color: '#fdfcf8', borderRadius: '9999px', padding: m ? '9px 16px' : '10px 22px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 6px 18px rgba(22,101,52,0.25)' }}>Shop</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <a href="#Products" style={{ background: FOREST, color: '#fdfcf8', borderRadius: '9999px', padding: m ? '9px 16px' : '10px 22px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 6px 18px rgba(22,101,52,0.25)' }}>Shop</a>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: `1px solid ${BORDER}`, borderRadius: '9999px', padding: '8px 10px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: FOREST_DARK, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {navLinks.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: INK, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

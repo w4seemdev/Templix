@@ -14,7 +14,7 @@ const BORDER = '#e2e8f0';
 const SOFT = '#ecfeff';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -77,6 +77,7 @@ function CatIcon({ name }: { name: string }) {
 export default function JobBoardPreview() {
   const m = useIsMobile();
   const [filter, setFilter] = useState('All');
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 2rem';
 
   return (
@@ -91,8 +92,20 @@ export default function JobBoardPreview() {
             <span style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '-0.02em' }}>Remote<span style={{ color: CYAN }}>Base</span></span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.5rem' }}>{nav.map(l => <a key={l} href="#jobs" style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <button style={{ background: CYAN, color: '#fff', border: 'none', borderRadius: '9px', padding: m ? '8px 14px' : '8px 18px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Post a job</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: CYAN, color: '#fff', border: 'none', borderRadius: '9px', padding: m ? '8px 14px' : '8px 18px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Post a job</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '9px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {nav.map(l => <a key={l} href="#jobs" onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: INK, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero search */}

@@ -14,7 +14,7 @@ const MUTED = '#6b5560';
 const BORDER = '#f2e2df';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -25,7 +25,7 @@ function useIsMobile() {
   return m;
 }
 
-const nav = ['Classes', 'Schedule', 'Coaches', 'Pricing'];
+const nav = ['Schedule', 'Coaches', 'Pricing'];
 
 const schedule: Record<string, { name: string; coach: string; time: string; level: string; c: string }[]> = {
   Mon: [
@@ -76,6 +76,7 @@ function CoachArt({ c1, c2, name }: { c1: string; c2: string; name: string }) {
 export default function FitnessPreview() {
   const m = useIsMobile();
   const [day, setDay] = useState('Mon');
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 2rem';
 
   return (
@@ -90,8 +91,20 @@ export default function FitnessPreview() {
             <span style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em' }}>Momentum</span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.6rem' }}>{nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <button style={{ background: CORAL, color: '#fff', border: 'none', borderRadius: '9999px', padding: m ? '9px 16px' : '10px 22px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 16px rgba(244,63,94,0.3)' }}>Try a class</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: CORAL, color: '#fff', border: 'none', borderRadius: '9999px', padding: m ? '9px 16px' : '10px 22px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 16px rgba(244,63,94,0.3)' }}>Try a class</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '10px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {nav.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: INK, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

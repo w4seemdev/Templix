@@ -13,7 +13,7 @@ const BORDER = '#e5e5e5';
 const SERIF = "Georgia, 'Times New Roman', serif";
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -75,6 +75,7 @@ function Portrait({ c1, c2, name, height }: { c1: string; c2: string; name: stri
 export default function ScoutTalentPreview() {
   const m = useIsMobile();
   const [division, setDivision] = useState<typeof divisions[number]>('Women');
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 1.5rem';
   const filtered = talent.filter(t => t.division === division);
   const featured = talent[0];
@@ -86,12 +87,24 @@ export default function ScoutTalentPreview() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: pad, height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontFamily: SERIF, fontSize: '24px', fontWeight: 700, letterSpacing: '0.02em' }}>Scout<span style={{ color: GOLD }}>.</span></span>
           {!m && <nav style={{ display: 'flex', gap: '2rem' }}>{navLinks.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '12px', fontWeight: 600, color: INK, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.16em' }}>{l}</a>)}</nav>}
-          <a href="#Contact" style={{ border: `1px solid ${INK}`, color: INK, padding: m ? '8px 14px' : '10px 22px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Book Talent</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <a href="#Contact" style={{ border: `1px solid ${INK}`, color: INK, padding: m ? '8px 14px' : '10px 22px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Book Talent</a>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: `1px solid ${BORDER}`, padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {navLinks.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '12px', fontWeight: 600, color: INK, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.16em', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}
-      <section style={{ padding: m ? '3rem 0' : '5rem 0 4rem' }}>
+      <section id="About" style={{ padding: m ? '3rem 0' : '5rem 0 4rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: pad, display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '2.5rem' : '3rem', alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: GOLD, margin: '0 0 1.25rem' }}>Talent Agency · Est. 2009</p>

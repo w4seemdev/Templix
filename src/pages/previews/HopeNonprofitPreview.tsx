@@ -14,7 +14,7 @@ const BORDER = '#e7e5e4';
 const SOFT = '#faf9f7';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -92,6 +92,7 @@ export default function HopeNonprofitPreview() {
   const m = useIsMobile();
   const [amount, setAmount] = useState<number>(50);
   const [monthly, setMonthly] = useState(true);
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 1.5rem';
 
   return (
@@ -104,8 +105,20 @@ export default function HopeNonprofitPreview() {
             <span style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.02em' }}>Hope</span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '1.75rem' }}>{navLinks.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: GREY, textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <a href="#donate" style={{ background: ROSE, color: '#fff', borderRadius: '9999px', padding: m ? '9px 18px' : '10px 24px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 18px rgba(225,29,72,0.3)' }}>Donate</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <a href="#donate" style={{ background: ROSE, color: '#fff', borderRadius: '9999px', padding: m ? '9px 18px' : '10px 24px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 18px rgba(225,29,72,0.3)' }}>Donate</a>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '9999px', padding: '8px 10px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {navLinks.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: INK, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}
@@ -287,7 +300,7 @@ export default function HopeNonprofitPreview() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${BORDER}`, background: SOFT, padding: m ? '3rem 0 2rem' : '3.5rem 0 2rem' }}>
+      <footer id="Contact" style={{ borderTop: `1px solid ${BORDER}`, background: SOFT, padding: m ? '3rem 0 2rem' : '3.5rem 0 2rem' }}>
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: m ? '2rem' : '3rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
             <div style={{ maxWidth: '280px' }}>

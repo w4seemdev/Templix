@@ -14,7 +14,7 @@ const BORDER = '#e0edf6';
 const MINT = '#0d9488';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -100,7 +100,7 @@ export default function HealthcarePreview() {
           </div>
           {!m && (
             <nav style={{ display: 'flex', gap: '1.6rem' }}>
-              {nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}
+              {nav.map(l => <a key={l} href={`#${l.replace(/\s/g, '')}`} style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>{l}</a>)}
             </nav>
           )}
           <button style={{ background: SKY, color: '#fff', border: 'none', borderRadius: '10px', padding: m ? '9px 14px' : '10px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 6px 16px rgba(2,132,199,0.25)' }}>
@@ -183,7 +183,7 @@ export default function HealthcarePreview() {
       </section>
 
       {/* Care team */}
-      <section id="Care Team" style={{ padding: m ? '3.25rem 0' : '5rem 0', background: '#f6fafd', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <section id="CareTeam" style={{ padding: m ? '3.25rem 0' : '5rem 0', background: '#f6fafd', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad }}>
           <div style={{ marginBottom: m ? '2rem' : '3rem' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: SKY }}>Your care team</span>

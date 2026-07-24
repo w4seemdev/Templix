@@ -14,7 +14,7 @@ const BORDER = '#e5e7eb';
 const FAINT = '#f7f6f2';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -25,7 +25,7 @@ function useIsMobile() {
   return m;
 }
 
-const nav = ['Practice', 'Attorneys', 'Results', 'Insights', 'Contact'];
+const nav = ['Practice', 'Attorneys', 'Results', 'Contact'];
 
 const areas = [
   { icon: 'building', name: 'Corporate Law', desc: 'M&A, joint ventures, restructuring, and governance for mid-market and Fortune 500 companies.' },
@@ -80,6 +80,7 @@ function Portrait({ c1, c2, name, tall }: { c1: string; c2: string; name: string
 
 export default function LegalPreview() {
   const m = useIsMobile();
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 2.5rem';
 
   return (
@@ -92,8 +93,20 @@ export default function LegalPreview() {
             <span style={{ display: 'block', fontSize: '9px', color: '#9ca3af', letterSpacing: '0.22em', marginTop: '-2px', fontFamily: 'system-ui, sans-serif' }}>ATTORNEYS AT LAW</span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '2rem' }}>{nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '12px', fontWeight: 500, color: '#9ca3af', textDecoration: 'none', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: 'system-ui, sans-serif' }}>{l}</a>)}</nav>}
-          <button style={{ background: GOLD, color: '#fff', border: 'none', borderRadius: '3px', padding: m ? '9px 14px' : '10px 20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: 'system-ui, sans-serif' }}>{m ? 'Consult' : 'Free consultation'}</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: GOLD, color: '#fff', border: 'none', borderRadius: '3px', padding: m ? '9px 14px' : '10px 20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: 'system-ui, sans-serif' }}>{m ? 'Consult' : 'Free consultation'}</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '3px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: '#fff', display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: '1px solid rgba(255,255,255,0.14)' }}>
+            {nav.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '12px', fontWeight: 500, color: '#e5e7eb', textDecoration: 'none', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: 'system-ui, sans-serif', borderBottom: '1px solid rgba(255,255,255,0.14)' }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

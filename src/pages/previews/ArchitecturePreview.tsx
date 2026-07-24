@@ -12,7 +12,7 @@ const MUTED = '#737370';
 const LINE = '#e0e0d8';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -65,6 +65,7 @@ function ProjArt({ c1, c2 }: { c1: string; c2: string }) {
 
 export default function ArchitecturePreview() {
   const m = useIsMobile();
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 3rem';
 
   return (
@@ -74,12 +75,24 @@ export default function ArchitecturePreview() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: pad, height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Forma Studio</span>
           {!m && <nav style={{ display: 'flex', gap: '2.25rem' }}>{nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '11px', color: MUTED, textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l}</a>)}</nav>}
-          <button style={{ background: STONE, color: PAPER, border: 'none', borderRadius: '2px', padding: m ? '8px 14px' : '9px 18px', fontSize: '11px', cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{m ? 'Contact' : 'Get in touch'}</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: STONE, color: PAPER, border: 'none', borderRadius: '2px', padding: m ? '8px 14px' : '9px 18px', fontSize: '11px', cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{m ? 'Contact' : 'Get in touch'}</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: `1px solid ${LINE}`, borderRadius: '2px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: STONE, display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${LINE}` }}>
+            {nav.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '11px', color: STONE, textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase', borderBottom: `1px solid ${LINE}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', minHeight: m ? 'auto' : '80vh' }}>
+      <section id="Studio" style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', minHeight: m ? 'auto' : '80vh' }}>
         <div style={{ padding: m ? '3rem 1.25rem 2.5rem' : '6rem 3rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <p style={{ fontSize: '11px', letterSpacing: '0.2em', color: MUTED, textTransform: 'uppercase', marginBottom: '1.5rem' }}>Est. 2008 · Barcelona · New York</p>
           <h1 style={{ fontSize: m ? '2.6rem' : 'clamp(2.8rem, 6vw, 4.5rem)', fontWeight: 800, letterSpacing: '-0.045em', lineHeight: 0.98, margin: '0 0 1.5rem' }}>

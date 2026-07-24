@@ -13,7 +13,7 @@ const MUTED = '#64748b';
 const BORDER = '#e2e8f0';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -77,6 +77,7 @@ function ProjArt({ c1, c2 }: { c1: string; c2: string }) {
 
 export default function ConstructionPreview() {
   const m = useIsMobile();
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 2rem';
 
   return (
@@ -91,8 +92,20 @@ export default function ConstructionPreview() {
             <span style={{ fontSize: '18px', fontWeight: 900, color: '#fff', letterSpacing: '0.02em' }}>BRIX</span>
           </div>
           {!m && <nav style={{ display: 'flex', gap: '2rem' }}>{nav.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', textDecoration: 'none' }}>{l}</a>)}</nav>}
-          <button style={{ background: AMBER, color: SLATE, border: 'none', borderRadius: '6px', padding: m ? '9px 14px' : '10px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Request quote</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <button style={{ background: AMBER, color: SLATE, border: 'none', borderRadius: '6px', padding: m ? '9px 14px' : '10px 20px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Request quote</button>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: 'none', border: '1px solid rgba(255,255,255,0.22)', borderRadius: '6px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: '#fff', display: 'block' }} />)}
+              </button>
+            )}
+          </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+            {nav.map(l => <a key={l} href={`#${l}`} onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '14px', fontWeight: 500, color: '#e2e8f0', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}
@@ -194,7 +207,7 @@ export default function ConstructionPreview() {
       </section>
 
       {/* Footer */}
-      <footer style={{ background: '#0a0f1a', padding: m ? '2.5rem 0 1.75rem' : '3rem 0 2rem' }}>
+      <footer id="Contact" style={{ background: '#0a0f1a', padding: m ? '2.5rem 0 1.75rem' : '3rem 0 2rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: pad, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: AMBER, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

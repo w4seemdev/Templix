@@ -15,7 +15,7 @@ const SOFT = '#f8fafc';
 const TINT = 'rgba(16,185,129,0.08)';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -117,6 +117,7 @@ export default function NomadRemoteJobsPreview() {
   const m = useIsMobile();
   const [cat, setCat] = useState('All roles');
   const [savedIds, setSavedIds] = useState<number[]>([]);
+  const [open, setOpen] = useState(false);
   const pad = m ? '0 1.25rem' : '0 1.5rem';
   const visible = cat === 'All roles' ? jobs : jobs.filter(j => j.category === cat);
   const toggle = (id: number) => setSavedIds(p => p.includes(id) ? p.filter(s => s !== id) : [...p, id]);
@@ -134,8 +135,18 @@ export default function NomadRemoteJobsPreview() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {!m && <a href="#" style={{ fontSize: '14px', fontWeight: 500, color: MUTED, textDecoration: 'none' }}>Sign in</a>}
             <a href="#" style={{ background: EMERALD, color: '#fff', borderRadius: '12px', padding: '9px 18px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 14px rgba(16,185,129,0.3)' }}>Post a job</a>
+            {m && (
+              <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '7px 9px', cursor: 'pointer', display: 'grid', gap: '4px' }}>
+                {[0, 1, 2].map(i => <span key={i} style={{ width: '18px', height: '2px', background: INK, display: 'block' }} />)}
+              </button>
+            )}
           </div>
         </div>
+        {m && open && (
+          <nav style={{ display: 'grid', padding: '0.25rem 1.25rem 0.75rem', borderTop: `1px solid ${BORDER}` }}>
+            {navLinks.map(l => <a key={l} href="#jobs" onClick={() => setOpen(false)} style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: INK, textDecoration: 'none', borderBottom: `1px solid ${BORDER}` }}>{l}</a>)}
+          </nav>
+        )}
       </header>
 
       {/* Hero */}

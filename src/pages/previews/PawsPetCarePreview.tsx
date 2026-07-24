@@ -14,7 +14,7 @@ const BORDER = '#e2e8f0';
 const SOFT = '#f0f9ff';
 
 function useIsMobile() {
-  const [m, setM] = useState(false);
+  const [m, setM] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const on = () => setM(mq.matches);
@@ -122,7 +122,7 @@ export default function PawsPetCarePreview() {
             <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: SKY, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Paw size={20} fill="#fff" /></div>
             <span style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.02em' }}>Paws</span>
           </div>
-          {!m && <nav style={{ display: 'flex', gap: '1.75rem' }}>{navLinks.map(l => <a key={l} href={`#${l}`} style={{ fontSize: '14px', fontWeight: 500, color: GREY, textDecoration: 'none' }}>{l}</a>)}</nav>}
+          {!m && <nav style={{ display: 'flex', gap: '1.75rem' }}>{navLinks.map(l => <a key={l} href={`#${l.replace(/\s/g, '')}`} style={{ fontSize: '14px', fontWeight: 500, color: GREY, textDecoration: 'none' }}>{l}</a>)}</nav>}
           <a href="#book" style={{ background: SKY, color: '#fff', borderRadius: '9999px', padding: m ? '9px 18px' : '10px 24px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 18px rgba(14,165,233,0.3)' }}>Book a visit</a>
         </div>
       </header>
@@ -189,7 +189,7 @@ export default function PawsPetCarePreview() {
       </section>
 
       {/* Vets */}
-      <section id="Our Vets" style={{ padding: m ? '3.5rem 0' : '5rem 0', background: SOFT, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <section id="OurVets" style={{ padding: m ? '3.5rem 0' : '5rem 0', background: SOFT, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad }}>
           <div style={{ textAlign: 'center', marginBottom: m ? '2rem' : '3rem' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: SKY }}>Our team</span>
