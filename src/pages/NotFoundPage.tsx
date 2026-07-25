@@ -31,11 +31,11 @@ export default function NotFoundPage() {
 
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link to="/" className="btn btn-primary">
-            <ArrowLeft size={15} />
+            <ArrowLeft size={15} aria-hidden="true" />
             Back to home
           </Link>
           <Link to="/templates" className="btn btn-secondary">
-            <LayoutGrid size={15} />
+            <LayoutGrid size={15} aria-hidden="true" />
             Browse templates
           </Link>
         </div>

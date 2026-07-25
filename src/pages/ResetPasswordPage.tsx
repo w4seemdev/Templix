@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { MIN_PASSWORD_LENGTH } from '../lib/constants';
 import { useSEO } from '../hooks/useSEO';
 
 const inputClass =
   'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.45)] focus:outline-none';
 
-const MIN_PASSWORD_LENGTH = 8;
 const REDIRECT_DELAY_MS = 2500;
 
 export default function ResetPasswordPage() {

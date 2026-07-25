@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect, useDeferredValue } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useMemo, useEffect, useRef, useDeferredValue } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, ArrowUpDown, ChevronDown, SearchX, X } from 'lucide-react';
 import TemplateCard from '../components/ui/TemplateCard';
 import { templates, categories } from '../data/templates';
@@ -38,22 +38,30 @@ export default function TemplatesPage() {
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // The URL is the single source of truth for category / price / sort, so deep
-  // links (/templates?category=saas), shared URLs and Back/Forward all restore
-  // the same view instead of silently drifting from the visible chips.
+  // The URL is the single source of truth for every filter — search included —
+  // so deep links (/templates?category=saas), shared URLs, Back/Forward and a
+  // plain /templates all restore exactly the view the address bar describes.
   const categoryParam = searchParams.get('category');
   const filterParam   = searchParams.get('filter');
   const sortParam     = searchParams.get('sort');
+  const searchParam   = searchParams.get('search') ?? '';
   const activeCategory          = isValidCategory(categoryParam) ? categoryParam : 'all';
   const priceFilter: PriceFilter = isPriceParam(filterParam)     ? filterParam   : 'all';
   const sortBy:      SortOption  = isSortParam(sortParam)        ? sortParam     : 'featured';
 
-  // Typing stays on local state (urgent lane); the grid re-filters at deferred
-  // priority and the URL catches up debounced.
-  const [search,        setSearch]        = useState(() => searchParams.get('search') ?? '');
+  // The input holds a draft of the URL value so typing stays on the urgent lane;
+  // the grid re-filters at deferred priority and the URL catches up debounced.
+  const [searchDraft,   setSearchDraft]   = useState(searchParam);
   const [searchFocused, setSearchFocused] = useState(false);
-  const deferredSearch = useDeferredValue(search);
+  const deferredSearch = useDeferredValue(searchDraft);
+  // Last value this page wrote into ?search=, so a change we did NOT author
+  // (Back/Forward, a nav link to a bare /templates) is recognised and adopted
+  // instead of being overwritten by the stale draft.
+  const pushedSearchRef = useRef(searchParam);
+  const searchInputRef  = useRef<HTMLInputElement>(null);
 
   /** Write one filter key to the URL, dropping it when it holds the default value. */
   const writeParam = (key: string, value: string | null) => {
@@ -64,11 +72,19 @@ export default function TemplatesPage() {
     }, { replace: true });
   };
 
-  // Mirror the query into ?search= so a filtered view can be shared or bookmarked.
+  // URL → input. Anything that rewrites ?search= from outside this input wins.
   useEffect(() => {
-    const q = search.trim();
-    if ((searchParams.get('search') ?? '') === q) return;
+    if (searchParam === pushedSearchRef.current) return;
+    pushedSearchRef.current = searchParam;
+    setSearchDraft(searchParam);
+  }, [searchParam]);
+
+  // input → URL, debounced so typing never drives navigation per keystroke.
+  useEffect(() => {
+    const q = searchDraft.trim();
+    if (q === searchParam) return;
     const id = setTimeout(() => {
+      pushedSearchRef.current = q;
       setSearchParams(prev => {
         const next = new URLSearchParams(prev);
         if (q) next.set('search', q); else next.delete('search');
@@ -76,7 +92,18 @@ export default function TemplatesPage() {
       }, { replace: true });
     }, SEARCH_SYNC_MS);
     return () => clearTimeout(id);
-  }, [search, searchParams, setSearchParams]);
+  }, [searchDraft, searchParam, setSearchParams]);
+
+  // ⌘K / Ctrl-K and the navbar search affordance both land here carrying a
+  // one-shot location-state flag. Focus the input, then strip the flag so
+  // returning to this history entry never steals focus a second time.
+  const focusSearchRequested = Boolean((location.state as { focusSearch?: boolean } | null)?.focusSearch);
+  useEffect(() => {
+    if (!focusSearchRequested) return;
+    searchInputRef.current?.focus();
+    searchInputRef.current?.select();
+    navigate({ pathname: location.pathname, search: location.search }, { replace: true, state: null });
+  }, [focusSearchRequested, navigate, location.pathname, location.search]);
 
   // Per-category counts, derived from the data so new templates are picked up automatically.
   const categoryCounts = useMemo(() => {
@@ -106,10 +133,11 @@ export default function TemplatesPage() {
     return result;
   }, [deferredSearch, activeCategory, priceFilter, sortBy]);
 
-  const hasActiveFilters = search.trim() !== '' || activeCategory !== 'all' || priceFilter !== 'all';
+  const hasActiveFilters = searchDraft.trim() !== '' || activeCategory !== 'all' || priceFilter !== 'all';
 
   const clearFilters = () => {
-    setSearch('');
+    pushedSearchRef.current = '';
+    setSearchDraft('');
     setSearchParams(prev => {
       const next = new URLSearchParams(prev);
       next.delete('category');
@@ -144,32 +172,34 @@ export default function TemplatesPage() {
           <div className="relative min-w-[220px] flex-1">
             <Search
               size={16}
+              aria-hidden="true"
               className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-150 ${searchFocused ? 'text-accent-hover' : 'text-text-tertiary'}`}
             />
             <input
+              ref={searchInputRef}
               type="search"
               aria-label="Search templates"
               placeholder="Search templates, tags, keywords…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
+              value={searchDraft}
+              onChange={e => setSearchDraft(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
               className="h-11 w-full rounded-lg border bg-surface-2 pl-10 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 placeholder:text-text-tertiary"
               style={{
                 borderColor: searchFocused ? 'var(--color-border-accent)' : 'var(--color-border-default)',
                 boxShadow: searchFocused ? '0 0 0 3px rgba(124,92,252,0.18)' : 'none',
-                paddingRight: search ? '40px' : '16px',
+                paddingRight: searchDraft ? '40px' : '16px',
               }}
             />
-            {search && (
+            {searchDraft && (
               <button
                 type="button"
-                onClick={() => setSearch('')}
+                onClick={() => { setSearchDraft(''); searchInputRef.current?.focus(); }}
                 title="Clear search"
                 aria-label="Clear search"
                 className="absolute right-2.5 top-1/2 grid h-6 w-6 -translate-y-1/2 cursor-pointer place-items-center rounded-md border-0 bg-transparent text-text-tertiary transition-colors duration-150 hover:bg-white/[0.06] hover:text-text-primary"
               >
-                <X size={14} />
+                <X size={14} aria-hidden="true" />
               </button>
             )}
           </div>
@@ -199,7 +229,7 @@ export default function TemplatesPage() {
 
           {/* Sort */}
           <div className="relative flex h-11 items-center gap-2 rounded-lg border border-border-default bg-surface-2 pl-3.5 transition-colors duration-150 hover:border-border-strong">
-            <ArrowUpDown size={14} className="pointer-events-none shrink-0 text-text-tertiary" />
+            <ArrowUpDown size={14} aria-hidden="true" className="pointer-events-none shrink-0 text-text-tertiary" />
             <select
               value={sortBy}
               onChange={e => writeParam('sort', e.target.value === 'featured' ? null : e.target.value)}
@@ -211,7 +241,7 @@ export default function TemplatesPage() {
               <option value="price-high">Price: High → Low</option>
               <option value="newest">Newest</option>
             </select>
-            <ChevronDown size={14} className="pointer-events-none absolute right-3 text-text-tertiary" />
+            <ChevronDown size={14} aria-hidden="true" className="pointer-events-none absolute right-3 text-text-tertiary" />
           </div>
         </div>
 
@@ -235,12 +265,37 @@ export default function TemplatesPage() {
 
         <div className="hairline mb-6" />
 
+        {/* Result summary — stays mounted across the empty/non-empty switch so its
+            live region actually announces filter changes. A live region inserted
+            into the DOM together with its text is not reliably read out (WCAG 4.1.3). */}
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <p role="status" aria-live="polite" className="text-[13px] text-text-tertiary">
+            {filtered.length === 0 ? 'No templates match the current filters' : (
+              <>
+                Showing{' '}
+                <span className="font-mono font-medium text-text-secondary" style={TNUM}>{filtered.length}</span>
+                {' '}of{' '}
+                <span className="font-mono font-medium" style={TNUM}>{templates.length}</span>
+                {' '}template{templates.length !== 1 ? 's' : ''}
+              </>
+            )}
+          </p>
+          {hasActiveFilters && filtered.length > 0 && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-accent-text transition-colors duration-150 hover:text-accent-hover"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+
         {/* Results */}
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-border-default px-6 py-24 text-center">
-            <span role="status" aria-live="polite" className="sr-only">No templates found</span>
             <div className="mb-5 grid h-12 w-12 place-items-center rounded-full border border-accent-soft-border bg-accent-soft">
-              <SearchX size={22} className="text-accent-text" />
+              <SearchX size={22} className="text-accent-text" aria-hidden="true" />
             </div>
             <h2 className="text-lg font-semibold text-text-primary">No templates found</h2>
             <p className="mt-1.5 max-w-[40ch] text-[15px] text-text-secondary">
@@ -255,29 +310,9 @@ export default function TemplatesPage() {
             )}
           </div>
         ) : (
-          <>
-            <div className="mb-6 flex items-center justify-between gap-3">
-              <p role="status" aria-live="polite" className="text-[13px] text-text-tertiary">
-                Showing{' '}
-                <span className="font-mono font-medium text-text-secondary" style={TNUM}>{filtered.length}</span>
-                {' '}of{' '}
-                <span className="font-mono font-medium" style={TNUM}>{templates.length}</span>
-                {' '}template{templates.length !== 1 ? 's' : ''}
-              </p>
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-accent-text transition-colors duration-150 hover:text-accent-hover"
-                >
-                  Clear filters
-                </button>
-              )}
-            </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 min-[1440px]:grid-cols-4">
-              {filtered.map(t => <TemplateCard key={t.id} template={t} />)}
-            </div>
-          </>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 min-[1440px]:grid-cols-4">
+            {filtered.map(t => <TemplateCard key={t.id} template={t} />)}
+          </div>
         )}
 
       </Container>

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { isSupabaseConfigured, MIN_PASSWORD_LENGTH } from '../lib/constants';
 import { useSEO } from '../hooks/useSEO';
 
 const inputClass =
   'h-11 w-full rounded-lg border border-border-default bg-surface-2 px-3.5 text-[15px] text-text-primary transition-[border-color,box-shadow] duration-150 focus:border-border-accent focus:shadow-[0_0_0_3px_rgba(124,92,252,0.45)] focus:outline-none';
 
-const MIN_PASSWORD_LENGTH = 8;
-
-// signIn/signUp reject only when the auth client itself never loaded — a stale
-// cached index.html after a deploy, or the chunk request being blocked.
+// Every auth call here goes through the context so supabase-js stays off this
+// route until the visitor actually acts. They reject only when the auth client
+// itself never loaded — a stale cached index.html after a deploy, or the chunk
+// request being blocked.
 const AUTH_UNREACHABLE_MESSAGE =
   'We couldn’t reach the sign-in service. Reload the page and try again.';
 
@@ -31,7 +31,7 @@ export default function LoginPage() {
   const [needsConfirm, setNeedsConfirm]   = useState(false);
   const [resending, setResending]         = useState(false);
 
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, signInWithGoogle, sendPasswordReset, resendConfirmation } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -81,36 +81,47 @@ export default function LoginPage() {
   const handleGoogle = async () => {
     resetBanners();
     setGoogleLoading(true);
-    // OAuth does a full-page redirect, so the return-intent must ride on
-    // redirectTo. Preserve the live origin (localhost / preview / prod).
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}${safeNext}` },
-    });
-    if (error) { setError(error.message); setGoogleLoading(false); }
-    // On success the browser is redirected away; no further state needed.
+    try {
+      // OAuth does a full-page redirect, so the return-intent must ride on
+      // redirectTo. The context preserves the live origin (localhost /
+      // preview / prod) and appends this path.
+      const { error } = await signInWithGoogle(safeNext);
+      if (error) { setError(error); setGoogleLoading(false); }
+      // On success the browser is redirected away; no further state needed.
+    } catch {
+      setError(AUTH_UNREACHABLE_MESSAGE);
+      setGoogleLoading(false);
+    }
   };
 
   const handleForgotPassword = async () => {
     if (!email) { resetBanners(); setError('Enter your email first.'); return; }
     resetBanners();
     setResetLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    setResetLoading(false);
-    if (error) setError(error.message);
-    else setSuccess('Password reset email sent! Check your inbox.');
+    try {
+      const { error } = await sendPasswordReset(email);
+      if (error) setError(error);
+      else setSuccess('Password reset email sent! Check your inbox.');
+    } catch {
+      setError(AUTH_UNREACHABLE_MESSAGE);
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   const handleResend = async () => {
     if (!email) { setError('Enter your email first.'); return; }
     setResending(true);
     setSuccess('');
-    const { error } = await supabase.auth.resend({ type: 'signup', email });
-    setResending(false);
-    if (error) setError(error.message);
-    else { setNeedsConfirm(false); setError(''); setSuccess('Confirmation email sent. Check your inbox.'); }
+    try {
+      const { error } = await resendConfirmation(email);
+      if (error) setError(error);
+      else { setNeedsConfirm(false); setError(''); setSuccess('Confirmation email sent. Check your inbox.'); }
+    } catch {
+      setError(AUTH_UNREACHABLE_MESSAGE);
+    } finally {
+      setResending(false);
+    }
   };
 
   return (

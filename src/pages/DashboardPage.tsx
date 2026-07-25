@@ -8,6 +8,7 @@ import type { Template } from '../types';
 import Container from '../components/ui/Container';
 import { useWishlist } from '../hooks/useWishlist';
 import { downloadTemplateZip } from '../lib/downloads';
+import { MIN_PASSWORD_LENGTH } from '../lib/constants';
 import { useSEO } from '../hooks/useSEO';
 
 interface OwnedItem {
@@ -17,7 +18,6 @@ interface OwnedItem {
 
 const mono = { fontFeatureSettings: '"tnum"' } as const;
 
-const MIN_PASSWORD_LENGTH = 8;
 const freeCount = templates.filter(t => t.isFree).length;
 
 const inputClass =
@@ -76,7 +76,13 @@ export default function DashboardPage() {
   }, [user?.id, user?.user_metadata?.full_name]);
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      await signOut();
+    } catch {
+      // signOut rejects only when the auth module can't load. Leaving the user
+      // on a signed-in-looking dashboard is the worse failure — send them home
+      // regardless; a reload re-reads the real session.
+    }
     navigate('/');
   };
 
@@ -130,9 +136,15 @@ export default function DashboardPage() {
     ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
     : '—';
 
+  // Until the library query lands — or when it failed — `owned` is empty because
+  // we don't know, not because the buyer owns nothing. Rendering "0" and "$0"
+  // states that as fact to someone who may have paid for every template here, so
+  // say "unknown" the same way `memberSince` already does.
+  const libraryKnown = !loading && !loadError;
+
   const stats = [
-    { label: 'Templates owned', value: String(owned.length) },
-    { label: 'Library value', value: `$${libraryValue}` },
+    { label: 'Templates owned', value: libraryKnown ? String(owned.length) : '—' },
+    { label: 'Library value', value: libraryKnown ? `$${libraryValue}` : '—' },
     { label: 'Wishlist saves', value: String(wishlist.length) },
     { label: 'Member since', value: memberSince },
   ];

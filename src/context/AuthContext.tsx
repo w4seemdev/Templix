@@ -8,6 +8,10 @@ import type { User, Session } from '@supabase/supabase-js';
  * parsed and executed before first paint even for anonymous visitors who never
  * touch auth. Load it on demand instead. The module-level promise means every
  * caller shares one instance and the module is fetched at most once.
+ *
+ * Consumers must route auth calls through this context. A component that
+ * imports '../lib/supabase' directly puts the chunk back on its own route —
+ * that is why the OAuth, password-reset, and resend methods below exist.
  */
 let clientPromise: Promise<typeof import('../lib/supabase')> | null = null;
 const getSupabase = async () => {
@@ -32,7 +36,10 @@ interface AuthContextType {
   authUnavailable: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signInWithGoogle: () => Promise<{ error: string | null }>;
+  /** `redirectPath` is where OAuth lands after the round trip (same-origin path). */
+  signInWithGoogle: (redirectPath?: string) => Promise<{ error: string | null }>;
+  sendPasswordReset: (email: string) => Promise<{ error: string | null }>;
+  resendConfirmation: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -104,12 +111,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error?.message ?? null };
   }, []);
 
-  const signInWithGoogle = useCallback(async () => {
+  const signInWithGoogle = useCallback(async (redirectPath = '/dashboard') => {
     const supabase = await getSupabase();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { redirectTo: `${window.location.origin}${redirectPath}` },
     });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const sendPasswordReset = useCallback(async (email: string) => {
+    const supabase = await getSupabase();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const resendConfirmation = useCallback(async (email: string) => {
+    const supabase = await getSupabase();
+    const { error } = await supabase.auth.resend({ type: 'signup', email });
     return { error: error?.message ?? null };
   }, []);
 
@@ -119,8 +140,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<AuthContextType>(
-    () => ({ user, session, loading, authUnavailable, signUp, signIn, signInWithGoogle, signOut }),
-    [user, session, loading, authUnavailable, signUp, signIn, signInWithGoogle, signOut],
+    () => ({
+      user, session, loading, authUnavailable,
+      signUp, signIn, signInWithGoogle, sendPasswordReset, resendConfirmation, signOut,
+    }),
+    [
+      user, session, loading, authUnavailable,
+      signUp, signIn, signInWithGoogle, sendPasswordReset, resendConfirmation, signOut,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

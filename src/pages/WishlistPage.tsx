@@ -26,7 +26,9 @@ export default function WishlistPage() {
             <h1 className="headline-fade text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] md:text-[44px]">
               My wishlist
             </h1>
-            <p className="mt-3 text-[15px] text-text-secondary">
+            {/* Always mounted, so unhearting a card announces the new count
+                instead of silently swapping the grid for the empty state. */}
+            <p role="status" aria-live="polite" className="mt-3 text-[15px] text-text-secondary">
               <span className="font-mono font-medium text-text-primary" style={TNUM}>{saved.length}</span>
               {' '}saved template{saved.length !== 1 ? 's' : ''} — kept on this device, ready when you are.
             </p>

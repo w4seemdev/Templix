@@ -170,7 +170,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
                 style={{
                   ...badgeBaseStyle,
                   border: '1px solid rgba(62,207,142,0.35)',
-                  color: '#3ECF8E',
+                  color: 'var(--color-success)',
                 }}
               >
                 Free
@@ -181,7 +181,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
                 style={{
                   ...badgeBaseStyle,
                   border: '1px solid rgba(124,92,252,0.45)',
-                  color: '#C4B5FD',
+                  color: 'var(--color-accent-text)',
                 }}
               >
                 Premium
@@ -233,7 +233,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
                 fontSize: '15px',
                 fontWeight: 600,
                 fontFeatureSettings: '"tnum"',
-                color: template.isFree ? '#3ECF8E' : 'var(--color-text-primary)',
+                color: template.isFree ? 'var(--color-success)' : 'var(--color-text-primary)',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,
               }}
