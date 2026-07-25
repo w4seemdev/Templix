@@ -1,5 +1,5 @@
 /* ============================================================
-   CAREPOINT — Primary-care clinic template
+   CAREPOINT - Primary-care clinic template
    Calm sky-blue · trust-building clinical layout
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -28,7 +28,7 @@ function useIsMobile() {
 const nav = ['Services', 'Care Team', 'Patients', 'Reviews', 'Contact'];
 
 const services = [
-  { icon: 'stethoscope', title: 'Family Medicine', desc: 'Everyday care for every age — check-ups, chronic conditions, and same-day sick visits.' },
+  { icon: 'stethoscope', title: 'Family Medicine', desc: 'Everyday care for every age - check-ups, chronic conditions, and same-day sick visits.' },
   { icon: 'video', title: 'Telehealth Visits', desc: 'Secure video consultations with your own physician, from home, in under 15 minutes.' },
   { icon: 'flask', title: 'On-site Lab', desc: 'Blood panels, screenings, and results delivered straight to your patient portal.' },
   { icon: 'syringe', title: 'Immunizations', desc: 'Flu, travel, and childhood vaccination schedules managed and reminded automatically.' },
@@ -142,7 +142,7 @@ export default function HealthcarePreview() {
                 <div key={d} style={{ textAlign: 'center', border: `1px solid ${i === 1 ? SKY : BORDER}`, background: i === 1 ? SKY : '#fff', color: i === 1 ? '#fff' : INK, borderRadius: '10px', padding: '9px 0', fontSize: '13px', fontWeight: 600 }}>{d}<div style={{ fontSize: '11px', fontWeight: 500, opacity: 0.7 }}>{16 + i}</div></div>
               ))}
             </div>
-            <button style={{ width: '100%', background: INK, color: '#fff', border: 'none', borderRadius: '12px', padding: '13px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Continue — {dept}</button>
+            <button style={{ width: '100%', background: INK, color: '#fff', border: 'none', borderRadius: '12px', padding: '13px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Continue - {dept}</button>
             <p style={{ fontSize: '12px', color: MUTED, textAlign: 'center', margin: '10px 0 0' }}>Most visits confirmed within the hour.</p>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function HealthcarePreview() {
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad }}>
           <div style={{ background: `linear-gradient(135deg, ${INK}, #0e4b73)`, borderRadius: '22px', padding: m ? '2.5rem 1.5rem' : '3.75rem 3rem', textAlign: 'center' }}>
             <h2 style={{ fontSize: m ? '1.7rem' : 'clamp(1.9rem, 3.6vw, 2.6rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', margin: '0 0 0.9rem' }}>Feeling unwell? We have time today.</h2>
-            <p style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.75)', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.7 }}>Book online in two minutes, or call our front desk — a real person answers, every time.</p>
+            <p style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.75)', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.7 }}>Book online in two minutes, or call our front desk - a real person answers, every time.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.9rem', flexWrap: 'wrap' }}>
               <button style={{ background: '#fff', color: INK, border: 'none', borderRadius: '12px', padding: '13px 26px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>Book an appointment</button>
               <button style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', borderRadius: '12px', padding: '13px 26px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Call (555) 200-4180</button>
@@ -276,7 +276,7 @@ export default function HealthcarePreview() {
             </div>
             <span style={{ fontSize: '15px', fontWeight: 800 }}>Care<span style={{ color: SKY }}>Point</span></span>
           </div>
-          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>140 Elm Street · Open Mon–Sat, 8:00–19:00</p>
+          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>140 Elm Street · Open Mon-Sat, 8:00-19:00</p>
           <p style={{ fontSize: '13px', color: '#9fb6cc', margin: 0 }}>© 2026 CarePoint Family Health</p>
         </div>
       </footer>

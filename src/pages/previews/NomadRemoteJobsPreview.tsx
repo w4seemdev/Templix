@@ -1,5 +1,5 @@
 /* ============================================================
-   NOMAD — Remote jobs board template
+   NOMAD - Remote jobs board template
    Clean light theme · emerald accent · travel feel
    React 19 + TypeScript + Vite. Self-contained, fully responsive.
    ============================================================ */
@@ -41,14 +41,14 @@ const categories = ['All roles', 'Engineering', 'Design', 'Marketing', 'Product'
 type Job = { id: number; title: string; company: string; mono: string; color: string; category: string; salary: string; timezone: string; type: string; tags: string[]; posted: string; };
 
 const jobs: Job[] = [
-  { id: 1, title: 'Senior Frontend Engineer', company: 'Wanderstack', mono: 'W', color: '#10b981', category: 'Engineering', salary: '$130k – $165k', timezone: 'UTC-8 to UTC+2', type: 'Full-time', tags: ['React', 'TypeScript', 'Vite'], posted: '2h ago' },
-  { id: 2, title: 'Staff Platform Engineer', company: 'Driftbase', mono: 'D', color: '#0ea5e9', category: 'Engineering', salary: '$160k – $195k', timezone: 'Americas only', type: 'Full-time', tags: ['Go', 'Kubernetes'], posted: '5h ago' },
-  { id: 3, title: 'Product Designer, Growth', company: 'Atlas & Co', mono: 'A', color: '#f59e0b', category: 'Design', salary: '$105k – $135k', timezone: 'UTC-5 to UTC+3', type: 'Full-time', tags: ['Figma', 'Design systems'], posted: '1d ago' },
-  { id: 4, title: 'Brand Designer', company: 'Solstice', mono: 'S', color: '#8b5cf6', category: 'Design', salary: '$90k – $115k', timezone: 'Europe-friendly', type: 'Contract', tags: ['Illustration', 'Motion'], posted: '1d ago' },
-  { id: 5, title: 'Content Marketing Lead', company: 'Fernweh Labs', mono: 'F', color: '#ef4444', category: 'Marketing', salary: '$85k – $110k', timezone: 'Any timezone', type: 'Full-time', tags: ['SEO', 'Editorial'], posted: '2d ago' },
-  { id: 6, title: 'Senior Product Manager', company: 'Tidepool', mono: 'T', color: '#14b8a6', category: 'Product', salary: '$125k – $155k', timezone: 'UTC-6 to UTC+1', type: 'Full-time', tags: ['B2B', 'Async'], posted: '2d ago' },
-  { id: 7, title: 'Backend Engineer, Payments', company: 'Wanderstack', mono: 'W', color: '#10b981', category: 'Engineering', salary: '$120k – $150k', timezone: 'UTC-3 to UTC+5', type: 'Full-time', tags: ['Node', 'Postgres'], posted: '3d ago' },
-  { id: 8, title: 'Customer Success Manager', company: 'Harbor', mono: 'H', color: '#6366f1', category: 'Customer Success', salary: '$70k – $92k', timezone: 'APAC overlap', type: 'Full-time', tags: ['SaaS', 'Onboarding'], posted: '4d ago' },
+  { id: 1, title: 'Senior Frontend Engineer', company: 'Wanderstack', mono: 'W', color: '#10b981', category: 'Engineering', salary: '$130k - $165k', timezone: 'UTC-8 to UTC+2', type: 'Full-time', tags: ['React', 'TypeScript', 'Vite'], posted: '2h ago' },
+  { id: 2, title: 'Staff Platform Engineer', company: 'Driftbase', mono: 'D', color: '#0ea5e9', category: 'Engineering', salary: '$160k - $195k', timezone: 'Americas only', type: 'Full-time', tags: ['Go', 'Kubernetes'], posted: '5h ago' },
+  { id: 3, title: 'Product Designer, Growth', company: 'Atlas & Co', mono: 'A', color: '#f59e0b', category: 'Design', salary: '$105k - $135k', timezone: 'UTC-5 to UTC+3', type: 'Full-time', tags: ['Figma', 'Design systems'], posted: '1d ago' },
+  { id: 4, title: 'Brand Designer', company: 'Solstice', mono: 'S', color: '#8b5cf6', category: 'Design', salary: '$90k - $115k', timezone: 'Europe-friendly', type: 'Contract', tags: ['Illustration', 'Motion'], posted: '1d ago' },
+  { id: 5, title: 'Content Marketing Lead', company: 'Fernweh Labs', mono: 'F', color: '#ef4444', category: 'Marketing', salary: '$85k - $110k', timezone: 'Any timezone', type: 'Full-time', tags: ['SEO', 'Editorial'], posted: '2d ago' },
+  { id: 6, title: 'Senior Product Manager', company: 'Tidepool', mono: 'T', color: '#14b8a6', category: 'Product', salary: '$125k - $155k', timezone: 'UTC-6 to UTC+1', type: 'Full-time', tags: ['B2B', 'Async'], posted: '2d ago' },
+  { id: 7, title: 'Backend Engineer, Payments', company: 'Wanderstack', mono: 'W', color: '#10b981', category: 'Engineering', salary: '$120k - $150k', timezone: 'UTC-3 to UTC+5', type: 'Full-time', tags: ['Node', 'Postgres'], posted: '3d ago' },
+  { id: 8, title: 'Customer Success Manager', company: 'Harbor', mono: 'H', color: '#6366f1', category: 'Customer Success', salary: '$70k - $92k', timezone: 'APAC overlap', type: 'Full-time', tags: ['SaaS', 'Onboarding'], posted: '4d ago' },
 ];
 
 const companies = [
@@ -57,19 +57,19 @@ const companies = [
   { name: 'Atlas & Co', mono: 'A', color: '#f59e0b', blurb: 'Design studio building brands for climate startups. Quarterly team offsites, anywhere on Earth.', roles: 4, base: '19 people · 9 countries' },
   { name: 'Tidepool', mono: 'T', color: '#14b8a6', blurb: 'Collaboration suite for ocean researchers and field teams. Generous co-working stipend.', roles: 6, base: '64 people · 26 countries' },
   { name: 'Fernweh Labs', mono: 'F', color: '#ef4444', blurb: 'A travel-tech venture studio shipping three products a year. Work from wherever the WiFi works.', roles: 9, base: '27 people · 14 countries' },
-  { name: 'Harbor', mono: 'H', color: '#6366f1', blurb: 'Compliance autopilot for global employers. They hire in 90+ countries — and practice what they sell.', roles: 11, base: '88 people · 31 countries' },
+  { name: 'Harbor', mono: 'H', color: '#6366f1', blurb: 'Compliance autopilot for global employers. They hire in 90+ countries - and practice what they sell.', roles: 11, base: '88 people · 31 countries' },
 ];
 
 const profilePerks = [
-  { title: 'One profile, every application', desc: 'Skills, timezone, visa status, and portfolio in one place — apply to any job with a single click.' },
+  { title: 'One profile, every application', desc: 'Skills, timezone, visa status, and portfolio in one place - apply to any job with a single click.' },
   { title: 'Timezone matching built in', desc: 'Set your working window once and we only surface roles with real overlap. No more 3am standups.' },
-  { title: 'Private by default', desc: 'You choose which companies can see you. Your current employer never will — guaranteed.' },
+  { title: 'Private by default', desc: 'You choose which companies can see you. Your current employer never will - guaranteed.' },
   { title: 'Saved jobs that follow up', desc: 'Bookmark a role and we will nudge you before it closes, and when the team starts interviewing.' },
 ];
 
 const employerSteps = [
   { num: '1', title: 'Create your company profile', desc: 'Show candidates who you are: team size, timezone spread, async rituals. Culture-rich profiles get 3.2× more applicants.' },
-  { num: '2', title: 'Post your role in minutes', desc: 'Our editor enforces salary range, timezone window, and visa support — so qualified people actually apply.' },
+  { num: '2', title: 'Post your role in minutes', desc: 'Our editor enforces salary range, timezone window, and visa support - so qualified people actually apply.' },
   { num: '3', title: 'Hire across timezones', desc: 'Screen with structured questions, schedule across UTC offsets automatically, and send an offer. Average fill: 11 days.' },
 ];
 
@@ -154,7 +154,7 @@ export default function NomadRemoteJobsPreview() {
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad, position: 'relative', textAlign: 'center' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: TINT, border: '1px solid rgba(16,185,129,0.3)', borderRadius: '9999px', padding: '6px 16px', fontSize: '13px', fontWeight: 600, color: '#047857', marginBottom: '1.5rem' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: EMERALD }} />312 new remote roles this week</span>
           <h1 style={{ fontSize: m ? '2.3rem' : 'clamp(2.6rem, 6vw, 4.25rem)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.07, margin: '0 auto', maxWidth: '820px' }}>Work from anywhere.<br /><span style={{ color: EMERALD }}>Hired from everywhere.</span></h1>
-          <p style={{ fontSize: m ? '1rem' : '1.125rem', color: MUTED, lineHeight: 1.75, maxWidth: '580px', margin: '1.5rem auto 0' }}>Nomad is the job board built for digital nomads — every listing shows a real salary range, a timezone window, and a company that actually hires across borders.</p>
+          <p style={{ fontSize: m ? '1rem' : '1.125rem', color: MUTED, lineHeight: 1.75, maxWidth: '580px', margin: '1.5rem auto 0' }}>Nomad is the job board built for digital nomads - every listing shows a real salary range, a timezone window, and a company that actually hires across borders.</p>
           {/* Search */}
           <div style={{ maxWidth: '760px', margin: '2.5rem auto 0', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '16px', padding: '8px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 20px 50px rgba(15,23,42,0.1)', flexWrap: 'wrap' }}>
             <div style={{ flex: 2, minWidth: '200px', display: 'flex', alignItems: 'center', gap: '10px', padding: '0 12px' }}>
@@ -206,7 +206,7 @@ export default function NomadRemoteJobsPreview() {
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: EMERALD_DARK }}>Latest jobs</span>
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.6rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem' }}>Fresh roles, real ranges, honest timezones</h2>
-            <p style={{ color: MUTED, fontSize: '1.05rem', maxWidth: '540px', margin: '0 auto' }}>Every listing is verified remote. Salary and timezone window are mandatory — companies that hide them can&apos;t post here.</p>
+            <p style={{ color: MUTED, fontSize: '1.05rem', maxWidth: '540px', margin: '0 auto' }}>Every listing is verified remote. Salary and timezone window are mandatory - companies that hide them can&apos;t post here.</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '2rem' }}>
             {categories.map(c => {
@@ -285,7 +285,7 @@ export default function NomadRemoteJobsPreview() {
           <div>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: EMERALD_DARK }}>Your nomad profile</span>
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem' }}>Build a profile once. Get matched everywhere.</h2>
-            <p style={{ color: MUTED, fontSize: '1.05rem', lineHeight: 1.75, margin: '0 0 1.75rem' }}>Stop rewriting the same answers into ten different forms. Your Nomad profile travels with you — and the matching runs on your timezone, not your mailing address.</p>
+            <p style={{ color: MUTED, fontSize: '1.05rem', lineHeight: 1.75, margin: '0 0 1.75rem' }}>Stop rewriting the same answers into ten different forms. Your Nomad profile travels with you - and the matching runs on your timezone, not your mailing address.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
               {profilePerks.map(p => (
                 <div key={p.title} style={{ display: 'flex', gap: '14px' }}>
@@ -306,7 +306,7 @@ export default function NomadRemoteJobsPreview() {
               </div>
             </div>
             <div style={{ position: 'absolute', bottom: '-18px', left: '24px', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '14px', padding: '12px 18px', boxShadow: '0 12px 30px rgba(15,23,42,0.12)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: EMERALD }} /><span style={{ fontSize: '13px', fontWeight: 600 }}>Profile 92% complete — 14 matches</span>
+              <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: EMERALD }} /><span style={{ fontSize: '13px', fontWeight: 600 }}>Profile 92% complete - 14 matches</span>
             </div>
           </div>
         </div>
@@ -338,7 +338,7 @@ export default function NomadRemoteJobsPreview() {
           <div>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#6ee7b7' }}>Salary insights</span>
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem', color: '#fff' }}>Know your worth in every currency</h2>
-            <p style={{ color: 'rgba(236,253,245,0.75)', fontSize: '1.05rem', lineHeight: 1.75, margin: '0 0 1.75rem' }}>Median full-time remote salaries from 18,400 verified offers in the last 12 months. Filter by role, seniority, and timezone — then walk into your negotiation with receipts.</p>
+            <p style={{ color: 'rgba(236,253,245,0.75)', fontSize: '1.05rem', lineHeight: 1.75, margin: '0 0 1.75rem' }}>Median full-time remote salaries from 18,400 verified offers in the last 12 months. Filter by role, seniority, and timezone - then walk into your negotiation with receipts.</p>
             <a href="#" style={{ display: 'inline-block', background: EMERALD, color: '#022c22', borderRadius: '12px', padding: '13px 28px', fontSize: '14.5px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 8px 24px rgba(16,185,129,0.35)' }}>Open the salary explorer →</a>
           </div>
           <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '20px', padding: '1.75rem' }}>
@@ -393,7 +393,7 @@ export default function NomadRemoteJobsPreview() {
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', margin: '0 0 1rem' }}>Your next teammate is already packed</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.05rem', maxWidth: '520px', margin: '0 auto 2.25rem', lineHeight: 1.7 }}>Post a role for $299 and reach 90,000+ remote professionals today. If you don&apos;t make a hire in 60 days, the next posting is on us.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap' }}>
-              <a href="#" style={{ background: '#fff', color: '#047857', borderRadius: '12px', padding: '14px 30px', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Post a job — $299</a>
+              <a href="#" style={{ background: '#fff', color: '#047857', borderRadius: '12px', padding: '14px 30px', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Post a job - $299</a>
               <a href="#" style={{ border: '1px solid rgba(255,255,255,0.55)', color: '#fff', borderRadius: '12px', padding: '14px 30px', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>Talk to our team</a>
             </div>
           </div>

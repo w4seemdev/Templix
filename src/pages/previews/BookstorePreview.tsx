@@ -1,5 +1,5 @@
 /* ============================================================
-   MARGINALIA — Independent Bookstore Template
+   MARGINALIA - Independent Bookstore Template
    Warm paper cream with forest-green & oxblood accents.
    ============================================================ */
 
@@ -165,8 +165,8 @@ function StaffPick() {
         <div>
           <span style={{ fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#d9a9a9', fontWeight: 700 }}>Staff pick of the month</span>
           <h2 style={{ fontFamily: serif, fontSize: m ? '1.9rem' : '2.6rem', fontWeight: 700, lineHeight: 1.1, margin: '12px 0 16px' }}>"The poems I return to most."</h2>
-          <p style={{ fontSize: '1rem', lineHeight: 1.8, opacity: 0.92, margin: '0 0 20px' }}>A career-spanning collection of Mary Oliver's luminous nature poems. If you only buy one book of poetry this year, make it this one — start with "Wild Geese" and see if you can stop.</p>
-          <p style={{ fontSize: '14px', opacity: 0.85, margin: '0 0 22px' }}>— Priya, bookseller since 2016</p>
+          <p style={{ fontSize: '1rem', lineHeight: 1.8, opacity: 0.92, margin: '0 0 20px' }}>A career-spanning collection of Mary Oliver's luminous nature poems. If you only buy one book of poetry this year, make it this one - start with "Wild Geese" and see if you can stop.</p>
+          <p style={{ fontSize: '14px', opacity: 0.85, margin: '0 0 22px' }}>- Priya, bookseller since 2016</p>
           <a href="#shelf" style={{ background: '#f2efe4', color: C.green, borderRadius: '4px', padding: '13px 26px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>Add to basket · $18</a>
         </div>
       </div>
@@ -178,7 +178,7 @@ function Events() {
   const m = useIsMobile();
   const list = [
     { date: 'Thu 18', title: 'Poetry night with local writers', time: '7:00pm · Free' },
-    { date: 'Sat 20', title: "Children's story hour", time: '10:30am · Ages 3–7' },
+    { date: 'Sat 20', title: "Children's story hour", time: '10:30am · Ages 3-7' },
     { date: 'Wed 24', title: 'Book club: Piranesi', time: '6:30pm · All welcome' },
     { date: 'Fri 26', title: 'Author signing: Merlin Sheldrake', time: '6:00pm · Ticketed' },
   ];
@@ -207,7 +207,7 @@ function Newsletter() {
   return (
     <section style={{ ...container, padding: m ? '52px 20px' : '84px 20px', textAlign: 'center' }}>
       <h2 style={{ fontFamily: serif, fontSize: m ? '1.9rem' : '2.4rem', fontWeight: 700, margin: '0 0 10px' }}>Our monthly reading letter</h2>
-      <p style={{ color: C.muted, margin: '0 0 24px', fontSize: '15px' }}>New arrivals, staff picks and event invites — once a month, never more.</p>
+      <p style={{ color: C.muted, margin: '0 0 24px', fontSize: '15px' }}>New arrivals, staff picks and event invites - once a month, never more.</p>
       <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', gap: '10px', maxWidth: '440px', margin: '0 auto', flexDirection: m ? 'column' : 'row' }}>
         <input type="email" placeholder="you@email.com" style={{ flex: 1, background: C.surface, border: `1px solid ${C.line}`, borderRadius: '4px', padding: '13px 16px', color: C.ink, fontSize: '14px' }} />
         <button type="submit" style={{ background: C.wine, color: '#fff', border: 'none', borderRadius: '4px', padding: '13px 26px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>Subscribe</button>
@@ -222,7 +222,7 @@ function Footer() {
     <footer style={{ borderTop: `1px solid ${C.line}`, padding: '44px 20px 28px' }}>
       <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: m ? 'center' : 'flex-start', width: m ? '100%' : 'auto' }}><Mark /><span style={{ fontFamily: serif, fontSize: '19px', fontWeight: 700 }}>Marginalia</span></div>
-        <span style={{ fontSize: '14px', color: C.muted }}>7 Chapter Street, Edinburgh · Open daily 9–7</span>
+        <span style={{ fontSize: '14px', color: C.muted }}>7 Chapter Street, Edinburgh · Open daily 9-7</span>
         <span style={{ fontSize: '13px', color: C.faint }}>© {new Date().getFullYear()} Marginalia Books</span>
       </div>
     </footer>

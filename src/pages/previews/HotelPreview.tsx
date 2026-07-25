@@ -1,5 +1,5 @@
 /* ============================================================
-   THE MERIDIAN — Boutique Hotel Template
+   THE MERIDIAN - Boutique Hotel Template
    Deep navy with brass accent. Fully responsive.
    ============================================================ */
 
@@ -192,7 +192,7 @@ function Gallery() {
 function Reviews() {
   const m = useIsMobile();
   const data = [
-    { text: 'The most restful weekend we have had in years. The room, the food, the sea — flawless.', a: 'Helena & Marc', s: 'Harbour Suite' },
+    { text: 'The most restful weekend we have had in years. The room, the food, the sea - flawless.', a: 'Helena & Marc', s: 'Harbour Suite' },
     { text: 'Staff remembered our names and our coffee order by day two. Genuinely special place.', a: 'Dev P.', s: 'Garden Deluxe' },
     { text: 'Worth every penny. The cliffside spa alone is reason enough to come back.', a: 'Sofia L.', s: 'The Loft' },
   ];

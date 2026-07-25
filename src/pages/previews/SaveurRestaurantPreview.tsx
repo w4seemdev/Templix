@@ -1,5 +1,5 @@
 /* ============================================================
-   SAVEUR — Fine Dining Restaurant Template
+   SAVEUR - Fine Dining Restaurant Template
    Dark espresso with gold accent. Fully responsive.
    ============================================================ */
 
@@ -144,7 +144,7 @@ function Story() {
           <p style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: C.gold, margin: '0 0 14px' }}>Our kitchen</p>
           <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 20px' }}>Led by chef Rosa Fontaine</h2>
           <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 16px' }}>Rosa trained across kitchens in Lyon and San Sebastián before returning home to build a restaurant around one idea: cook what is best, right now. Menus change with the season and the day's catch.</p>
-          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: 0 }}>Nearly everything is made in-house — from the sourdough to the aged vinegars — and sourced from farms within forty miles of the door.</p>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: 0 }}>Nearly everything is made in-house - from the sourdough to the aged vinegars - and sourced from farms within forty miles of the door.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
           <div style={{ aspectRatio: '3/4', borderRadius: '4px', background: 'linear-gradient(160deg,#3a2c1c,#1a130c)' }} />
@@ -188,8 +188,8 @@ function Reserve() {
           <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 20px' }}>Join us for dinner</h2>
           <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 24px' }}>We take bookings up to eight weeks ahead. For parties larger than six, please call us directly and we'll take care of the rest.</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: C.muted }}>
-            <span><b style={{ color: C.ink }}>Dinner</b> · Tue–Sat, 6pm–10pm</span>
-            <span><b style={{ color: C.ink }}>Lunch</b> · Fri & Sat, 12pm–2:30pm</span>
+            <span><b style={{ color: C.ink }}>Dinner</b> · Tue-Sat, 6pm-10pm</span>
+            <span><b style={{ color: C.ink }}>Lunch</b> · Fri & Sat, 12pm-2:30pm</span>
             <span><b style={{ color: C.ink }}>Call</b> · +44 20 7946 0110</span>
           </div>
         </div>

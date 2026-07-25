@@ -1,5 +1,5 @@
 /* ============================================================
-   HAVEN — Interior Design Studio Template
+   HAVEN - Interior Design Studio Template
    Warm oat & terracotta on charcoal. Fully responsive.
    ============================================================ */
 
@@ -134,7 +134,7 @@ function Portfolio() {
 function Services() {
   const m = useIsMobile();
   const items = [
-    { t: 'Full-service design', d: 'End-to-end interiors — concept, sourcing, project management and styling.' },
+    { t: 'Full-service design', d: 'End-to-end interiors - concept, sourcing, project management and styling.' },
     { t: 'Room refresh', d: 'A single space reimagined with a considered scheme and shopping list.' },
     { t: 'Renovation support', d: 'Space planning, joinery and finishes that get the bones right.' },
     { t: 'Commercial spaces', d: 'Studios, cafés and offices designed to feel as good as they work.' },

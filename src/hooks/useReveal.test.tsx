@@ -1,6 +1,6 @@
 /**
  * useReveal's whole contract is the class it returns: '' until the element
- * crosses into view, then 'is-inview' — permanently. The class is asserted
+ * crosses into view, then 'is-inview' - permanently. The class is asserted
  * directly here because it *is* the hook's output, not incidental styling.
  *
  * The global IntersectionObserver stub in src/test/setup.ts intersects
@@ -19,7 +19,7 @@ interface ObserverRecord {
 
 const observers: ObserverRecord[] = [];
 
-/* A partial stub, like the one in setup.ts — it carries only the surface
+/* A partial stub, like the one in setup.ts - it carries only the surface
    useReveal touches, so it is cast in rather than declared `implements`. */
 class ControllableIntersectionObserver {
   readonly root = null;

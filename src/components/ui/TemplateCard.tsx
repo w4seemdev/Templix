@@ -125,7 +125,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
             }}
           />
 
-          {/* Hover pill over a scrim — the card links to the detail page */}
+          {/* Hover pill over a scrim - the card links to the detail page */}
           {!hidePreviewHint && (
             <div
               style={{
@@ -282,7 +282,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
                 }}
               >
                 +{overflowTags.length}
-                {/* title= is mouse-only — name the hidden tags for AT and keyboard users. */}
+                {/* title= is mouse-only - name the hidden tags for AT and keyboard users. */}
                 <span className="sr-only">: {overflowTags.join(', ')}</span>
               </span>
             )}
@@ -290,7 +290,7 @@ export default function TemplateCard({ template, hidePreviewHint = false }: Prop
         </div>
       </Link>
 
-      {/* Wishlist toggle — overlays the thumbnail, sibling of the Link */}
+      {/* Wishlist toggle - overlays the thumbnail, sibling of the Link */}
       <button
         type="button"
         onClick={() => toggle(template.id)}

@@ -5,8 +5,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const { user, loading, authUnavailable } = useAuth();
 
   // The auth module never loaded, so we cannot tell whether this visitor is
-  // signed in. Bouncing to /login would be a dead end — that page imports the
-  // same module — so surface the failure with a reload affordance instead.
+  // signed in. Bouncing to /login would be a dead end - that page imports the
+  // same module - so surface the failure with a reload affordance instead.
   if (authUnavailable) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas px-4">

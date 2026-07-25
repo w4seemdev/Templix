@@ -34,14 +34,14 @@ const TNUM = { fontFeatureSettings: '"tnum"' } as const;
 export default function TemplatesPage() {
   useSEO({
     title: 'Browse Templates',
-    description: 'Browse all Templix website templates — free and premium, filterable by category and price.',
+    description: 'Browse all Templix website templates - free and premium, filterable by category and price.',
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // The URL is the single source of truth for every filter — search included —
+  // The URL is the single source of truth for every filter - search included -
   // so deep links (/templates?category=saas), shared URLs, Back/Forward and a
   // plain /templates all restore exactly the view the address bar describes.
   const categoryParam = searchParams.get('category');
@@ -161,7 +161,7 @@ export default function TemplatesPage() {
           </h1>
           <p className="mt-3 max-w-[52ch] text-[15px] text-text-secondary">
             <span className="font-mono font-medium text-text-primary" style={TNUM}>{templates.length}</span>
-            {' '}production-ready templates — free &amp; premium, buy once, keep forever.
+            {' '}production-ready templates - free &amp; premium, buy once, keep forever.
           </p>
         </header>
 
@@ -265,7 +265,7 @@ export default function TemplatesPage() {
 
         <div className="hairline mb-6" />
 
-        {/* Result summary — stays mounted across the empty/non-empty switch so its
+        {/* Result summary - stays mounted across the empty/non-empty switch so its
             live region actually announces filter changes. A live region inserted
             into the DOM together with its text is not reliably read out (WCAG 4.1.3). */}
         <div className="mb-6 flex items-center justify-between gap-3">

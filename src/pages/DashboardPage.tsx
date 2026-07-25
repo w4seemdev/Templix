@@ -80,7 +80,7 @@ export default function DashboardPage() {
       await signOut();
     } catch {
       // signOut rejects only when the auth module can't load. Leaving the user
-      // on a signed-in-looking dashboard is the worse failure — send them home
+      // on a signed-in-looking dashboard is the worse failure - send them home
       // regardless; a reload re-reads the real session.
     }
     navigate('/');
@@ -134,17 +134,17 @@ export default function DashboardPage() {
   const initials     = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
   const memberSince  = user?.created_at
     ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
-    : '—';
+    : '-';
 
-  // Until the library query lands — or when it failed — `owned` is empty because
+  // Until the library query lands - or when it failed - `owned` is empty because
   // we don't know, not because the buyer owns nothing. Rendering "0" and "$0"
   // states that as fact to someone who may have paid for every template here, so
   // say "unknown" the same way `memberSince` already does.
   const libraryKnown = !loading && !loadError;
 
   const stats = [
-    { label: 'Templates owned', value: libraryKnown ? String(owned.length) : '—' },
-    { label: 'Library value', value: libraryKnown ? `$${libraryValue}` : '—' },
+    { label: 'Templates owned', value: libraryKnown ? String(owned.length) : '-' },
+    { label: 'Library value', value: libraryKnown ? `$${libraryValue}` : '-' },
     { label: 'Wishlist saves', value: String(wishlist.length) },
     { label: 'Member since', value: memberSince },
   ];
@@ -189,7 +189,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Section switcher — plain toggle buttons, not ARIA tabs: the tabs
+        {/* Section switcher - plain toggle buttons, not ARIA tabs: the tabs
             pattern promises arrow-key navigation we don't implement, and
             announcing a contract that doesn't work is worse than none. */}
         <div className="mb-8 flex gap-7 border-b border-border-subtle">
@@ -234,7 +234,7 @@ export default function DashboardPage() {
                 <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-text-primary">No purchases yet</h2>
                 <p className="mb-6 text-sm leading-relaxed text-text-secondary">
                   Templates you buy will live here, ready to re-download anytime. Start with one of
-                  the {freeCount} free templates — no payment needed — or browse the full library.
+                  the {freeCount} free templates - no payment needed - or browse the full library.
                 </p>
                 <Link to="/templates" className="btn btn-primary glow-cta">
                   Browse templates
@@ -401,7 +401,7 @@ function DownloadButton({ template }: { template: Template }) {
 
     try {
       // Ownership is verified server-side (edge function) before a signed URL
-      // is minted — no public-path fallback for paid templates.
+      // is minted - no public-path fallback for paid templates.
       await downloadTemplateZip(template);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Download unavailable. Please try again.');

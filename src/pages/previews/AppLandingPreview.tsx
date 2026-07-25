@@ -1,5 +1,5 @@
 /* ============================================================
-   ORBIT — Mobile App Landing Template
+   ORBIT - Mobile App Landing Template
    Dark with blue/indigo accent + phone mockups. Self-contained,
    inline styles only, fully responsive (375px → 1280px).
    ============================================================ */
@@ -117,7 +117,7 @@ function Hero({ mobile }: { mobile: boolean }) {
             Build better habits, <span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>one day at a time</span>
           </h1>
           <p style={{ fontSize: mobile ? '1rem' : '1.12rem', color: T.mut, lineHeight: 1.7, margin: '18px auto 0', maxWidth: 460, marginLeft: mobile ? 'auto' : 0, marginRight: mobile ? 'auto' : 0 }}>
-            Orbit turns your goals into simple daily rituals — with gentle reminders, streaks, and insights that actually keep you going.
+            Orbit turns your goals into simple daily rituals - with gentle reminders, streaks, and insights that actually keep you going.
           </p>
           <div style={{ marginTop: 26, display: 'flex', justifyContent: mobile ? 'center' : 'flex-start' }}><StoreButtons compact={!mobile} /></div>
           <div style={{ display: 'flex', gap: 20, marginTop: 24, justifyContent: mobile ? 'center' : 'flex-start', flexWrap: 'wrap' }}>
@@ -148,7 +148,7 @@ function Features({ mobile }: { mobile: boolean }) {
   const items = [
     ['target', 'Goals that stick', 'Break big ambitions into tiny daily actions you can actually complete.'],
     ['flame', 'Streaks & rewards', 'Stay motivated with streaks, milestones, and satisfying little wins.'],
-    ['bell', 'Smart reminders', 'Nudges that adapt to your routine — never annoying, always on time.'],
+    ['bell', 'Smart reminders', 'Nudges that adapt to your routine - never annoying, always on time.'],
     ['chart', 'Real insights', 'See your progress with clear weekly trends and honest, useful stats.'],
     ['cloud', 'Syncs everywhere', 'Your habits follow you across iPhone, iPad, Android, and web.'],
     ['users', 'Accountability', 'Share goals with a friend and cheer each other on to the finish.'],

@@ -59,7 +59,7 @@ beforeEach(() => {
  * useWishlist keeps one snapshot in module scope and only re-reads storage
  * while a consumer is mounted (it attaches the `storage` listener on first
  * subscribe and drops it on last unsubscribe). So the shared store has to be
- * put back with the tree still up — call this at the end of any test that
+ * put back with the tree still up - call this at the end of any test that
  * leaves entries behind, or they leak into the next one.
  */
 function resetSharedWishlist() {

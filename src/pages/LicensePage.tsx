@@ -3,12 +3,12 @@ import { Check, X } from 'lucide-react';
 import { useSEO } from '../hooks/useSEO';
 import Container from '../components/ui/Container';
 
-/* Canonical Templix Standard License — must stay identical to the summary shown
+/* Canonical Templix Standard License - must stay identical to the summary shown
    on each template detail page and referenced from the Terms of Service. */
 const canDo = [
   'Use the template in unlimited personal and commercial end-products',
   'Modify, customize, and extend it freely',
-  'Use it in paid client and freelance work — no attribution required',
+  'Use it in paid client and freelance work - no attribution required',
 ];
 
 const cannotDo = [
@@ -20,7 +20,7 @@ const cannotDo = [
 export default function LicensePage() {
   useSEO({
     title: 'License',
-    description: 'The Templix Standard License — how you may use free and paid templates from Templix.',
+    description: 'The Templix Standard License - how you may use free and paid templates from Templix.',
   });
 
   return (
@@ -38,12 +38,12 @@ export default function LicensePage() {
         <div className="hairline mb-12" />
 
         <p className="m-0 mb-10 text-[15px] leading-[1.85] text-text-secondary">
-          Every template on Templix — free or paid — is covered by the single Templix Standard License below.
+          Every template on Templix - free or paid - is covered by the single Templix Standard License below.
           There are no separate personal and commercial tiers: one license covers both. By downloading a template
           you agree to these terms.
         </p>
 
-        {/* The grant — canonical wording */}
+        {/* The grant - canonical wording */}
         <section className="mb-10 rounded-2xl border border-border-subtle bg-surface-1 p-6 sm:p-8">
           <h2 className="m-0 mb-3 text-lg font-semibold tracking-[-0.01em] text-text-primary">The grant</h2>
           <p className="m-0 text-[15px] leading-[1.85] text-text-secondary">
@@ -83,7 +83,7 @@ export default function LicensePage() {
         <section className="mb-10">
           <h2 className="m-0 mb-3 text-lg font-semibold tracking-[-0.01em] text-text-primary">Free templates</h2>
           <p className="m-0 text-[15px] leading-[1.85] text-text-secondary">
-            Free templates are covered by the exact same usage terms as paid ones — the only difference is that no
+            Free templates are covered by the exact same usage terms as paid ones - the only difference is that no
             purchase is required to download them. The restriction on reselling or redistributing the template itself
             still applies.
           </p>
@@ -92,7 +92,7 @@ export default function LicensePage() {
         <section className="mb-10">
           <h2 className="m-0 mb-3 text-lg font-semibold tracking-[-0.01em] text-text-primary">Ownership</h2>
           <p className="m-0 text-[15px] leading-[1.85] text-text-secondary">
-            A license grants you the right to use the template — it does not transfer ownership of the underlying
+            A license grants you the right to use the template - it does not transfer ownership of the underlying
             design or source code. You may not claim the original template as your own work.
           </p>
         </section>

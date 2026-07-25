@@ -5,7 +5,7 @@ const STORAGE_KEY = 'templix_wishlist';
 /**
  * One shared external store instead of per-hook `useState` copies. Every
  * consumer (61 TemplateCards, the Navbar badge, WishlistPage) reads the same
- * snapshot, so a heart click updates all of them instantly — and localStorage is
+ * snapshot, so a heart click updates all of them instantly - and localStorage is
  * read once per page instead of once per card.
  */
 function readStored(): string[] {
@@ -28,7 +28,7 @@ function emit() {
   for (const listener of listeners) listener();
 }
 
-// Another tab wrote the key — re-read and notify this tab's consumers.
+// Another tab wrote the key - re-read and notify this tab's consumers.
 function handleStorage(event: StorageEvent) {
   if (event.key !== null && event.key !== STORAGE_KEY) return;
   snapshot = readStored();

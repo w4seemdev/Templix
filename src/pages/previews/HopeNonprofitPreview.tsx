@@ -1,5 +1,5 @@
 /* ============================================================
-   HOPE — Nonprofit & charity template
+   HOPE - Nonprofit & charity template
    Warm white · rose accent · amber highlights
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -237,7 +237,7 @@ export default function HopeNonprofitPreview() {
           <div>
             <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: ROSE }}>Volunteer</span>
             <h2 style={{ fontSize: m ? '1.7rem' : 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem' }}>Give time, not just money</h2>
-            <p style={{ color: GREY, fontSize: '1rem', lineHeight: 1.8, margin: '0 0 1.5rem', maxWidth: '420px' }}>23,000 volunteers power our programs — from weekend meal crews to remote grant writers. There is a seat for every schedule and skill.</p>
+            <p style={{ color: GREY, fontSize: '1rem', lineHeight: 1.8, margin: '0 0 1.5rem', maxWidth: '420px' }}>23,000 volunteers power our programs - from weekend meal crews to remote grant writers. There is a seat for every schedule and skill.</p>
             <a href="#" style={{ display: 'inline-block', background: AMBER, color: '#451a03', borderRadius: '9999px', padding: '13px 28px', fontSize: '14px', fontWeight: 800, textDecoration: 'none' }}>Browse all roles →</a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
@@ -293,7 +293,7 @@ export default function HopeNonprofitPreview() {
         <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
           <div style={{ background: `linear-gradient(135deg, ${ROSE}, #fb7185)`, borderRadius: '28px', padding: m ? '2.75rem 1.5rem' : '4rem 2.5rem', textAlign: 'center' }}>
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 800, color: '#fff', margin: '0 0 1rem', letterSpacing: '-0.03em' }}>Hope is a monthly habit</h2>
-            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.05rem', maxWidth: '460px', margin: '0 auto 2.25rem', lineHeight: 1.7 }}>Join 41,000 monthly givers funding long-term change — and get one honest letter from the field each month.</p>
+            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.05rem', maxWidth: '460px', margin: '0 auto 2.25rem', lineHeight: 1.7 }}>Join 41,000 monthly givers funding long-term change - and get one honest letter from the field each month.</p>
             <a href="#donate" style={{ display: 'inline-block', background: '#fff', color: ROSE, borderRadius: '9999px', padding: '14px 34px', fontSize: '15px', fontWeight: 800, textDecoration: 'none' }}>Become a monthly giver</a>
           </div>
         </div>

@@ -1,5 +1,5 @@
 /* ============================================================
-   COURSIFY — Online course platform template
+   COURSIFY - Online course platform template
    Light vibrant theme · violet + amber accents
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -45,7 +45,7 @@ const curriculum = [
   { module: 'Foundations & Environment Setup', lessons: 9, duration: '1h 45m', topics: ['Why TypeScript changes how you write React', 'Project scaffolding with Vite', 'Strict mode, linting & editor superpowers'] },
   { module: 'Components, Props & Typed State', lessons: 14, duration: '3h 20m', topics: ['Typing props, children & events', 'useState and discriminated unions', 'Building a reusable component library'] },
   { module: 'Hooks Deep Dive & Data Fetching', lessons: 16, duration: '4h 05m', topics: ['Custom hooks with generics', 'Caching, loading & error states', 'Suspense-ready fetching patterns'] },
-  { module: 'State Architecture at Scale', lessons: 12, duration: '3h 10m', topics: ['Context vs. stores — when and why', 'Reducers with exhaustive type checks', 'Performance profiling & memoization'] },
+  { module: 'State Architecture at Scale', lessons: 12, duration: '3h 10m', topics: ['Context vs. stores - when and why', 'Reducers with exhaustive type checks', 'Performance profiling & memoization'] },
   { module: 'Capstone: Ship a Production App', lessons: 11, duration: '4h 30m', topics: ['Auth, routing & protected pages', 'Testing the critical path', 'CI, deployment & monitoring'] },
 ];
 
@@ -58,13 +58,13 @@ const outcomes = [
 
 const tiers = [
   { name: 'Starter', price: '$0', period: 'forever', desc: 'Sample lessons and community access to get moving.', features: ['Access to 40+ free lessons', 'Community forum', 'Course previews', 'Weekly newsletter'], highlight: false, cta: 'Start learning free' },
-  { name: 'Pro Learner', price: '$24', period: '/month', desc: 'Unlimited access to every course and certificate.', features: ['All 1,200+ courses unlocked', 'Verified certificates', 'Downloadable resources', 'Progress dashboard', 'Offline viewing', 'Priority instructor Q&A'], highlight: true, cta: 'Go Pro — 7 days free' },
+  { name: 'Pro Learner', price: '$24', period: '/month', desc: 'Unlimited access to every course and certificate.', features: ['All 1,200+ courses unlocked', 'Verified certificates', 'Downloadable resources', 'Progress dashboard', 'Offline viewing', 'Priority instructor Q&A'], highlight: true, cta: 'Go Pro - 7 days free' },
   { name: 'Teams', price: '$19', period: '/seat/month', desc: 'Upskill your whole team with admin insights.', features: ['Everything in Pro', 'Team analytics & reporting', 'Custom learning paths', 'SSO & provisioning', 'Dedicated success manager'], highlight: false, cta: 'Talk to sales' },
 ];
 
 const testimonials = [
   { quote: 'I went from marketing coordinator to product designer in eight months. The project-based curriculum gave me a portfolio that actually got interviews.', name: 'Priya Sharma', role: 'Product Designer at Linear', c1: '#7c3aed', c2: '#c084fc' },
-  { quote: 'The TypeScript bootcamp is the single best technical course I have taken anywhere — and I have taken a lot. Daniel explains the "why" behind everything.', name: 'Tom Becker', role: 'Frontend Engineer at Shopify', c1: '#2563eb', c2: '#60a5fa' },
+  { quote: 'The TypeScript bootcamp is the single best technical course I have taken anywhere - and I have taken a lot. Daniel explains the "why" behind everything.', name: 'Tom Becker', role: 'Frontend Engineer at Shopify', c1: '#2563eb', c2: '#60a5fa' },
   { quote: 'We rolled Coursify Teams out to 120 people. Completion rates tripled compared to our old platform, and the analytics make my reviews easy.', name: 'Elena Vasquez', role: 'Head of L&D at Notion', c1: '#db2777', c2: '#f9a8d4' },
 ];
 

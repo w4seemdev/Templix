@@ -1,5 +1,5 @@
 /* ============================================================
-   LAW & CO — Attorneys at law template
+   LAW & CO - Attorneys at law template
    Deep navy + gold · authoritative, editorial
    Self-contained, fully responsive, no external assets.
    ============================================================ */

@@ -1,5 +1,5 @@
 /**
- * DashboardPage — the buyer's library.
+ * DashboardPage - the buyer's library.
  *
  * The load-bearing distinction here is "you own nothing" versus "we couldn't
  * check". A paying customer who is told their library is empty has, from where
@@ -29,7 +29,7 @@ const mocks = vi.hoisted(() => {
 
   const state = {
     session: null as { user: { id: string; email: string; created_at: string } } | null,
-    /** Resolves the `purchases` query — swapped per test. */
+    /** Resolves the `purchases` query - swapped per test. */
     purchases: (): Promise<Result> => Promise.resolve({ data: [], error: null }),
   };
 

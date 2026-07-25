@@ -1,4 +1,4 @@
-// Supabase Edge Function — Verify Download
+// Supabase Edge Function - Verify Download
 // Deploy with: supabase functions deploy verify-download
 //
 // Purpose: gate access to premium template zips. The caller must be
@@ -79,8 +79,8 @@ Deno.serve(async (req) => {
 
     if (!FREE_TEMPLATE_IDS.has(id)) {
       // `limit(1)`, not `.maybeSingle()`: nothing enforces uniqueness on
-      // (user_id, template_id) — the UNIQUE constraint is on stripe_session_id
-      // — so a customer who legitimately bought the same template twice has two
+      // (user_id, template_id) - the UNIQUE constraint is on stripe_session_id
+      // - so a customer who legitimately bought the same template twice has two
       // rows, and .maybeSingle() would error (PGRST116) and lock them out of a
       // template they paid for. Existence is the question; one row is enough.
       const { data: purchases, error: purchaseErr } = await supabase
@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
         .eq('template_id', id)
         .limit(1);
 
-      // A failed lookup is our fault, not a missing entitlement — never bill it
+      // A failed lookup is our fault, not a missing entitlement - never bill it
       // to the customer as a 403.
       if (purchaseErr) {
         console.error('[verify-download] ownership lookup failed', {

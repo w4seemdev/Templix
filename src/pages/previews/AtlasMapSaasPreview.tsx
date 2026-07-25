@@ -1,5 +1,5 @@
 /* ============================================================
-   ATLAS — Location Platform Landing Template
+   ATLAS - Location Platform Landing Template
    Dark slate theme with sky/cyan accent + inline-SVG map.
    Self-contained, inline styles only, fully responsive.
    ============================================================ */
@@ -69,7 +69,7 @@ function Hero({ mobile }: { mobile: boolean }) {
     <section style={{ padding: mobile ? '48px 20px 36px' : '78px 20px 52px' }}>
       <div style={{ maxWidth: 1120, margin: '0 auto', display: mobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 44, alignItems: 'center' }}>
         <div>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${T.line}`, background: 'rgba(14,165,233,0.08)', borderRadius: 9999, padding: '6px 14px', fontSize: 13, color: T.a2 }}>Maps, geocoding & routing — one API</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${T.line}`, background: 'rgba(14,165,233,0.08)', borderRadius: 9999, padding: '6px 14px', fontSize: 13, color: T.a2 }}>Maps, geocoding & routing - one API</span>
           <h1 style={{ fontSize: mobile ? '2.3rem' : '3.5rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.07, margin: '20px 0 0' }}>
             Location intelligence,<br /><span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>built for developers</span>
           </h1>
@@ -131,7 +131,7 @@ function AIcon({ name }: { name: string }) { return <svg width="20" height="20" 
 function Features({ mobile }: { mobile: boolean }) {
   const items = [
     ['pin', 'Interactive maps', 'Vector tiles, custom styles, and 60fps rendering on web and mobile.'],
-    ['search', 'Geocoding & autocomplete', 'Turn any address into coordinates — and back — with typo tolerance.'],
+    ['search', 'Geocoding & autocomplete', 'Turn any address into coordinates - and back - with typo tolerance.'],
     ['route', 'Routing & ETAs', 'Traffic-aware directions and multi-stop route optimization out of the box.'],
     ['layers', 'Custom overlays', 'Heatmaps, clusters, and GeoJSON layers you can style with a few lines.'],
     ['bolt', 'Edge-fast', 'Tiles and APIs served from 40+ POPs so maps load instantly everywhere.'],

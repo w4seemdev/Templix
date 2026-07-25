@@ -1,5 +1,5 @@
 /* ============================================================
-   LUMEN — Beauty & Wellness Spa Template
+   LUMEN - Beauty & Wellness Spa Template
    Soft sage & blush on warm stone. Fully responsive.
    ============================================================ */
 
@@ -207,7 +207,7 @@ function Booking() {
         <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '12px 0 18px' }}>Book your visit</h2>
         <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.8, margin: '0 0 22px' }}>Choose a treatment and time that suits you. We'll confirm within the hour. Gift vouchers available for every service.</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: C.muted }}>
-          <span><b style={{ color: C.ink }}>Open</b> · Mon–Sat, 9am–8pm</span>
+          <span><b style={{ color: C.ink }}>Open</b> · Mon-Sat, 9am-8pm</span>
           <span><b style={{ color: C.ink }}>Find us</b> · 3 Willow Court, Manchester</span>
           <span><b style={{ color: C.ink }}>Call</b> · +44 161 496 0170</span>
         </div>
@@ -228,7 +228,7 @@ function Footer() {
     <footer style={{ borderTop: `1px solid ${C.line}`, padding: '44px 20px 28px' }}>
       <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: m ? 'center' : 'flex-start', width: m ? '100%' : 'auto' }}><Leaf /><span style={{ fontFamily: serif, fontSize: '20px', fontWeight: 700, letterSpacing: '0.06em' }}>LUMEN</span></div>
-        <span style={{ fontSize: '14px', color: C.muted }}>3 Willow Court, Manchester · Open Mon–Sat</span>
+        <span style={{ fontSize: '14px', color: C.muted }}>3 Willow Court, Manchester · Open Mon-Sat</span>
         <span style={{ fontSize: '13px', color: C.faint }}>© {new Date().getFullYear()} Lumen Spa</span>
       </div>
     </footer>

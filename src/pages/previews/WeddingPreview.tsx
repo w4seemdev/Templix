@@ -1,5 +1,5 @@
 /* ============================================================
-   EVELYN & JAMES — Wedding
+   EVELYN & JAMES - Wedding
    Soft cream, blush + antique-gold accents, romantic serif
    Self-contained, responsive single-page site
    ============================================================ */
@@ -130,7 +130,7 @@ export default function WeddingPreview() {
           <span style={{ fontSize: '12px', letterSpacing: '0.24em', textTransform: 'uppercase', color: GOLD }}>Kindly respond by August 1</span>
           <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.4rem' : '3rem', fontWeight: 500, margin: '1rem 0 1.75rem' }}>Will you join us?</h2>
           {sent ? (
-            <p style={{ fontFamily: SERIF, fontSize: '1.6rem', fontStyle: 'italic', color: BLUSH }}>Thank you — we can&rsquo;t wait to celebrate with you.</p>
+            <p style={{ fontFamily: SERIF, fontSize: '1.6rem', fontStyle: 'italic', color: BLUSH }}>Thank you - we can&rsquo;t wait to celebrate with you.</p>
           ) : (
             <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ display: 'grid', gap: '0.9rem', textAlign: 'left' }}>
               <input required placeholder="Full name" style={{ padding: '13px 16px', borderRadius: '6px', border: `1px solid ${LINE}`, background: CREAM, color: INK, fontSize: '15px', outline: 'none' }} />

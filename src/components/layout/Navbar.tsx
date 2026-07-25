@@ -169,7 +169,7 @@ export default function Navbar() {
       await signOut();
     } catch {
       // signOut rejects only when the auth module can't load. A click on
-      // "Sign out" must still close the menus and leave — stranding the user
+      // "Sign out" must still close the menus and leave - stranding the user
       // on a signed-in-looking page is the worse failure.
     }
     setUserMenuOpen(false);

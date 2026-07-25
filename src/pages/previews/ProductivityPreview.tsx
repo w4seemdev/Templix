@@ -1,5 +1,5 @@
 /* ============================================================
-   TEMPO — Productivity App Landing Template
+   TEMPO - Productivity App Landing Template
    Warm dark with amber/rose accent + kanban board mock.
    Self-contained, inline styles only, fully responsive.
    ============================================================ */
@@ -74,7 +74,7 @@ function Hero({ mobile }: { mobile: boolean }) {
           Plan less, <span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>finish more</span>
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: T.mut, lineHeight: 1.7, margin: '18px auto 0', maxWidth: 520 }}>
-          Tempo blends tasks, notes, and a calendar into one flowing workspace — so you spend your energy doing the work, not organizing it.
+          Tempo blends tasks, notes, and a calendar into one flowing workspace - so you spend your energy doing the work, not organizing it.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
           <a href="#pricing" style={{ background: grad, borderRadius: 12, padding: '14px 26px', fontSize: 15, fontWeight: 700, color: '#2a1400', textDecoration: 'none' }}>Get started free</a>
@@ -127,11 +127,11 @@ function PIcon({ name }: { name: string }) { return <svg width="20" height="20" 
 
 function Features({ mobile }: { mobile: boolean }) {
   const items = [
-    ['check', 'Tasks that flow', 'Boards, lists, and subtasks that adapt to how you actually work — not the other way around.'],
+    ['check', 'Tasks that flow', 'Boards, lists, and subtasks that adapt to how you actually work - not the other way around.'],
     ['note', 'Notes built in', 'Rich docs live right next to your tasks, so context is always one click away.'],
     ['cal', 'Time-blocked calendar', 'Drag any task onto your calendar and Tempo protects the time to do it.'],
     ['focus', 'Focus mode', 'Silence everything but the one thing that matters right now.'],
-    ['bolt', 'Quick capture', 'Add anything from anywhere in a keystroke. Sort it later — or let Tempo suggest.'],
+    ['bolt', 'Quick capture', 'Add anything from anywhere in a keystroke. Sort it later - or let Tempo suggest.'],
     ['link', 'Connects your stack', 'Two-way sync with GitHub, Slack, and Google Calendar keeps everything in step.'],
   ];
   return (

@@ -1,5 +1,5 @@
 /* ============================================================
-   VERSE — Poet & poetry collection
+   VERSE - Poet & poetry collection
    Quiet paper, deep ink, muted olive accent, literary serif
    Self-contained, responsive single-page site
    ============================================================ */
@@ -32,9 +32,9 @@ const NAV = [
 ];
 
 const poems = [
-  { t: 'Field, Late September', lines: ['The wheat leans toward a light', 'it will not live to keep —', 'and still it leans.'] },
+  { t: 'Field, Late September', lines: ['The wheat leans toward a light', 'it will not live to keep -', 'and still it leans.'] },
   { t: 'What the River Said', lines: ['I have carried whole cities', 'and forgotten each of them.', 'This is how I stay clean.'] },
-  { t: 'Small Hours', lines: ['The kettle, the cat,', 'the blue square of the window —', 'proof enough for now.'] },
+  { t: 'Small Hours', lines: ['The kettle, the cat,', 'the blue square of the window -', 'proof enough for now.'] },
 ];
 
 const books = [
@@ -75,7 +75,7 @@ export default function VersePoetryPreview() {
           Poems for the<br /><span style={{ fontStyle: 'italic', color: OLIVE }}>slow, attentive hour.</span>
         </h1>
         <p style={{ fontFamily: SERIF, fontSize: mobile ? '1.3rem' : '1.6rem', fontStyle: 'italic', color: MUTE, lineHeight: 1.6, maxWidth: '540px', margin: '0 auto' }}>
-          The collected work of Ada Wren — quiet poems about tending, distance, and the ordinary light we live by.
+          The collected work of Ada Wren - quiet poems about tending, distance, and the ordinary light we live by.
         </p>
       </section>
 

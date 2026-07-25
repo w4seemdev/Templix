@@ -1,12 +1,12 @@
 /// <reference types="node" />
 /**
- * Covers scripts/check-price-sync.mjs — the guard that stands between
+ * Covers scripts/check-price-sync.mjs - the guard that stands between
  * src/data/templates.ts (what the buyer is shown) and the CATALOG in the
  * create-checkout edge function (what Stripe actually charges). Before it
  * existed 34 of 52 paid templates were mismatched, 21 of them overcharging, so
  * "the guard still catches X" is a claim worth a test per failure class.
  *
- * The real script is copied — never edited — into a throwaway repo shaped like
+ * The real script is copied - never edited - into a throwaway repo shaped like
  * this one and run as a child process, so the fixtures exercise the shipped
  * parser end to end without the real templates.ts or edge function being
  * touched. It lives under src/ because vitest.config.ts only collects
@@ -75,16 +75,16 @@ const runGuard = (templates: readonly TemplateRow[], catalog: readonly CatalogRo
   return spawnSync(process.execPath, [script], { encoding: 'utf8' });
 };
 
-/** Two paid templates (one with an apostrophe) and one free — all consistent. */
+/** Two paid templates (one with an apostrophe) and one free - all consistent. */
 const TEMPLATES: readonly TemplateRow[] = [
-  { id: '1', title: 'Luminary — SaaS', price: 59, isFree: false },
-  { id: '2', title: 'Folio — Portfolio', price: 0, isFree: true },
-  { id: '3', title: "Chef's Table — Restaurant", price: 69, isFree: false },
+  { id: '1', title: 'Luminary - SaaS', price: 59, isFree: false },
+  { id: '2', title: 'Folio - Portfolio', price: 0, isFree: true },
+  { id: '3', title: "Chef's Table - Restaurant", price: 69, isFree: false },
 ];
 
 const CATALOG: readonly CatalogRow[] = [
-  { id: '1', title: 'Luminary — SaaS', priceCents: 5900 },
-  { id: '3', title: "Chef's Table — Restaurant", priceCents: 6900 },
+  { id: '1', title: 'Luminary - SaaS', priceCents: 5900 },
+  { id: '3', title: "Chef's Table - Restaurant", priceCents: 6900 },
 ];
 
 afterAll(() => {
@@ -111,7 +111,7 @@ describe('check:prices', () => {
 
   it('fails with the id and both amounts when CATALOG overcharges', () => {
     const result = runGuard(TEMPLATES, [
-      { id: '1', title: 'Luminary — SaaS', priceCents: 6900 },
+      { id: '1', title: 'Luminary - SaaS', priceCents: 6900 },
       ...CATALOG.slice(1),
     ]);
 
@@ -126,7 +126,7 @@ describe('check:prices', () => {
 
   it('fails when CATALOG undercharges', () => {
     const result = runGuard(TEMPLATES, [
-      { id: '1', title: 'Luminary — SaaS', priceCents: 900 },
+      { id: '1', title: 'Luminary - SaaS', priceCents: 900 },
       ...CATALOG.slice(1),
     ]);
 
@@ -138,14 +138,14 @@ describe('check:prices', () => {
   it('fails with both names when the CATALOG title has drifted', () => {
     const result = runGuard(TEMPLATES, [
       CATALOG[0],
-      { id: '3', title: 'Chez Table — Restaurant', priceCents: 6900 },
+      { id: '3', title: 'Chez Table - Restaurant', priceCents: 6900 },
     ]);
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('TITLE');
     expect(result.stderr).toContain('id 3');
-    expect(result.stderr).toContain("Chef's Table — Restaurant");
-    expect(result.stderr).toContain('Chez Table — Restaurant');
+    expect(result.stderr).toContain("Chef's Table - Restaurant");
+    expect(result.stderr).toContain('Chez Table - Restaurant');
   });
 
   it('fails when a paid template is missing from CATALOG', () => {
@@ -160,7 +160,7 @@ describe('check:prices', () => {
   it('fails when a free template is purchasable through CATALOG', () => {
     const result = runGuard(TEMPLATES, [
       ...CATALOG,
-      { id: '2', title: 'Folio — Portfolio', priceCents: 4900 },
+      { id: '2', title: 'Folio - Portfolio', priceCents: 4900 },
     ]);
 
     expect(result.status).toBe(1);
@@ -172,7 +172,7 @@ describe('check:prices', () => {
   it('fails when CATALOG sells an id that no longer exists in templates.ts', () => {
     const result = runGuard(TEMPLATES, [
       ...CATALOG,
-      { id: '99', title: 'Retired — Template', priceCents: 4900 },
+      { id: '99', title: 'Retired - Template', priceCents: 4900 },
     ]);
 
     expect(result.status).toBe(1);
@@ -182,7 +182,7 @@ describe('check:prices', () => {
 
   it('reports every mismatch in one run instead of stopping at the first', () => {
     const result = runGuard(TEMPLATES, [
-      { id: '1', title: 'Luminary — SaaS', priceCents: 100 },
+      { id: '1', title: 'Luminary - SaaS', priceCents: 100 },
       { id: '3', title: 'Wrong Name', priceCents: 6900 },
     ]);
 

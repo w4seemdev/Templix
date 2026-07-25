@@ -1,5 +1,5 @@
 /* ============================================================
-   SWIFT — Food Delivery Template
+   SWIFT - Food Delivery Template
    Fresh green with lime pop. Fully responsive.
    ============================================================ */
 
@@ -33,12 +33,12 @@ const container: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', w
 
 const cuisines = ['All', 'Pizza', 'Sushi', 'Burgers', 'Healthy', 'Dessert'];
 const spots = [
-  { name: 'Napoli Slice', cuisine: 'Pizza', rating: 4.8, time: '20–30', fee: 'Free', from: '#e0553a', to: '#7a2416' },
-  { name: 'Kaito Sushi', cuisine: 'Sushi', rating: 4.9, time: '25–35', fee: '$1.99', from: '#2e6f5e', to: '#123329' },
-  { name: 'Smash & Co.', cuisine: 'Burgers', rating: 4.7, time: '15–25', fee: 'Free', from: '#c58a3a', to: '#5f3f16' },
-  { name: 'Green Bowl', cuisine: 'Healthy', rating: 4.8, time: '20–30', fee: 'Free', from: '#4a8f3a', to: '#1f4118' },
-  { name: 'Sugar Lab', cuisine: 'Dessert', rating: 4.9, time: '30–40', fee: '$0.99', from: '#c05a86', to: '#5f223e' },
-  { name: 'Taco Norte', cuisine: 'Burgers', rating: 4.6, time: '20–30', fee: 'Free', from: '#d08a2a', to: '#6b4310' },
+  { name: 'Napoli Slice', cuisine: 'Pizza', rating: 4.8, time: '20-30', fee: 'Free', from: '#e0553a', to: '#7a2416' },
+  { name: 'Kaito Sushi', cuisine: 'Sushi', rating: 4.9, time: '25-35', fee: '$1.99', from: '#2e6f5e', to: '#123329' },
+  { name: 'Smash & Co.', cuisine: 'Burgers', rating: 4.7, time: '15-25', fee: 'Free', from: '#c58a3a', to: '#5f3f16' },
+  { name: 'Green Bowl', cuisine: 'Healthy', rating: 4.8, time: '20-30', fee: 'Free', from: '#4a8f3a', to: '#1f4118' },
+  { name: 'Sugar Lab', cuisine: 'Dessert', rating: 4.9, time: '30-40', fee: '$0.99', from: '#c05a86', to: '#5f223e' },
+  { name: 'Taco Norte', cuisine: 'Burgers', rating: 4.6, time: '20-30', fee: 'Free', from: '#d08a2a', to: '#6b4310' },
 ];
 
 export default function SwiftDeliveryPreview() {

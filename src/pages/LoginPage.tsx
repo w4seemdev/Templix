@@ -9,7 +9,7 @@ const inputClass =
 
 // Every auth call here goes through the context so supabase-js stays off this
 // route until the visitor actually acts. They reject only when the auth client
-// itself never loaded — a stale cached index.html after a deploy, or the chunk
+// itself never loaded - a stale cached index.html after a deploy, or the chunk
 // request being blocked.
 const AUTH_UNREACHABLE_MESSAGE =
   'We couldn’t reach the sign-in service. Reload the page and try again.';
@@ -36,7 +36,7 @@ export default function LoginPage() {
   const location = useLocation();
 
   // Return-intent: a buy action navigates to /login with { state: { next } }.
-  // Only same-origin absolute paths are honoured — '//evil.example' is
+  // Only same-origin absolute paths are honoured - '//evil.example' is
   // protocol-relative and would leave the site, so it falls back to /dashboard.
   const next = (location.state as { next?: string } | null)?.next ?? '/dashboard';
   const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
@@ -62,7 +62,7 @@ export default function LoginPage() {
         if (password.length < MIN_PASSWORD_LENGTH) { setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`); return; }
         const { error } = await signUp(email, password, name);
         if (error) {
-          if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Almost there — confirm your email to finish creating your account.'); }
+          if (isUnconfirmed(error)) { setNeedsConfirm(true); setError('Almost there - confirm your email to finish creating your account.'); }
           else setError(error);
           return;
         }

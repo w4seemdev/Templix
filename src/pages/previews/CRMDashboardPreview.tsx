@@ -1,5 +1,5 @@
 /* ============================================================
-   RELATE — CRM Dashboard Template
+   RELATE - CRM Dashboard Template
    Dark CRM app shell with indigo accent. Responsive:
    topbar + sidebar + KPIs + pipeline + inline-SVG chart + deals.
    ============================================================ */
@@ -85,10 +85,10 @@ function Main({ mobile }: { mobile: boolean }) {
   const stages: [string, number, string][] = [['Lead', 42, '#6366f1'], ['Qualified', 28, '#818cf8'], ['Proposal', 17, '#a78bfa'], ['Negotiation', 9, '#f59e0b'], ['Won', 12, '#10b981']];
   const maxStage = Math.max(...stages.map(s => s[1]));
   const deals = [
-    ['Acme Corp — Platform', 'Sarah Chen', '$48,000', 'Negotiation', '#f59e0b', '82%'],
-    ['Northwind — Renewal', 'Diego Ruiz', '$120,000', 'Proposal', '#a78bfa', '64%'],
-    ['Orbital — Expansion', 'Amy Okafor', '$36,500', 'Qualified', '#818cf8', '40%'],
-    ['Cascade — New logo', 'Tom Vega', '$22,000', 'Won', '#10b981', '100%'],
+    ['Acme Corp - Platform', 'Sarah Chen', '$48,000', 'Negotiation', '#f59e0b', '82%'],
+    ['Northwind - Renewal', 'Diego Ruiz', '$120,000', 'Proposal', '#a78bfa', '64%'],
+    ['Orbital - Expansion', 'Amy Okafor', '$36,500', 'Qualified', '#818cf8', '40%'],
+    ['Cascade - New logo', 'Tom Vega', '$22,000', 'Won', '#10b981', '100%'],
   ] as const;
   return (
     <main style={{ flex: 1, padding: mobile ? 16 : 26, minWidth: 0 }}>

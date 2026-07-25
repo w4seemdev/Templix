@@ -1,5 +1,5 @@
 /* ============================================================
-   LUMINARY — SaaS Landing Page Template
+   LUMINARY - SaaS Landing Page Template
    Premium dark SaaS with violet/indigo accent. Self-contained,
    inline styles only, fully responsive (375px → 1280px).
    ============================================================ */
@@ -82,13 +82,13 @@ function Hero({ mobile }: { mobile: boolean }) {
       <div style={{ position: 'absolute', top: -120, left: '50%', transform: 'translateX(-50%)', width: 760, height: 460, maxWidth: '120%', background: 'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative', textAlign: 'center' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid rgba(139,92,246,0.4)', background: 'rgba(139,92,246,0.1)', borderRadius: 9999, padding: '6px 15px', fontSize: 13, color: '#c4b5fd' }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: V.a1 }} /> New — AI sprint planning is live
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: V.a1 }} /> New - AI sprint planning is live
         </span>
         <h1 style={{ fontSize: mobile ? '2.3rem' : '4.2rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.05, margin: '22px auto 0', maxWidth: 820 }}>
           The workspace where teams<br />ship <span style={{ background: 'linear-gradient(135deg,#a78bfa,#818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>10x faster</span>
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: V.mut, lineHeight: 1.7, maxWidth: 560, margin: '20px auto 0' }}>
-          Plan sprints, track work, and ship on time — Luminary unifies your roadmap, issues, and docs in one fast, beautiful platform.
+          Plan sprints, track work, and ship on time - Luminary unifies your roadmap, issues, and docs in one fast, beautiful platform.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 30, flexWrap: 'wrap' }}>
           <a href="#pricing" style={{ background: grad, borderRadius: 12, padding: '14px 26px', fontSize: 15, fontWeight: 600, color: '#fff', textDecoration: 'none', boxShadow: '0 0 40px rgba(139,92,246,0.3)' }}>Start free trial</a>
@@ -222,7 +222,7 @@ function Workflow({ mobile }: { mobile: boolean }) {
 function Reviews({ mobile }: { mobile: boolean }) {
   const t = [
     ['Luminary cut our planning time in half. The whole team finally knows what is going on.', 'Sarah Chen', 'Eng Lead, Cascade'],
-    ['We evaluated six tools. The analytics alone were worth the switch — nothing else compares.', 'Marcus Webb', 'VP Product, Orbital'],
+    ['We evaluated six tools. The analytics alone were worth the switch - nothing else compares.', 'Marcus Webb', 'VP Product, Orbital'],
     ['Onboarded 40 people in a week. Fast, thoughtful, and it just works.', 'Priya Nair', 'Chief of Staff, Meridian'],
   ];
   return (

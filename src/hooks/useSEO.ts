@@ -10,7 +10,7 @@ interface SEOProps {
    together with public/robots.txt, public/sitemap.xml and index.html in one commit. */
 const SITE_URL      = 'https://templix-peach.vercel.app';
 const BASE_TITLE    = 'Templix';
-const DEFAULT_TITLE = 'Templix — Website Templates for Developers';
+const DEFAULT_TITLE = 'Templix - Website Templates for Developers';
 const BASE_DESC     = 'Browse professionally designed, fully responsive website templates built with React, TypeScript, and Vite. Buy once, use forever.';
 
 /** Sets a meta tag's content, creating the tag if index.html does not ship it. */
@@ -44,7 +44,7 @@ export function useSEO({ title, description }: SEOProps = {}) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const fullTitle = title ? `${title} — ${BASE_TITLE}` : DEFAULT_TITLE;
+    const fullTitle = title ? `${title} - ${BASE_TITLE}` : DEFAULT_TITLE;
     const desc      = description ?? BASE_DESC;
     // Canonicals carry no query string and no trailing slash (except the root).
     const path      = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');

@@ -1,5 +1,5 @@
 /* ============================================================
-   SIGNAL '26 — Product & engineering conference
+   SIGNAL '26 - Product & engineering conference
    Deep midnight navy, electric lime + cyan accents
    Self-contained, responsive single-page site
    ============================================================ */
@@ -76,7 +76,7 @@ export default function LaunchConfEventPreview() {
         <div style={{ position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)', width: '620px', maxWidth: '100%', height: '620px', background: `radial-gradient(circle, rgba(56,225,214,0.14), transparent 60%)`, pointerEvents: 'none' }} />
         <div style={{ position: 'relative' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: CYAN, border: `1px solid ${LINE}`, borderRadius: '999px', padding: '6px 16px', marginBottom: '1.75rem' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: LIME }} /> Oct 8–9, 2026 · Berlin & online
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: LIME }} /> Oct 8-9, 2026 · Berlin & online
           </span>
           <h1 style={{ fontSize: mobile ? '3rem' : 'clamp(3.4rem,9vw,6.2rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 0.98, margin: '0 0 1.25rem' }}>
             The conference for<br /><span style={{ background: `linear-gradient(90deg,${LIME},${CYAN})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>people who ship.</span>
@@ -162,7 +162,7 @@ export default function LaunchConfEventPreview() {
             <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: CYAN }}>The venue</span>
             <h2 style={{ fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 900, letterSpacing: '-0.03em', margin: '0.75rem 0 1rem' }}>Kraftwerk, Berlin</h2>
             <p style={{ fontSize: '1.05rem', color: MUTE, lineHeight: 1.75, margin: '0 0 1.5rem' }}>
-              A converted power station in the heart of Mitte — soaring concrete halls, fast wifi everywhere, and a rooftop bar for the after-party. Fully accessible, ten minutes from the main station.
+              A converted power station in the heart of Mitte - soaring concrete halls, fast wifi everywhere, and a rooftop bar for the after-party. Fully accessible, ten minutes from the main station.
             </p>
             <a href="#venue" style={{ color: LIME, fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>Get directions →</a>
           </div>

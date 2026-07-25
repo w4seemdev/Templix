@@ -27,7 +27,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
 const PREVIEWS  = join(ROOT, 'src', 'pages', 'previews');
 // Free zips are public by design. Paid zips are build output, never committed
-// and never served — see .gitignore.
+// and never served - see .gitignore.
 const PUBLIC_DIR  = join(ROOT, 'public', 'templates');
 const PRIVATE_DIR = join(ROOT, 'dist-zips');
 
@@ -105,7 +105,7 @@ const SLUG_TO_FILE = {
 // parsed out of that file at run time rather than mirrored here, so renaming a
 // template in the catalog can never leave the shipped zip selling a
 // differently-named product. templates.ts is TypeScript and this is a plain
-// .mjs script, so it cannot be imported — the object literal is parsed instead.
+// .mjs script, so it cannot be imported - the object literal is parsed instead.
 // The parser is deliberately strict and throws unless it recovers exactly
 // EXPECTED_TEMPLATE_COUNT entries, which makes silent drift impossible.
 // Every template's TRUE stack is React 19 + TypeScript + Vite (see TRUE_STACK
@@ -153,7 +153,7 @@ function readTemplates() {
   if (templates.length !== EXPECTED_TEMPLATE_COUNT) {
     throw new Error(
       `Parsed ${templates.length} templates from src/data/templates.ts, expected ${EXPECTED_TEMPLATE_COUNT}. ` +
-      `The catalog's shape changed — fix this parser before regenerating, or buyers get mislabelled downloads.`,
+      `The catalog's shape changed - fix this parser before regenerating, or buyers get mislabelled downloads.`,
     );
   }
 
@@ -173,7 +173,7 @@ const TEMPLATES = readTemplates();
 // The one true stack of every downloadable template.
 const TRUE_STACK = ['React 19', 'TypeScript', 'Vite'];
 
-// Truthful "What's included" list (identical everywhere — see CANONICAL FACTS).
+// Truthful "What's included" list (identical everywhere - see CANONICAL FACTS).
 const INCLUDED = [
   'Complete React + TypeScript source (Vite)',
   'Fully responsive mobile-first layout',
@@ -184,10 +184,10 @@ const INCLUDED = [
 // ─── Templix Standard License ────────────────────────────────────────────────
 // SOURCE OF TRUTH: src/pages/LicensePage.tsx (mirrored in section 2 of
 // src/pages/TermsPage.tsx). The buyer agrees to that page, so the LICENSE.txt
-// shipped in the zip is derived from it verbatim in substance — a bundled file
+// shipped in the zip is derived from it verbatim in substance - a bundled file
 // that contradicted the page would be worse than no file at all.
 // The page draws NO free/paid distinction ("Free templates are covered by the
-// exact same usage terms as paid ones — the only difference is that no purchase
+// exact same usage terms as paid ones - the only difference is that no purchase
 // is required to download them"), so there is ONE licence and every zip,
 // free or paid, receives the identical file.
 const SITE_URL = 'https://templix-peach.vercel.app';
@@ -203,7 +203,7 @@ the same usage terms with no purchase required.`;
 const LICENSE_TEXT = `Templix Standard License
 Last updated: July 2026
 
-Every template on Templix — free or paid — is covered by the single Templix
+Every template on Templix - free or paid - is covered by the single Templix
 Standard License below. There are no separate personal and commercial tiers:
 one license covers both. By downloading a template you agree to these terms.
 
@@ -217,7 +217,7 @@ WHAT YOU CAN DO
 
   - Use the template in unlimited personal and commercial end-products
   - Modify, customize, and extend it freely
-  - Use it in paid client and freelance work — no attribution required
+  - Use it in paid client and freelance work - no attribution required
 
 
 WHAT YOU CANNOT DO
@@ -230,14 +230,14 @@ WHAT YOU CANNOT DO
 
 FREE TEMPLATES
 
-Free templates are covered by the exact same usage terms as paid ones — the
+Free templates are covered by the exact same usage terms as paid ones - the
 only difference is that no purchase is required to download them. The
 restriction on reselling or redistributing the template itself still applies.
 
 
 OWNERSHIP
 
-A license grants you the right to use the template — it does not transfer
+A license grants you the right to use the template - it does not transfer
 ownership of the underlying design or source code. You may not claim the
 original template as your own work.
 
@@ -396,7 +396,7 @@ createRoot(document.getElementById('root')!).render(
 }
 
 function makeIndexCss() {
-  // Base page styles only — every template styles itself with inline React
+  // Base page styles only - every template styles itself with inline React
   // style objects, so this just provides the reset and default font.
   return `*,
 *::before,
@@ -426,7 +426,7 @@ function makeReadme(title, description) {
 
 A responsive single-page website template built with ${TRUE_STACK.join(', ')}. The whole
 site lives in \`src/App.tsx\` as one component composed of multiple sections (header, hero,
-content sections, and footer). Styling uses self-contained inline React style objects — there
+content sections, and footer). Styling uses self-contained inline React style objects - there
 is no CSS framework or design tooling to configure.
 
 ## What's included
@@ -447,7 +447,7 @@ npm run preview  # preview the production build locally
 ## Customising
 
 Everything lives in \`src/App.tsx\`. Each section is a small function component inside that
-file — edit the copy, colors, and images there. Base page styles (font and reset) are in
+file - edit the copy, colors, and images there. Base page styles (font and reset) are in
 \`src/index.css\`.
 
 ## Project structure
@@ -461,14 +461,14 @@ file — edit the copy, colors, and images there. Base page styles (font and res
 ├── vite.config.ts
 └── src/
     ├── main.tsx        # entry point
-    ├── App.tsx         # the template — all sections live here
+    ├── App.tsx         # the template - all sections live here
     ├── index.css       # base page styles
     └── vite-env.d.ts   # Vite client types
 \`\`\`
 
 ## License
 
-Covered by the Templix Standard License — the same terms for free and paid
+Covered by the Templix Standard License - the same terms for free and paid
 templates alike.
 
 ${LICENSE_GRANT}

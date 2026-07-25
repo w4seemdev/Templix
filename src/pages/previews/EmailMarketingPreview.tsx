@@ -1,5 +1,5 @@
 /* ============================================================
-   SENDWELL — Email marketing platform (landing)
+   SENDWELL - Email marketing platform (landing)
    Bright, friendly SaaS: emerald primary, coral accent
    Self-contained, responsive single-page site
    ============================================================ */
@@ -71,10 +71,10 @@ export default function EmailMarketingPreview() {
               Email your people <span style={{ color: EMERALD }}>actually open.</span>
             </h1>
             <p style={{ fontSize: mobile ? '1.05rem' : '1.2rem', color: MUTE, lineHeight: 1.65, margin: '0 0 2rem', maxWidth: '460px' }}>
-              Sendwell is the email platform for creators and small teams — beautiful campaigns, smart automations, and analytics you&rsquo;ll actually read.
+              Sendwell is the email platform for creators and small teams - beautiful campaigns, smart automations, and analytics you&rsquo;ll actually read.
             </p>
             <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-              <a href="#pricing" style={{ background: EMERALD, color: '#fff', borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Start free — no card</a>
+              <a href="#pricing" style={{ background: EMERALD, color: '#fff', borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Start free - no card</a>
               <a href="#how" style={{ border: `1px solid ${LINE}`, background: '#fff', color: INK, borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>See how it works</a>
             </div>
             <p style={{ fontSize: '13px', color: MUTE }}>Trusted by 12,000+ senders · Free up to 1,000 subscribers</p>
@@ -111,10 +111,10 @@ export default function EmailMarketingPreview() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '1.25rem' }}>
           {[
-            { t: 'Drag-and-drop builder', d: 'Compose on-brand emails in minutes — no code, no fiddly HTML, mobile-perfect by default.', p: 'M4 5h16M4 12h10M4 19h7' },
+            { t: 'Drag-and-drop builder', d: 'Compose on-brand emails in minutes - no code, no fiddly HTML, mobile-perfect by default.', p: 'M4 5h16M4 12h10M4 19h7' },
             { t: 'Automations that convert', d: 'Welcome flows, drips, and re-engagement journeys triggered by what your readers actually do.', p: 'M12 2v6m0 0l3-3m-3 3L9 5M4 12h16M6 20h12' },
             { t: 'Segments in one click', d: 'Group by activity, tags, or purchase history and send the right message to the right people.', p: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z' },
-            { t: 'Analytics you\'ll read', d: 'Opens, clicks, growth, and revenue in one clean dashboard — no spreadsheet gymnastics.', p: 'M3 3v18h18M7 15l4-4 3 3 5-6' },
+            { t: 'Analytics you\'ll read', d: 'Opens, clicks, growth, and revenue in one clean dashboard - no spreadsheet gymnastics.', p: 'M3 3v18h18M7 15l4-4 3 3 5-6' },
             { t: 'A/B testing built in', d: 'Test subject lines and content, then auto-send the winner to the rest of your list.', p: 'M8 3v18M16 3v18M3 8h5M16 16h5' },
             { t: 'Deliverability first', d: 'Authenticated sending, warm-up, and spam-scoring so your emails reach the inbox.', p: 'M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z' },
           ].map(f => (

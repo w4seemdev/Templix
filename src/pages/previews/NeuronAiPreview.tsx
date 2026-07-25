@@ -1,5 +1,5 @@
 /* ============================================================
-   NEURON — AI Platform Landing Template
+   NEURON - AI Platform Landing Template
    Near-black with cyan/violet accent. Self-contained, inline
    styles only, fully responsive (375px → 1280px).
    ============================================================ */
@@ -100,7 +100,7 @@ function Console({ mobile }: { mobile: boolean }) {
     <div style={{ marginTop: mobile ? 36 : 0, borderRadius: 16, border: `1px solid ${T.line}`, background: T.panel, overflow: 'hidden', boxShadow: '0 40px 90px rgba(0,0,0,0.55), 0 0 60px rgba(34,211,238,0.1)', fontFamily: "'SF Mono', ui-monospace, monospace" }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '11px 14px', borderBottom: `1px solid ${T.line}`, background: '#080b1a' }}>
         {['#ff5f57', '#febc2e', '#28c840'].map(c => <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c }} />)}
-        <span style={{ marginLeft: 10, fontSize: 11, color: T.dim }}>playground — neuron-4</span>
+        <span style={{ marginLeft: 10, fontSize: 11, color: T.dim }}>playground - neuron-4</span>
       </div>
       <div style={{ padding: 18, fontSize: 12.5, lineHeight: 1.8 }}>
         <div style={{ color: T.dim }}>{'>'} POST /v1/chat</div>
@@ -137,7 +137,7 @@ function Capabilities({ mobile }: { mobile: boolean }) {
     ['eye', 'Multimodal vision', 'Parse screenshots, charts, and PDFs with pixel-accurate grounding.'],
     ['bolt', 'Streaming & tools', 'Token streaming, function calling, and structured JSON outputs by default.'],
     ['shield', 'Private by design', 'Zero data retention, SOC 2, and dedicated VPC deployments on request.'],
-    ['code', 'SDKs for everything', 'First-class TypeScript, Python, and REST — go from key to prod in an hour.'],
+    ['code', 'SDKs for everything', 'First-class TypeScript, Python, and REST - go from key to prod in an hour.'],
   ];
   return (
     <Section id="platform" mobile={mobile} tag="Platform" title="Everything you need to build with AI" sub="A single, dependable API surface for every intelligent feature.">

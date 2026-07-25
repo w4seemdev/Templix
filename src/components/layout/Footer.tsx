@@ -28,7 +28,7 @@ const linkColumns: { group: string; items: { label: string; to: string }[] }[] =
 ];
 
 /* Brand social icons inlined (lucide brand icons are deprecated).
-   Only profiles that actually exist belong here — a dead link to a platform
+   Only profiles that actually exist belong here - a dead link to a platform
    homepage reads as a fake storefront. */
 const socials: { label: string; href: string; path: string }[] = [
   {
@@ -59,7 +59,7 @@ export default function Footer() {
             <span className="text-base font-semibold tracking-[-0.02em] text-text-primary">Templix</span>
           </Link>
           <p className="m-0 text-[13px] leading-relaxed text-text-tertiary">
-            Professionally designed website templates for developers and designers —
+            Professionally designed website templates for developers and designers -
             preview live, buy once, ship faster.
           </p>
         </div>

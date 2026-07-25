@@ -1,5 +1,5 @@
 /* ============================================================
-   VELOCITY — Performance Auto Dealership Template
+   VELOCITY - Performance Auto Dealership Template
    Carbon black with electric crimson. Fully responsive.
    ============================================================ */
 
@@ -140,7 +140,7 @@ function Fleet() {
               </div>
               <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
                 <SpecChip label="Horsepower" value={`${c.hp}`} />
-                <SpecChip label="0–100" value={c.zero} />
+                <SpecChip label="0-100" value={c.zero} />
                 <SpecChip label="Top mph" value={c.top} />
               </div>
               <a href="#fleet" style={{ display: 'block', textAlign: 'center', border: `1px solid ${C.line}`, color: C.ink, borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>Book a test drive</a>
@@ -155,7 +155,7 @@ function Fleet() {
 function Why() {
   const m = useIsMobile();
   const items = [
-    { t: 'Transparent pricing', d: 'One fair price on every car — no haggling, no hidden add-ons.', p: 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
+    { t: 'Transparent pricing', d: 'One fair price on every car - no haggling, no hidden add-ons.', p: 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
     { t: '200-point inspection', d: 'Every vehicle is fully reconditioned and certified before sale.', p: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
     { t: '7-day return', d: 'Change your mind within a week and we take it back, no fuss.', p: 'M3 7v6h6M3 13a9 9 0 1 0 3-7.7L3 8' },
     { t: 'Flexible finance', d: 'Rates from 0% APR with instant online pre-approval.', p: 'M3 10h18M3 6h18v12H3zM7 15h4' },

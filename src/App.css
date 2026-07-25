@@ -1,5 +1,5 @@
 /* ============================================================
-   TEMPLIX — shared component recipes ("Obsidian Gallery")
+   TEMPLIX - shared component recipes ("Obsidian Gallery")
    Imported by src/index.css. Plain classes for what utilities
    can't express cleanly: glass, glow, sheen, aurora, buttons,
    bento tiles, chips, marquee + shared keyframes.
@@ -237,7 +237,7 @@
   background: var(--gradient-sheen);
   pointer-events: none;
 }
-/* cursor spotlight — page sets --spot-x / --spot-y on pointermove */
+/* cursor spotlight - page sets --spot-x / --spot-y on pointermove */
 .bento-tile::after {
   content: "";
   position: absolute;
@@ -260,7 +260,7 @@
   animation: tmx-sheet-in 320ms var(--ease-sheet);
 }
 @media (prefers-reduced-motion: reduce) {
-  /* The slide becomes a plain fade — the global guard only collapses
+  /* The slide becomes a plain fade - the global guard only collapses
      transitions, not named animations. */
   .tmx-sheet {
     animation: tmx-fade 150ms ease-out;
@@ -283,8 +283,8 @@
 }
 
 /* ── Scroll reveals (useReveal hook adds .is-inview once, at ~20% entry) ──
-   .reveal        — single element rise (600ms ease-out-quint)
-   .reveal-group  — parent gains .is-inview; direct children stagger 70ms,
+   .reveal        - single element rise (600ms ease-out-quint)
+   .reveal-group  - parent gains .is-inview; direct children stagger 70ms,
                     capped at 420ms. Children with their own inline
                     `transition` (e.g. TemplateCard) must be wrapped in a
                     plain div; .bento-tile children are handled below. */

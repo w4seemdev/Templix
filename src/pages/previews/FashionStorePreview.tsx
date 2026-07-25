@@ -1,5 +1,5 @@
 /* ============================================================
-   MAISON — Fashion Boutique Template
+   MAISON - Fashion Boutique Template
    Light editorial ivory with plum accent. Fully responsive.
    ============================================================ */
 
@@ -96,7 +96,7 @@ function Hero() {
       <div>
         <span style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold, fontWeight: 600 }}>The Autumn Edit</span>
         <h1 style={{ fontFamily: serif, fontSize: m ? '2.8rem' : '4.4rem', fontWeight: 700, lineHeight: 1.04, letterSpacing: '-0.01em', margin: '18px 0 20px' }}>Timeless pieces, quietly made.</h1>
-        <p style={{ fontSize: m ? '1rem' : '1.1rem', color: C.muted, lineHeight: 1.7, maxWidth: '440px', margin: '0 0 30px' }}>A considered wardrobe of natural fibres and enduring silhouettes — cut in small batches by independent European ateliers.</p>
+        <p style={{ fontSize: m ? '1rem' : '1.1rem', color: C.muted, lineHeight: 1.7, maxWidth: '440px', margin: '0 0 30px' }}>A considered wardrobe of natural fibres and enduring silhouettes - cut in small batches by independent European ateliers.</p>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <a href="#shop" style={{ background: C.accent, color: '#fff', borderRadius: '2px', padding: '15px 34px', fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>Shop the edit</a>
           <a href="#editorial" style={{ border: `1px solid ${C.ink}`, color: C.ink, borderRadius: '2px', padding: '15px 34px', fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>The lookbook</a>
@@ -162,8 +162,8 @@ function Editorial() {
         <div style={{ aspectRatio: m ? '4/3' : '1/1', borderRadius: '4px', background: 'linear-gradient(155deg,#c9a97a,#7d5b34)' }} />
         <div>
           <span style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold, fontWeight: 600 }}>Our philosophy</span>
-          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '16px 0 20px' }}>Fewer, finer things — built to be kept.</h2>
-          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.75, margin: '0 0 16px' }}>Every Maison piece begins with the cloth. We work only with mills that can trace their fibres, and with ateliers that pay a living wage. The result is clothing designed to outlast the season — and the trend.</p>
+          <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '16px 0 20px' }}>Fewer, finer things - built to be kept.</h2>
+          <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.75, margin: '0 0 16px' }}>Every Maison piece begins with the cloth. We work only with mills that can trace their fibres, and with ateliers that pay a living wage. The result is clothing designed to outlast the season - and the trend.</p>
           <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.75, margin: '0 0 24px' }}>Complimentary alterations and lifetime repairs come standard, because well-made clothes deserve a long life.</p>
           <a href="#shop" style={{ color: C.accent, fontSize: '13px', letterSpacing: '0.05em', textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none', borderBottom: `1px solid ${C.accent}`, paddingBottom: '3px' }}>Read our story</a>
         </div>

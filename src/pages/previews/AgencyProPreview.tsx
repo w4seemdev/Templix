@@ -1,6 +1,6 @@
 /* ============================================================
-   KINETIC — Digital Agency Template
-   Near-black with electric lime accent — bold & editorial.
+   KINETIC - Digital Agency Template
+   Near-black with electric lime accent - bold & editorial.
    Self-contained, inline styles only, fully responsive.
    ============================================================ */
 
@@ -105,7 +105,7 @@ function Work({ mobile }: { mobile: boolean }) {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 34 }}>
           <h2 style={{ fontSize: mobile ? '2rem' : '3rem', fontWeight: 900, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: 0 }}>Selected work</h2>
-          <span style={{ fontSize: 13, color: T.dim }}>2024 — 2025</span>
+          <span style={{ fontSize: 13, color: T.dim }}>2024 - 2025</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(2,1fr)', gap: 20 }}>
           {projects.map(([name, tag, bg]) => (

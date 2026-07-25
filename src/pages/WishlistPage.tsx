@@ -30,7 +30,7 @@ export default function WishlistPage() {
                 instead of silently swapping the grid for the empty state. */}
             <p role="status" aria-live="polite" className="mt-3 text-[15px] text-text-secondary">
               <span className="font-mono font-medium text-text-primary" style={TNUM}>{saved.length}</span>
-              {' '}saved template{saved.length !== 1 ? 's' : ''} — kept on this device, ready when you are.
+              {' '}saved template{saved.length !== 1 ? 's' : ''} - kept on this device, ready when you are.
             </p>
           </div>
           {saved.length > 0 && (
@@ -42,7 +42,7 @@ export default function WishlistPage() {
         </header>
 
         {saved.length === 0 ? (
-          /* Empty state — dashed tile, duotone heart disc */
+          /* Empty state - dashed tile, duotone heart disc */
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-border-default px-6 py-24 text-center">
             <div className="mb-5 grid h-14 w-14 place-items-center rounded-full border border-danger-soft-border bg-danger-soft">
               <Heart size={24} className="text-danger" aria-hidden="true" />
@@ -51,7 +51,7 @@ export default function WishlistPage() {
               No saved templates yet
             </h2>
             <p className="m-0 mt-1.5 max-w-[40ch] text-[15px] leading-relaxed text-text-secondary">
-              Tap the heart on any template to keep it here for later — no account needed.
+              Tap the heart on any template to keep it here for later - no account needed.
             </p>
             <Link to="/templates" className="btn btn-primary mt-7">
               Browse templates

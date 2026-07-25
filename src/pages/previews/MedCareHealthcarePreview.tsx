@@ -1,5 +1,5 @@
 /* ============================================================
-   MEDCARE — Multi-specialty clinic template
+   MEDCARE - Multi-specialty clinic template
    Clinical teal + navy · department booking layout
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -54,7 +54,7 @@ const doctors = [
 const steps = [
   { n: '1', t: 'Choose a department', d: 'Browse specialties and pick the clinic that matches your concern.' },
   { n: '2', t: 'Pick your doctor', d: 'Compare specialists by experience, focus area, and ratings.' },
-  { n: '3', t: 'Select date & time', d: 'Real-time availability — book a slot that fits your schedule.' },
+  { n: '3', t: 'Select date & time', d: 'Real-time availability - book a slot that fits your schedule.' },
   { n: '4', t: 'Visit the clinic', d: 'Your records and results sync to your patient portal automatically.' },
 ];
 
@@ -124,7 +124,7 @@ export default function MedCareHealthcarePreview() {
         <div style={{ maxWidth: '1180px', margin: '0 auto', padding: m ? '2.75rem 1.25rem 3rem' : '4.5rem 2rem 5rem', display: 'grid', gridTemplateColumns: m ? '1fr' : '1.15fr 0.85fr', gap: m ? '2rem' : '4rem', alignItems: 'center' }}>
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: '9999px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, color: TEAL, marginBottom: '1.5rem' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: TEAL }} />Accepting new patients — no waitlist
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: TEAL }} />Accepting new patients - no waitlist
             </span>
             <h1 style={{ fontSize: m ? '2.2rem' : 'clamp(2.6rem, 5.2vw, 4rem)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.08, margin: '0 0 1.25rem' }}>
               Modern healthcare,<br /><span style={{ color: TEAL }}>built around you</span>
@@ -260,7 +260,7 @@ export default function MedCareHealthcarePreview() {
         <div style={{ maxWidth: '1180px', margin: '0 auto', padding: pad }}>
           <div style={{ background: `linear-gradient(135deg, ${NAVY} 0%, #0f4c5c 60%, ${TEAL} 100%)`, borderRadius: '24px', padding: m ? '2.75rem 1.5rem' : '4rem 3rem', textAlign: 'center' }}>
             <h2 style={{ fontSize: m ? '1.8rem' : 'clamp(1.9rem, 3.8vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', margin: '0 0 1rem' }}>Your health shouldn&apos;t wait</h2>
-            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.75)', maxWidth: '480px', margin: '0 auto 2.25rem', lineHeight: 1.7 }}>Book online in under two minutes, or call our care line — we answer 24 hours a day, every day of the year.</p>
+            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.75)', maxWidth: '480px', margin: '0 auto 2.25rem', lineHeight: 1.7 }}>Book online in under two minutes, or call our care line - we answer 24 hours a day, every day of the year.</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
               <button style={{ background: '#fff', color: NAVY, border: 'none', borderRadius: '12px', padding: '14px 28px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>Book an appointment</button>
               <button style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', borderRadius: '12px', padding: '14px 28px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Call (555) 014-2030</button>
@@ -278,7 +278,7 @@ export default function MedCareHealthcarePreview() {
             </div>
             <span style={{ fontSize: '17px', fontWeight: 800 }}>Med<span style={{ color: TEAL }}>Care</span></span>
           </div>
-          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>120 Wellness Ave · Open Mon–Sat, 8:00–20:00</p>
+          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>120 Wellness Ave · Open Mon-Sat, 8:00-20:00</p>
           <p style={{ fontSize: '13px', color: '#9fb3c2', margin: 0 }}>© 2026 MedCare Clinic</p>
         </div>
       </footer>

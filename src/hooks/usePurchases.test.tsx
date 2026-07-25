@@ -8,7 +8,7 @@
  * The Supabase client is mocked at the module boundary, so both this hook (which
  * imports it statically) and AuthProvider (which imports it lazily) resolve to
  * the fake below. Queries are handed back as deferred promises: the test decides
- * when — and in what order — each one settles.
+ * when - and in what order - each one settles.
  */
 import { AuthProvider } from '../context/AuthContext';
 import { act, renderHook, waitFor } from '../test/utils';
@@ -41,7 +41,7 @@ const boundary = vi.hoisted(() => {
           userId = value;
           return builder;
         },
-        // Deferred on purpose — nothing settles until a test says so.
+        // Deferred on purpose - nothing settles until a test says so.
         returns: () =>
           new Promise<unknown>(resolve => {
             queries.push({ userId, resolve });
@@ -62,7 +62,7 @@ const boundary = vi.hoisted(() => {
     client,
     queries,
     isListening: () => authCallback !== null,
-    /** Session that `getSession()` resolves with — set this before rendering. */
+    /** Session that `getSession()` resolves with - set this before rendering. */
     startSignedInAs: (userId: string | null) => {
       session = userId === null ? null : { user: { id: userId } };
     },
@@ -131,7 +131,7 @@ describe('usePurchases', () => {
 
     expect(result.current.purchasedIds).toEqual([]);
     expect(result.current.loading).toBe(false);
-    // The load succeeded — a caller may safely offer checkout on this state.
+    // The load succeeded - a caller may safely offer checkout on this state.
     expect(result.current.error).toBe(false);
   });
 

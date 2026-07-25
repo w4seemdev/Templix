@@ -9,7 +9,7 @@ import ScrollToTop from './components/ui/ScrollToTop';
 import Container from './components/ui/Container';
 import HomePage from './pages/HomePage';
 
-// Secondary pages — lazy so the initial bundle stays small (homepage only).
+// Secondary pages - lazy so the initial bundle stays small (homepage only).
 const TemplatesPage        = lazy(() => import('./pages/TemplatesPage'));
 const TemplateDetailPage   = lazy(() => import('./pages/TemplateDetailPage'));
 const CategoriesPage       = lazy(() => import('./pages/CategoriesPage'));
@@ -26,7 +26,7 @@ const SupportPage          = lazy(() => import('./pages/SupportPage'));
 const FaqPage              = lazy(() => import('./pages/FaqPage'));
 const LicensePage          = lazy(() => import('./pages/LicensePage'));
 
-// Template previews — one lazy chunk each so a visitor loads only the demo
+// Template previews - one lazy chunk each so a visitor loads only the demo
 // they open, not all 61. Route paths are unchanged.
 const LuminarySaasPreview      = lazy(() => import('./pages/previews/LuminarySaasPreview'));
 const FolioPortfolioPreview    = lazy(() => import('./pages/previews/FolioPortfolioPreview'));
@@ -90,7 +90,7 @@ const PawsPetCarePreview       = lazy(() => import('./pages/previews/PawsPetCare
 const HavenInteriorPreview     = lazy(() => import('./pages/previews/HavenInteriorPreview'));
 const DailyNewsPreview         = lazy(() => import('./pages/previews/DailyNewsPreview'));
 
-// Route fallback — echoes the catalog shell (title, toolbar, card grid) so a
+// Route fallback - echoes the catalog shell (title, toolbar, card grid) so a
 // lazy chunk settles into the real layout instead of swapping a bare spinner
 // for a full page. Blocks are decorative; the wrapper carries the a11y status.
 function PageFallback() {

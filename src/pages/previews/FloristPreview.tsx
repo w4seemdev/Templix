@@ -1,5 +1,5 @@
 /* ============================================================
-   PETALWORKS — Florist & Flower Studio Template
+   PETALWORKS - Florist & Flower Studio Template
    Soft blush with sage-green accents. Fully responsive.
    ============================================================ */
 
@@ -221,7 +221,7 @@ function Footer() {
     <footer style={{ borderTop: `1px solid ${C.line}`, padding: '44px 20px 28px' }}>
       <div style={{ ...container, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '18px', alignItems: 'center', textAlign: m ? 'center' : 'left' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: m ? 'center' : 'flex-start', width: m ? '100%' : 'auto' }}><Bloom /><span style={{ fontFamily: serif, fontSize: '19px', fontWeight: 700 }}>Petalworks</span></div>
-        <span style={{ fontSize: '14px', color: C.muted }}>112 Blossom Row, Sheffield · Open Tue–Sun</span>
+        <span style={{ fontSize: '14px', color: C.muted }}>112 Blossom Row, Sheffield · Open Tue-Sun</span>
         <span style={{ fontSize: '13px', color: C.faint }}>© {new Date().getFullYear()} Petalworks Studio</span>
       </div>
     </footer>

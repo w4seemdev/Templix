@@ -1,7 +1,7 @@
 /**
  * ProtectedRoute gates every signed-in surface (dashboard, purchases,
  * downloads). These tests drive the *real* AuthProvider and mock only the
- * boundary it talks to — the lazily imported supabase module — so each of the
+ * boundary it talks to - the lazily imported supabase module - so each of the
  * four states a visitor can land in is reached through production code paths.
  */
 import { Route, Routes } from 'react-router-dom';
@@ -19,7 +19,7 @@ vi.mock('../../lib/supabase', () => ({
   /**
    * AuthContext loads auth as `(await import('../lib/supabase')).supabase` and
    * treats *any* failure at that expression as "auth is dead". A throwing getter
-   * reproduces the stale-index.html chunk 404 through the identical catch —
+   * reproduces the stale-index.html chunk 404 through the identical catch -
    * and unlike a factory that throws, it can be flipped per test rather than
    * once per file, so these tests do not depend on execution order.
    */
@@ -108,7 +108,7 @@ describe('ProtectedRoute', () => {
     expect(screen.getByRole('button', { name: 'Reload page' })).toBeInTheDocument();
 
     // The two failure modes this branch exists to prevent: an endless spinner,
-    // and a redirect to /login — which imports the same dead chunk.
+    // and a redirect to /login - which imports the same dead chunk.
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Sign in' })).not.toBeInTheDocument();
   });

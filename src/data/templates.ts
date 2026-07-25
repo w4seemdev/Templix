@@ -1,6 +1,6 @@
 import type { Template, TemplateCategory } from '../types';
 
-// Every template ships the same true stack and deliverables — see CANONICAL FACTS.
+// Every template ships the same true stack and deliverables - see CANONICAL FACTS.
 // Frozen with `as const` because both arrays are shared by reference across all entries.
 const STACK = ['React', 'TypeScript', 'Vite', 'Responsive'] as const;
 const INCLUDED = [
@@ -11,12 +11,12 @@ const INCLUDED = [
 ] as const;
 
 // Premium badge rule: isPremium === (price >= 59). It is a price tier, not a
-// curation flag — keep it in sync when adding or repricing a template.
+// curation flag - keep it in sync when adding or repricing a template.
 // Every `pages` list below names sections that exist in that template's preview.
 export const templates: readonly Template[] = [
   {
     id: '1',
-    title: 'Luminary — SaaS',
+    title: 'Luminary - SaaS',
     description: 'A clean, modern single-page SaaS landing template with hero, feature highlights, pricing, and testimonial sections.',
     category: 'saas',
     price: 59,
@@ -32,7 +32,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '2',
-    title: 'Folio — Portfolio',
+    title: 'Folio - Portfolio',
     description: 'Minimal and elegant single-page portfolio template for designers and developers, with project and contact sections.',
     category: 'portfolio',
     price: 0,
@@ -48,7 +48,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '3',
-    title: 'ShopDrop — Ecommerce',
+    title: 'ShopDrop - Ecommerce',
     description: 'Single-page ecommerce storefront template with product grid, featured collections, and promo sections (front-end UI only).',
     category: 'ecommerce',
     price: 69,
@@ -64,7 +64,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '4',
-    title: 'Bloom — Blog',
+    title: 'Bloom - Blog',
     description: 'Single-page blog home template with a featured post, latest-stories grid, about, and newsletter sections.',
     category: 'blog',
     price: 39,
@@ -96,7 +96,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '6',
-    title: 'StartKit — Startup',
+    title: 'StartKit - Startup',
     description: 'Free single-page startup landing template with hero, features, how-it-works, and call-to-action sections.',
     category: 'saas',
     price: 0,
@@ -112,7 +112,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '7',
-    title: 'LaunchPad — Landing Page',
+    title: 'LaunchPad - Landing Page',
     description: 'High-converting single-page landing template with hero, benefits, social proof, pricing, and CTA sections.',
     category: 'landing',
     price: 49,
@@ -128,7 +128,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '8',
-    title: 'Dashify — Dashboard',
+    title: 'Dashify - Dashboard',
     description: 'Modern single-page admin dashboard UI with stat cards, charts, activity, and data-table sections (front-end only).',
     category: 'dashboard',
     price: 79,
@@ -144,7 +144,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '9',
-    title: 'Saveur — Restaurant',
+    title: 'Saveur - Restaurant',
     description: 'Elegant single-page restaurant template with about, menu, gallery, and reservation sections.',
     category: 'restaurant',
     price: 49,
@@ -160,7 +160,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '10',
-    title: 'Nexus — Corporate',
+    title: 'Nexus - Corporate',
     description: 'Professional single-page corporate template with about, services, team, testimonials, and contact sections.',
     category: 'corporate',
     price: 59,
@@ -176,7 +176,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '11',
-    title: 'MedCare — Healthcare',
+    title: 'MedCare - Healthcare',
     description: 'Clean, trustworthy single-page medical centre template with specialist departments, doctor profiles, a four-step booking flow, and insurance and contact sections.',
     category: 'corporate',
     price: 69,
@@ -192,7 +192,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '12',
-    title: 'Coursify — Education',
+    title: 'Coursify - Education',
     description: 'Single-page online-course landing template with course grid, instructor, testimonial, and pricing sections.',
     category: 'saas',
     price: 69,
@@ -208,8 +208,8 @@ export const templates: readonly Template[] = [
   },
   {
     id: '13',
-    title: 'Estatly — Real Estate',
-    description: 'Sophisticated single-page brokerage template built around neighbourhood guides — featured properties, a why-us story, agent profiles, and a home-valuation call to action.',
+    title: 'Estatly - Real Estate',
+    description: 'Sophisticated single-page brokerage template built around neighbourhood guides - featured properties, a why-us story, agent profiles, and a home-valuation call to action.',
     category: 'landing',
     price: 69,
     image: '/covers/estatly.png',
@@ -224,7 +224,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '14',
-    title: 'Lens — Photography',
+    title: 'Lens - Photography',
     description: 'Editorial single-page photography portfolio with a gallery grid, selected series, a fine-art print shop, and contact sections.',
     category: 'portfolio',
     price: 0,
@@ -240,7 +240,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '15',
-    title: 'Eventide — Event Planning',
+    title: 'Eventide - Event Planning',
     description: 'Elegant single-page event planning and celebrations template with services, events gallery, packages, testimonials, and contact sections.',
     category: 'landing',
     price: 49,
@@ -256,7 +256,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '16',
-    title: 'Relate — CRM',
+    title: 'Relate - CRM',
     description: 'Single-page CRM dashboard UI with pipeline overview, deals table, contacts, and activity sections (front-end only).',
     category: 'dashboard',
     price: 69,
@@ -272,7 +272,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '17',
-    title: 'Maison — Fashion Store',
+    title: 'Maison - Fashion Store',
     description: 'Sleek, minimal single-page fashion storefront with lookbook, product grid, and editorial sections (front-end UI only).',
     category: 'ecommerce',
     price: 59,
@@ -288,7 +288,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '18',
-    title: 'Floww — App Landing',
+    title: 'Floww - App Landing',
     description: 'High-converting single-page app landing template with features, app preview, reviews, and download sections.',
     category: 'landing',
     price: 49,
@@ -304,7 +304,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '19',
-    title: 'Grind & Co. — Coffee Shop',
+    title: 'Grind & Co. - Coffee Shop',
     description: 'Warm, inviting single-page coffee shop template with about, menu, locations, and gallery sections.',
     category: 'restaurant',
     price: 0,
@@ -320,7 +320,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '20',
-    title: 'DevLog — Tech Blog',
+    title: 'DevLog - Tech Blog',
     description: 'Developer-focused single-page tech blog template with featured post, articles, tutorials, and newsletter sections.',
     category: 'blog',
     price: 39,
@@ -336,7 +336,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '21',
-    title: 'Vault — Finance SaaS',
+    title: 'Vault - Finance SaaS',
     description: 'Single-page personal-finance SaaS template with dashboard preview, feature, security, and pricing sections.',
     category: 'saas',
     price: 59,
@@ -352,7 +352,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '22',
-    title: 'Form& — Creative Studio',
+    title: 'Form& - Creative Studio',
     description: 'Bold, creative single-page studio portfolio with work grid, services, process, and contact sections.',
     category: 'agency',
     price: 49,
@@ -368,7 +368,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '23',
-    title: 'RemoteBase — Job Board',
+    title: 'RemoteBase - Job Board',
     description: 'Free single-page remote tech job board template with a role search bar, listing cards, category browsing, and hiring-company sections (front-end UI only).',
     category: 'saas',
     price: 0,
@@ -384,7 +384,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '24',
-    title: 'Pulse — Analytics SaaS',
+    title: 'Pulse - Analytics SaaS',
     description: 'Single-page web-analytics dashboard UI with realtime cards, charts, traffic sources, and funnel sections (front-end only).',
     category: 'dashboard',
     price: 79,
@@ -400,7 +400,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '25',
-    title: 'Wanderline — Travel Blog',
+    title: 'Wanderline - Travel Blog',
     description: 'Visually rich single-page travel blog template with featured destinations, stories, photo grid, and newsletter sections.',
     category: 'blog',
     price: 39,
@@ -416,7 +416,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '26',
-    title: 'Brix — Construction',
+    title: 'Brix - Construction',
     description: 'Strong, professional single-page construction template with services, projects, team, and contact sections.',
     category: 'corporate',
     price: 49,
@@ -432,7 +432,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '27',
-    title: 'Glow — Beauty & Spa',
+    title: 'Glow - Beauty & Spa',
     description: 'Elegant single-page beauty salon and spa template with services, treatments, gallery, and booking sections.',
     category: 'landing',
     price: 49,
@@ -448,7 +448,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '28',
-    title: 'Brick — Newsletter',
+    title: 'Brick - Newsletter',
     description: 'Clean, minimal single-page newsletter landing template with benefits, sample issue, and signup sections.',
     category: 'landing',
     price: 0,
@@ -464,7 +464,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '29',
-    title: 'Atlas — Map SaaS',
+    title: 'Atlas - Map SaaS',
     description: 'Single-page location-intelligence SaaS template with map preview, feature, data-layer, and pricing sections.',
     category: 'saas',
     price: 79,
@@ -480,7 +480,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '30',
-    title: 'Forge — Dev Tools',
+    title: 'Forge - Dev Tools',
     description: 'Technical single-page dev-tools landing template with features, code preview, integrations, and pricing sections.',
     category: 'saas',
     price: 59,
@@ -496,7 +496,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '31',
-    title: 'Ora — Productivity App',
+    title: 'Ora - Productivity App',
     description: 'Single-page productivity app landing template with features, app preview, pricing, and FAQ sections.',
     category: 'landing',
     price: 39,
@@ -512,7 +512,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '32',
-    title: 'Luxe — Hotel',
+    title: 'Luxe - Hotel',
     description: 'Sophisticated single-page luxury hotel template with rooms, amenities, dining, gallery, and reservation sections.',
     category: 'restaurant',
     price: 69,
@@ -528,7 +528,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '33',
-    title: 'Fit — Gym & Fitness',
+    title: 'Fit - Gym & Fitness',
     description: 'High-energy single-page gym and fitness template with classes, trainers, membership, and schedule sections.',
     category: 'landing',
     price: 49,
@@ -544,7 +544,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '34',
-    title: 'Archi — Architecture',
+    title: 'Archi - Architecture',
     description: 'Minimalist single-page architecture-firm portfolio with project grid, studio, and process sections.',
     category: 'portfolio',
     price: 39,
@@ -560,7 +560,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '35',
-    title: 'Crypto — Web3 Landing',
+    title: 'Crypto - Web3 Landing',
     description: 'Single-page Web3 and crypto landing template with about, tokenomics, roadmap, team, and FAQ sections.',
     category: 'landing',
     price: 59,
@@ -576,7 +576,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '36',
-    title: 'Shelf — Bookstore',
+    title: 'Shelf - Bookstore',
     description: 'Charming single-page independent-bookstore template with a genre-filtered shelf, staff picks, events, and newsletter sections (front-end UI only).',
     category: 'ecommerce',
     price: 49,
@@ -592,7 +592,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '37',
-    title: 'Verde — Eco & Sustainability',
+    title: 'Verde - Eco & Sustainability',
     description: 'Clean, purpose-driven single-page sustainability brand template with mission, products, and impact sections.',
     category: 'landing',
     price: 49,
@@ -608,7 +608,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '38',
-    title: 'Swift — Delivery App',
+    title: 'Swift - Delivery App',
     description: 'Single-page food-delivery app landing template with how-it-works, restaurant showcase, and download sections.',
     category: 'landing',
     price: 49,
@@ -624,7 +624,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '39',
-    title: 'Law & Co — Legal Firm',
+    title: 'Law & Co - Legal Firm',
     description: 'Professional single-page law firm template with practice areas, attorneys, results, and contact sections.',
     category: 'corporate',
     price: 59,
@@ -640,7 +640,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '40',
-    title: 'Spark — Email Marketing',
+    title: 'Spark - Email Marketing',
     description: 'Single-page email-marketing SaaS landing template with features, builder preview, analytics, and pricing sections.',
     category: 'saas',
     price: 79,
@@ -656,8 +656,8 @@ export const templates: readonly Template[] = [
   },
   {
     id: '41',
-    title: 'NestFind — Real Estate',
-    description: 'Premium single-page property-search template led by a buy/rent/sell search bar — just-listed cards, a how-it-works walkthrough, top agents, and a seller call to action (front-end UI only).',
+    title: 'NestFind - Real Estate',
+    description: 'Premium single-page property-search template led by a buy/rent/sell search bar - just-listed cards, a how-it-works walkthrough, top agents, and a seller call to action (front-end UI only).',
     category: 'landing',
     price: 79,
     image: '/covers/real-estate.png',
@@ -672,7 +672,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '42',
-    title: 'IronPeak — Gym & Fitness',
+    title: 'IronPeak - Gym & Fitness',
     description: 'Modern single-page gym and fitness studio template with classes, trainers, plans, and schedule sections.',
     category: 'landing',
     price: 59,
@@ -688,7 +688,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '43',
-    title: 'Signal — Podcast',
+    title: 'Signal - Podcast',
     description: 'Sleek single-page podcast template with latest episodes, player, guests, and newsletter sections.',
     category: 'blog',
     price: 49,
@@ -704,7 +704,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '44',
-    title: 'LaunchConf — Event',
+    title: 'LaunchConf - Event',
     description: 'Single-page conference and event landing template with speakers, schedule, tickets, and sponsor sections.',
     category: 'landing',
     price: 59,
@@ -720,7 +720,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '45',
-    title: 'Evelyn — Wedding',
+    title: 'Evelyn - Wedding',
     description: 'Romantic single-page wedding template with our-story, gallery, schedule, and RSVP sections.',
     category: 'landing',
     price: 0,
@@ -736,7 +736,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '46',
-    title: 'Vega — Music Artist',
+    title: 'Vega - Music Artist',
     description: 'Striking single-page music artist template with music, tour dates, videos, and merch sections.',
     category: 'portfolio',
     price: 59,
@@ -752,7 +752,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '47',
-    title: 'Aria — Photography',
+    title: 'Aria - Photography',
     description: 'Wedding-focused single-page photography portfolio with a masonry gallery, a day-of experience story, an investment pricing section, and enquiry contact.',
     category: 'portfolio',
     price: 49,
@@ -768,7 +768,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '48',
-    title: 'Finwise — Personal Finance',
+    title: 'Finwise - Personal Finance',
     description: 'Single-page personal-finance dashboard UI with balance cards, charts, transactions, and budget sections (front-end only).',
     category: 'dashboard',
     price: 69,
@@ -784,7 +784,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '49',
-    title: 'Petal — Florist',
+    title: 'Petal - Florist',
     description: 'Beautiful single-page florist shop template with collection grid, arrangement, and occasion sections (front-end UI only).',
     category: 'ecommerce',
     price: 49,
@@ -800,7 +800,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '50',
-    title: 'Nomad — Remote Jobs',
+    title: 'Nomad - Remote Jobs',
     description: 'Single-page remote-work job board template with destination-flavoured search, salary insights, an employer walkthrough, and testimonial sections (front-end UI only).',
     category: 'saas',
     price: 59,
@@ -816,7 +816,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '51',
-    title: 'Verse — Poetry & Lit',
+    title: 'Verse - Poetry & Lit',
     description: 'Single-page literary magazine template with featured poems, fiction, author, and submission sections.',
     category: 'blog',
     price: 0,
@@ -832,7 +832,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '52',
-    title: 'Roam — Airbnb Style',
+    title: 'Roam - Airbnb Style',
     description: 'Single-page vacation-rental template with property cards, search UI, and category sections (front-end UI only).',
     category: 'ecommerce',
     price: 79,
@@ -848,7 +848,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '53',
-    title: 'Clinic — Healthcare',
+    title: 'Clinic - Healthcare',
     description: 'Warm, sky-blue single-page family clinic template with a care-team lineup, patient-portal preview, patient reviews, and contact sections.',
     category: 'corporate',
     price: 69,
@@ -864,7 +864,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '54',
-    title: 'PixelForge — Game Studio',
+    title: 'PixelForge - Game Studio',
     description: 'Single-page video game studio template with a featured-title spotlight, game library, community, and wishlist sections.',
     category: 'agency',
     price: 59,
@@ -880,7 +880,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '55',
-    title: 'Scout — Talent Agency',
+    title: 'Scout - Talent Agency',
     description: 'Single-page talent and modeling agency template with talent grid, booking, and news sections.',
     category: 'agency',
     price: 49,
@@ -896,7 +896,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '56',
-    title: 'Hope — Nonprofit & Charity',
+    title: 'Hope - Nonprofit & Charity',
     description: 'Heartfelt single-page nonprofit and charity template with causes, impact, donation, and volunteer sections.',
     category: 'landing',
     price: 49,
@@ -912,7 +912,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '57',
-    title: 'Neuron — AI Platform',
+    title: 'Neuron - AI Platform',
     description: 'Futuristic single-page AI platform landing template with feature, benchmark, and pricing sections (playground UI mock).',
     category: 'saas',
     price: 89,
@@ -928,7 +928,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '58',
-    title: 'Velocity — Auto Dealership',
+    title: 'Velocity - Auto Dealership',
     description: 'Single-page car dealership template with inventory grid, featured vehicles, financing, and contact sections (front-end UI only).',
     category: 'ecommerce',
     price: 59,
@@ -944,7 +944,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '59',
-    title: 'Paws — Pet Care & Vet',
+    title: 'Paws - Pet Care & Vet',
     description: 'Friendly single-page veterinary and pet care template with services, team, booking, and pricing sections.',
     category: 'landing',
     price: 0,
@@ -960,7 +960,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '60',
-    title: 'Haven — Interior Design',
+    title: 'Haven - Interior Design',
     description: 'Elegant single-page interior design studio portfolio with projects, services, process, and studio sections.',
     category: 'portfolio',
     price: 49,
@@ -976,7 +976,7 @@ export const templates: readonly Template[] = [
   },
   {
     id: '61',
-    title: 'The Daily — News & Magazine',
+    title: 'The Daily - News & Magazine',
     description: 'Classic single-page news and magazine template with breaking-news, top-stories, category, and trending sections.',
     category: 'blog',
     price: 59,
@@ -992,8 +992,8 @@ export const templates: readonly Template[] = [
   },
 ];
 
-// Filter UI list. Typed against TemplateCategory so a typo here — or in any
-// template's `category` — fails the build instead of rendering an empty page.
+// Filter UI list. Typed against TemplateCategory so a typo here - or in any
+// template's `category` - fails the build instead of rendering an empty page.
 export const categories: ReadonlyArray<{ id: TemplateCategory | 'all'; label: string }> = [
   { id: 'all',        label: 'All Templates'            },
   { id: 'saas',       label: 'SaaS'                     },

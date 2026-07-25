@@ -13,7 +13,7 @@ const faqs: Faq[] = [
     q: 'What license do templates come with?',
     a: (
       <>
-        Every template — free or paid — is covered by the single Templix Standard License. You may use it in
+        Every template - free or paid - is covered by the single Templix Standard License. You may use it in
         unlimited personal and commercial end-products and modify it freely; you may not resell, redistribute,
         sublicense, or offer the template itself for download. Read the full{' '}
         <Link to="/license" className="font-medium text-accent no-underline hover:underline">License</Link>.
@@ -25,7 +25,7 @@ const faqs: Faq[] = [
     a: (
       <>
         The complete React + TypeScript source (built with Vite), a fully responsive mobile-first layout, a
-        quick-start README with setup steps, and the Templix Standard License. That is the entire deliverable — we
+        quick-start README with setup steps, and the Templix Standard License. That is the entire deliverable - we
         do not advertise design files or extras that are not in the download.
       </>
     ),
@@ -35,7 +35,7 @@ const faqs: Faq[] = [
     a: (
       <>
         Each template is one responsive single-page site built with React 19 and TypeScript, bundled with Vite.
-        Styling is self-contained, so there is no build-time CSS framework to configure — you can run it with a
+        Styling is self-contained, so there is no build-time CSS framework to configure - you can run it with a
         single <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[13px] text-text-primary">npm install</code>{' '}
         and <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[13px] text-text-primary">npm run dev</code>.
       </>
@@ -45,7 +45,7 @@ const faqs: Faq[] = [
     q: 'Can I preview a template before buying?',
     a: (
       <>
-        Yes. Every template has a live preview you can open from its detail page — click through the real,
+        Yes. Every template has a live preview you can open from its detail page - click through the real,
         fully-interactive site at desktop and mobile widths before you decide.
       </>
     ),
@@ -55,7 +55,7 @@ const faqs: Faq[] = [
     a: (
       <>
         Checkout is handled by Stripe. All major credit and debit cards are accepted, and prices are listed in USD.
-        Payment happens entirely on Stripe&apos;s secure checkout page — we never see or store your card details — and
+        Payment happens entirely on Stripe&apos;s secure checkout page - we never see or store your card details - and
         Stripe emails you a receipt automatically after purchase.
       </>
     ),
@@ -74,7 +74,7 @@ const faqs: Faq[] = [
     a: (
       <>
         When we ship a fix or improvement to a template, the updated version becomes available to re-download from
-        your dashboard at no additional cost — you will not be charged again for a template you already own.
+        your dashboard at no additional cost - you will not be charged again for a template you already own.
       </>
     ),
   },
@@ -93,7 +93,7 @@ const faqs: Faq[] = [
     q: 'Do I need an account to buy?',
     a: (
       <>
-        Yes — an account ties your purchases to you so you can re-download anytime and see your library. Browsing
+        Yes - an account ties your purchases to you so you can re-download anytime and see your library. Browsing
         and live previews are open to everyone; only downloading a paid template requires signing in.
       </>
     ),

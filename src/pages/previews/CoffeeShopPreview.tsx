@@ -1,5 +1,5 @@
 /* ============================================================
-   ROASTED — Specialty Coffee Shop Template
+   ROASTED - Specialty Coffee Shop Template
    Warm cream with terracotta & roast-brown accents. Responsive.
    ============================================================ */
 
@@ -186,7 +186,7 @@ function Visit() {
           <p style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#e0a878', margin: '0 0 14px' }}>Come say hi</p>
           <h2 style={{ fontFamily: serif, fontSize: m ? '2rem' : '2.8rem', fontWeight: 700, lineHeight: 1.1, margin: '0 0 24px' }}>Open daily on Baker Lane</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '15px' }}>
-            {[['Mon–Fri', '7:00 – 18:00'], ['Saturday', '8:00 – 18:00'], ['Sunday', '8:00 – 16:00']].map(([d, h]) => (
+            {[['Mon-Fri', '7:00 - 18:00'], ['Saturday', '8:00 - 18:00'], ['Sunday', '8:00 - 16:00']].map(([d, h]) => (
               <div key={d} style={{ display: 'flex', justifyContent: 'space-between', maxWidth: '320px', paddingBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
                 <span style={{ opacity: 0.85 }}>{d}</span><span style={{ fontWeight: 600 }}>{h}</span>
               </div>

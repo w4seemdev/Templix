@@ -1,6 +1,6 @@
 /**
  * useSEO owns every per-route SEO signal. The bug it exists to prevent is a
- * catalog of 61 product pages all declaring the homepage as their canonical —
+ * catalog of 61 product pages all declaring the homepage as their canonical -
  * which is what index.html alone gives you, since it only ships the defaults
  * for "/". So the assertions here are mostly about the canonical: that it is
  * created when missing, rewritten (never duplicated) when index.html shipped
@@ -46,13 +46,13 @@ describe('useSEO', () => {
   it('titles the page after the route and keeps the brand suffix', () => {
     renderAt('/templates/5', { title: 'Nebula' });
 
-    expect(document.title).toBe('Nebula — Templix');
+    expect(document.title).toBe('Nebula - Templix');
   });
 
   it('falls back to the site title and description when a route supplies neither', () => {
     renderAt('/');
 
-    expect(document.title).toBe('Templix — Website Templates for Developers');
+    expect(document.title).toBe('Templix - Website Templates for Developers');
     expect(metaContent('name', 'description')).toContain('Buy once, use forever.');
   });
 
@@ -91,10 +91,10 @@ describe('useSEO', () => {
   it('mirrors the title and description into the Open Graph and Twitter tags', () => {
     renderAt('/templates/5', { title: 'Nebula', description: 'A dark SaaS landing page.' });
 
-    expect(metaContent('property', 'og:title')).toBe('Nebula — Templix');
+    expect(metaContent('property', 'og:title')).toBe('Nebula - Templix');
     expect(metaContent('property', 'og:description')).toBe('A dark SaaS landing page.');
     expect(metaContent('property', 'og:url')).toBe(`${SITE}/templates/5`);
-    expect(metaContent('name', 'twitter:title')).toBe('Nebula — Templix');
+    expect(metaContent('name', 'twitter:title')).toBe('Nebula - Templix');
     expect(metaContent('name', 'twitter:description')).toBe('A dark SaaS landing page.');
   });
 
@@ -122,7 +122,7 @@ describe('useSEO', () => {
 
     expect(canonicalHref()).toBe(`${SITE}/templates/5`);
     expect(metaContent('property', 'og:url')).toBe(`${SITE}/templates/5`);
-    expect(document.title).toBe('Nebula — Templix');
+    expect(document.title).toBe('Nebula - Templix');
   });
 
   it('keeps the query string out of the canonical', () => {

@@ -1,5 +1,5 @@
 /* ============================================================
-   LUMEN — Photography portfolio
+   LUMEN - Photography portfolio
    Gallery-first, near-black canvas with warm amber accent
    Self-contained, responsive single-page site
    ============================================================ */

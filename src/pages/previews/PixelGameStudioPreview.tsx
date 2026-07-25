@@ -1,5 +1,5 @@
 /* ============================================================
-   PIXELFORGE — Indie Game Studio Template
+   PIXELFORGE - Indie Game Studio Template
    Near-black with neon magenta & cyan. Fully responsive.
    ============================================================ */
 
@@ -105,7 +105,7 @@ function Hero() {
         <div>
           <span style={{ fontFamily: mono, fontSize: '12px', letterSpacing: '0.1em', color: C.cyan, textTransform: 'uppercase' }}>// independent studio · est. 2019</span>
           <h1 style={{ fontSize: m ? '2.8rem' : '4.6rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.02, margin: '18px 0 20px' }}>We make games with <span style={{ color: C.magenta }}>soul</span>.</h1>
-          <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.65, maxWidth: '440px', margin: '0 0 28px' }}>A tiny team crafting hand-built worlds — neon roguelikes, tactile puzzles and stories worth staying up for.</p>
+          <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.65, maxWidth: '440px', margin: '0 0 28px' }}>A tiny team crafting hand-built worlds - neon roguelikes, tactile puzzles and stories worth staying up for.</p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <a href="#games" style={{ background: C.magenta, color: '#fff', borderRadius: '8px', padding: '14px 30px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>Play our games</a>
             <a href="#featured" style={{ border: `1px solid ${C.cyan}`, color: C.cyan, borderRadius: '8px', padding: '14px 30px', fontSize: '14px', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
@@ -177,7 +177,7 @@ function Featured() {
         </div>
         <div>
           <span style={{ fontFamily: mono, fontSize: '12px', color: C.magenta, letterSpacing: '0.08em', textTransform: 'uppercase' }}>// coming 2025</span>
-          <h2 style={{ fontSize: m ? '2rem' : '2.8rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.08, margin: '14px 0 16px' }}>Starfall — our biggest world yet</h2>
+          <h2 style={{ fontSize: m ? '2rem' : '2.8rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.08, margin: '14px 0 16px' }}>Starfall - our biggest world yet</h2>
           <p style={{ fontSize: '1rem', color: C.muted, lineHeight: 1.75, margin: '0 0 24px' }}>A hand-drawn roguelike across a dying galaxy. Procedural star systems, permadeath that matters, and a soundtrack recorded with a live orchestra. Two years in the making.</p>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '26px' }}>
             {[['48', 'Star systems'], ['200+', 'Weapons'], ['12hr', 'Original score']].map(([n, l]) => (

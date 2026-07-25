@@ -39,7 +39,7 @@ export default function TemplateDetailPage() {
 
   // The query settled but failed (expired token, network drop, RLS rejection).
   // An empty library and an unreadable one look identical from `purchasedIds`,
-  // so treat this as unknown ownership too — never as "not owned yet".
+  // so treat this as unknown ownership too - never as "not owned yet".
   const ownershipUnknown = Boolean(user) && !template?.isFree && purchasesError;
 
   useSEO({
@@ -49,7 +49,7 @@ export default function TemplateDetailPage() {
 
   const closePreview = useCallback(() => setPreviewOpen(false), []);
 
-  // Product + BreadcrumbList rich results. No aggregateRating/review nodes —
+  // Product + BreadcrumbList rich results. No aggregateRating/review nodes -
   // there is no review system, and fabricating one would be dishonest.
   useEffect(() => {
     if (!template) return;
@@ -259,7 +259,7 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* Sections — each template is one responsive single-page site */}
+              {/* Sections - each template is one responsive single-page site */}
               {template.pages && template.pages.length > 0 && (
                 <div className="mt-10">
                   <div className="hairline mb-8" />
@@ -281,7 +281,7 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* License — identical Templix Standard License on every template */}
+              {/* License - identical Templix Standard License on every template */}
               <div className="mt-10">
                 <div className="hairline mb-8" />
                 <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
@@ -292,7 +292,7 @@ export default function TemplateDetailPage() {
                   <div className="sheen rounded-xl border border-border-subtle bg-surface-1 p-5">
                     <p className="m-0 mb-3 text-[13px] font-semibold text-text-primary">What you can do</p>
                     <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                      {['Use in unlimited personal and commercial end-products', 'Modify and customize freely', 'Use in client work — no attribution required'].map(item => (
+                      {['Use in unlimited personal and commercial end-products', 'Modify and customize freely', 'Use in client work - no attribution required'].map(item => (
                         <li key={item} className="flex items-start gap-2 text-[13px] leading-normal text-text-secondary">
                           <Check size={13} className="mt-[3px] shrink-0 text-success" />
                           {item}
@@ -321,7 +321,7 @@ export default function TemplateDetailPage() {
                 </p>
               </div>
 
-              {/* Reviews — honest placeholder; no ratings system exists yet */}
+              {/* Reviews - honest placeholder; no ratings system exists yet */}
               <div className="mt-10">
                 <div className="hairline mb-8" />
                 <h2 className="mb-4 flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-text-primary">
@@ -337,7 +337,7 @@ export default function TemplateDetailPage() {
                   <p className="m-0 text-[14px] font-medium text-text-secondary">No reviews yet</p>
                   <p className="m-0 mt-1 max-w-[46ch] text-[13px] leading-[1.6] text-text-tertiary">
                     No stars until real buyers leave them.
-                    {hasLivePreview && ' Open the live preview instead — it’s the full template, running.'}
+                    {hasLivePreview && ' Open the live preview instead - it’s the full template, running.'}
                   </p>
                 </div>
               </div>
@@ -369,7 +369,7 @@ export default function TemplateDetailPage() {
               {!template.isFree && (
                 <p className="-mt-4 mb-6 flex items-center gap-1.5 text-[13px] text-success">
                   <Check size={13} className="shrink-0" />
-                  One-time purchase — yours to keep
+                  One-time purchase - yours to keep
                 </p>
               )}
 
@@ -390,13 +390,13 @@ export default function TemplateDetailPage() {
 
               {/* ── Buy / Download button ── */}
               {ownershipPending ? (
-                /* Ownership still resolving — never offer a second purchase in this window */
+                /* Ownership still resolving - never offer a second purchase in this window */
                 <button disabled className="btn btn-lg w-full btn-secondary">
                   <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
                   Checking your library…
                 </button>
               ) : ownershipUnknown ? (
-                /* Library lookup failed — offering checkout here would charge an owner twice */
+                /* Library lookup failed - offering checkout here would charge an owner twice */
                 <div
                   role="alert"
                   className="rounded-xl border border-danger-soft-border bg-danger-soft px-4 py-4 text-center"
@@ -458,14 +458,14 @@ export default function TemplateDetailPage() {
                     </>
                   ) : (
                     <span className="inline-flex items-baseline gap-2">
-                      Buy now —
+                      Buy now -
                       <span className="font-mono" style={MONO_TNUM}>${template.price}</span>
                     </span>
                   )}
                 </button>
               )}
 
-              {/* Payment-processor microcopy — Stripe is the real checkout path */}
+              {/* Payment-processor microcopy - Stripe is the real checkout path */}
               {!template.isFree && !alreadyOwned && !ownershipPending && !ownershipUnknown && (
                 <p className="m-0 mt-2.5 text-center text-[12px] text-text-tertiary">
                   Secure checkout via Stripe
@@ -487,7 +487,7 @@ export default function TemplateDetailPage() {
                 </div>
               )}
 
-              {/* Trust row — every item links to a real page */}
+              {/* Trust row - every item links to a real page */}
               <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-text-tertiary">
                   <Zap size={13} className="shrink-0 text-accent-text" />
@@ -507,7 +507,7 @@ export default function TemplateDetailPage() {
                 </Link>
               </div>
 
-              {/* Included — sourced from the catalog so it stays truthful per template */}
+              {/* Included - sourced from the catalog so it stays truthful per template */}
               {includedItems.length > 0 && (
                 <>
                   <div className="hairline my-6" />
@@ -612,7 +612,7 @@ function PreviewOverlay({ title, demoUrl, onClose }: { title: string; demoUrl: s
             <Monitor size={14} className="text-accent-text" />
           </span>
           <span className="text-[13px] font-semibold text-text-primary truncate">{title}</span>
-          <span className="hidden sm:inline text-xs text-text-tertiary">— Live preview</span>
+          <span className="hidden sm:inline text-xs text-text-tertiary">- Live preview</span>
         </div>
         <div className="flex items-center gap-2.5 shrink-0">
           <a

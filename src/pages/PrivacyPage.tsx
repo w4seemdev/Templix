@@ -13,7 +13,7 @@ const sections = [
   },
   {
     title: '3. Information Sharing',
-    body: 'We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our platform, processing payments (Stripe), and delivering services to you — subject to confidentiality agreements. We may also disclose your information when required by law.',
+    body: 'We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our platform, processing payments (Stripe), and delivering services to you - subject to confidentiality agreements. We may also disclose your information when required by law.',
   },
   {
     title: '4. Payment Information',
@@ -21,7 +21,7 @@ const sections = [
   },
   {
     title: '5. Cookies and Browser Storage',
-    body: 'We use browser storage (localStorage) to keep you signed in and to store your wishlist on your device. We do not run third-party analytics or advertising trackers. Our payment provider, Stripe, may set its own cookies on its checkout pages — see Stripe\'s privacy policy for details.',
+    body: 'We use browser storage (localStorage) to keep you signed in and to store your wishlist on your device. We do not run third-party analytics or advertising trackers. Our payment provider, Stripe, may set its own cookies on its checkout pages - see Stripe\'s privacy policy for details.',
   },
   {
     title: '6. Data Retention',

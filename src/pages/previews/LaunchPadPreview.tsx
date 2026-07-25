@@ -1,5 +1,5 @@
 /* ============================================================
-   LAUNCHPAD — Startup Landing Template
+   LAUNCHPAD - Startup Landing Template
    Warm dark with coral/orange gradient. Self-contained, inline
    styles only, fully responsive (375px → 1280px).
    ============================================================ */
@@ -75,7 +75,7 @@ function Hero({ mobile }: { mobile: boolean }) {
           Launch your startup<br /><span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>in a weekend</span>
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: T.mut, lineHeight: 1.7, margin: '18px auto 0', maxWidth: 540 }}>
-          Auth, payments, email, and analytics — pre-wired and production-ready. Skip the boilerplate and go straight to building what makes you different.
+          Auth, payments, email, and analytics - pre-wired and production-ready. Skip the boilerplate and go straight to building what makes you different.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
           <a href="#pricing" style={{ background: grad, borderRadius: 12, padding: '14px 26px', fontSize: 15, fontWeight: 700, color: '#2a0f08', textDecoration: 'none' }}>Get the kit</a>
@@ -200,7 +200,7 @@ function Pricing({ mobile }: { mobile: boolean }) {
 function Faq({ mobile }: { mobile: boolean }) {
   const [open, setOpen] = useState(0);
   const qs = [
-    ['What tech stack does it use?', 'React 19, TypeScript, and Vite with a type-safe database layer — the modern, boring, reliable choices.'],
+    ['What tech stack does it use?', 'React 19, TypeScript, and Vite with a type-safe database layer - the modern, boring, reliable choices.'],
     ['Do I own what I build?', 'Yes. You get the full source and a license to build unlimited products. You only cannot resell the kit itself.'],
     ['Are updates really free?', 'Every Pro and Team purchase includes lifetime updates. New modules and fixes land in your repo.'],
     ['Can I get a refund?', 'If the kit is not for you, email us within 14 days for a no-questions-asked refund.'],

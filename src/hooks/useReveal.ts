@@ -29,7 +29,7 @@ export function useReveal<T extends HTMLElement>() {
           observer.disconnect();
         }
       },
-      // Fire once the element crosses the bottom 20% of the viewport —
+      // Fire once the element crosses the bottom 20% of the viewport -
       // height-independent, so tall grids can't stay hidden.
       { rootMargin: '0px 0px -20% 0px', threshold: 0 },
     );

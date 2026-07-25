@@ -27,7 +27,7 @@ export function usePurchases() {
       .returns<Pick<Purchase, 'template_id'>[]>()
       .then(({ data, error: queryError }) => {
         if (cancelled) return;
-        // A failed query is NOT an empty library — callers must be able to tell
+        // A failed query is NOT an empty library - callers must be able to tell
         // "you own nothing" from "we couldn't check".
         if (queryError) setError(true);
         else setPurchasedIds(data?.map(p => p.template_id) ?? []);

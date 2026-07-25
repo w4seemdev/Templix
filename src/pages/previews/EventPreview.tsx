@@ -1,5 +1,5 @@
 /* ============================================================
-   EVENTIDE — Event Planning & Celebrations Template
+   EVENTIDE - Event Planning & Celebrations Template
    Midnight plum with champagne gold. Fully responsive.
    ============================================================ */
 
@@ -48,7 +48,7 @@ const gallery = [
 
 const packages = [
   { name: 'Coordination', price: 'from £1,800', desc: 'On-the-day management for couples who have planned it all.', feats: ['Final-month handover', 'Timeline & run sheet', 'Vendor coordination', 'On-the-day team'], hot: false },
-  { name: 'Signature', price: 'from £4,500', desc: 'Our most-loved service — design and planning, start to finish.', feats: ['Full concept & design', 'Venue & vendor sourcing', 'Budget management', 'On-the-day direction'], hot: true },
+  { name: 'Signature', price: 'from £4,500', desc: 'Our most-loved service - design and planning, start to finish.', feats: ['Full concept & design', 'Venue & vendor sourcing', 'Budget management', 'On-the-day direction'], hot: true },
   { name: 'Bespoke', price: 'on request', desc: 'A blank canvas for the truly one-of-a-kind celebration.', feats: ['Everything in Signature', 'Custom builds & sets', 'Multi-day events', 'Dedicated producer'], hot: false },
 ];
 
@@ -95,7 +95,7 @@ function Hero() {
       <div style={{ ...container, padding: m ? '60px 20px 64px' : '104px 20px 112px', position: 'relative', textAlign: 'center' }}>
         <span style={{ fontSize: '12px', letterSpacing: '0.28em', textTransform: 'uppercase', color: C.gold }}>Event planning & production</span>
         <h1 style={{ fontFamily: serif, fontSize: m ? '2.9rem' : '5rem', fontWeight: 700, lineHeight: 1.02, margin: '22px auto 22px', maxWidth: '760px' }}>Occasions worth remembering.</h1>
-        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.7, maxWidth: '520px', margin: '0 auto 34px' }}>We design, plan and produce weddings, celebrations and corporate events across the UK and beyond — so you can be a guest at your own party.</p>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.7, maxWidth: '520px', margin: '0 auto 34px' }}>We design, plan and produce weddings, celebrations and corporate events across the UK and beyond - so you can be a guest at your own party.</p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#contact" style={{ background: C.gold, color: '#141019', borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none' }}>Start planning</a>
           <a href="#gallery" style={{ border: `1px solid ${C.line}`, color: C.ink, borderRadius: '2px', padding: '14px 32px', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>See our events</a>

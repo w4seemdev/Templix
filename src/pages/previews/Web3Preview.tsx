@@ -1,5 +1,5 @@
 /* ============================================================
-   HELIX — Web3 / DeFi Landing Template
+   HELIX - Web3 / DeFi Landing Template
    Near-black with neon mint/violet accent. Self-contained,
    inline styles only, fully responsive (375px → 1280px).
    ============================================================ */
@@ -73,7 +73,7 @@ function Hero({ mobile }: { mobile: boolean }) {
             Earn yield on-chain, <span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>fully non-custodial</span>
           </h1>
           <p style={{ fontSize: mobile ? '1rem' : '1.12rem', color: T.mut, lineHeight: 1.7, margin: '18px 0 0', maxWidth: 470 }}>
-            Helix is a decentralized liquidity protocol. Supply assets, earn real yield, and keep full control of your keys — no middlemen, no lockups.
+            Helix is a decentralized liquidity protocol. Supply assets, earn real yield, and keep full control of your keys - no middlemen, no lockups.
           </p>
           <div style={{ display: 'flex', gap: 12, marginTop: 26, flexWrap: 'wrap' }}>
             <a href="#community" style={{ background: grad, borderRadius: 12, padding: '13px 24px', fontSize: 15, fontWeight: 700, color: '#04120c', textDecoration: 'none' }}>Connect wallet</a>
@@ -138,7 +138,7 @@ function WIcon({ name }: { name: string }) { return <svg width="20" height="20" 
 
 function Protocol({ mobile }: { mobile: boolean }) {
   const items = [
-    ['lock', 'Non-custodial', 'You always hold your keys. Helix never takes custody of your funds — ever.'],
+    ['lock', 'Non-custodial', 'You always hold your keys. Helix never takes custody of your funds - ever.'],
     ['bolt', 'Real yield', 'Returns come from protocol fees, not token emissions or Ponzi mechanics.'],
     ['eye', 'Fully audited', 'Three independent audits and an ongoing bug bounty of up to $2M.'],
     ['chain', 'Omnichain', 'Supply and borrow across 12 chains from a single, unified interface.'],
@@ -193,10 +193,10 @@ function Tokenomics({ mobile }: { mobile: boolean }) {
 
 function Roadmap({ mobile }: { mobile: boolean }) {
   const phases: [string, string[], boolean][] = [
-    ['Q1 — Foundation', ['Mainnet launch', 'Security audits', 'ETH & L2 support'], true],
-    ['Q2 — Growth', ['HLX token generation', 'DAO governance live', '6 new chains'], true],
-    ['Q3 — Expansion', ['Fixed-rate lending', 'Mobile app', 'Fiat on-ramp'], false],
-    ['Q4 — Scale', ['Cross-chain vaults', 'Institutional access', 'Grants program'], false],
+    ['Q1 - Foundation', ['Mainnet launch', 'Security audits', 'ETH & L2 support'], true],
+    ['Q2 - Growth', ['HLX token generation', 'DAO governance live', '6 new chains'], true],
+    ['Q3 - Expansion', ['Fixed-rate lending', 'Mobile app', 'Fiat on-ramp'], false],
+    ['Q4 - Scale', ['Cross-chain vaults', 'Institutional access', 'Grants program'], false],
   ];
   return (
     <Section id="roadmap" mobile={mobile} tag="Roadmap" title="Where Helix is headed" sub="A transparent path from launch to omnichain scale.">

@@ -1,5 +1,5 @@
 /* ============================================================
-   WANDERLINE — Travel journal & guides
+   WANDERLINE - Travel journal & guides
    Airy off-white, deep teal + warm sand accents
    Self-contained, responsive single-page site
    ============================================================ */
@@ -33,10 +33,10 @@ const NAV = [
 ];
 
 const dests = [
-  { n: 'Santorini, Greece', region: 'Europe', reads: '14K', d: '10 slow days in the Aegean — the caldera villages worth the climb', g: 'linear-gradient(150deg,#2f7db0,#9fc6dd)' },
+  { n: 'Santorini, Greece', region: 'Europe', reads: '14K', d: '10 slow days in the Aegean - the caldera villages worth the climb', g: 'linear-gradient(150deg,#2f7db0,#9fc6dd)' },
   { n: 'Kyoto, Japan', region: 'Asia', reads: '22K', d: 'Temples at dawn, back-alley kissaten, and the last cherry blossoms', g: 'linear-gradient(150deg,#c66a72,#e6b3ad)' },
   { n: 'Chefchaouen, Morocco', region: 'Africa', reads: '9K', d: 'A blue city in the Rif Mountains, and how to reach it by bus', g: 'linear-gradient(150deg,#2f7d8b,#8fc0c6)' },
-  { n: 'Patagonia, Chile', region: 'Americas', reads: '18K', d: 'The W trek, unhurried — five days, four refugios, zero regrets', g: 'linear-gradient(150deg,#5b8b5a,#b6cf9f)' },
+  { n: 'Patagonia, Chile', region: 'Americas', reads: '18K', d: 'The W trek, unhurried - five days, four refugios, zero regrets', g: 'linear-gradient(150deg,#5b8b5a,#b6cf9f)' },
 ];
 
 export default function TravelBlogPreview() {
@@ -68,7 +68,7 @@ export default function TravelBlogPreview() {
               The long way to Hội An
             </h1>
             <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.7, maxWidth: '520px' }}>
-              Two weeks by motorbike down the coast — lantern-lit alleys, roadside phở, and the case for taking the road with more potholes.
+              Two weeks by motorbike down the coast - lantern-lit alleys, roadside phở, and the case for taking the road with more potholes.
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function TravelBlogPreview() {
             <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: TEAL }}>Behind Wanderline</span>
             <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 700, lineHeight: 1.2, margin: '0.75rem 0 1rem' }}>34 countries, one carry-on, and a lot of wrong turns</h2>
             <p style={{ fontSize: '1.02rem', color: MUTE, lineHeight: 1.8, margin: '0 0 1.25rem' }}>
-              I&rsquo;m Noor — a full-time traveller writing honest, budget-aware guides for people who&rsquo;d rather get lost than tick boxes. Everything here is first-hand and self-funded.
+              I&rsquo;m Noor - a full-time traveller writing honest, budget-aware guides for people who&rsquo;d rather get lost than tick boxes. Everything here is first-hand and self-funded.
             </p>
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
               {[{ v: '34', l: 'Countries' }, { v: '210+', l: 'Guides' }, { v: '96K', l: 'Readers/mo' }].map(s => (
@@ -114,7 +114,7 @@ export default function TravelBlogPreview() {
       <section id="newsletter" style={{ padding: mobile ? '3.5rem 1.25rem' : '5rem 2rem' }}>
         <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Postcards</h2>
-          <p style={{ color: MUTE, fontSize: '1rem', lineHeight: 1.7, margin: '0 0 1.75rem' }}>A short dispatch from the road every other week — one place, one meal, one thing I got wrong.</p>
+          <p style={{ color: MUTE, fontSize: '1rem', lineHeight: 1.7, margin: '0 0 1.75rem' }}>A short dispatch from the road every other week - one place, one meal, one thing I got wrong.</p>
           <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', gap: '0.6rem', flexDirection: mobile ? 'column' : 'row' }}>
             <input type="email" placeholder="you@email.com" style={{ flex: 1, padding: '13px 16px', borderRadius: '999px', border: `1px solid ${LINE}`, background: '#fff', color: INK, fontSize: '14px', outline: 'none' }} />
             <button type="submit" style={{ background: TEAL, color: PAPER, border: 'none', borderRadius: '999px', padding: '13px 26px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>Send me postcards</button>

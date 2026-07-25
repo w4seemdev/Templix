@@ -1,9 +1,9 @@
 /**
- * PurchaseSuccessPage — where the buyer lands back from Stripe.
+ * PurchaseSuccessPage - where the buyer lands back from Stripe.
  *
  * Stripe redirecting here proves nothing: the URL is guessable and the buyer can
  * reload it forever. Ownership is written server-side by the webhook, so this
- * page may only ever *read* — it must not announce a successful purchase, or
+ * page may only ever *read* - it must not announce a successful purchase, or
  * offer a download, until the purchase row actually exists.
  *
  * Boundary mocked: the Supabase client (auth session + the `purchases` poll) and

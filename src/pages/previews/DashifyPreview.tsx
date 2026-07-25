@@ -1,5 +1,5 @@
 /* ============================================================
-   DASHIFY — Admin Dashboard Template
+   DASHIFY - Admin Dashboard Template
    Dark analytics dashboard, teal/cyan accent. Responsive app
    shell: topbar + sidebar + KPI cards + inline-SVG charts.
    ============================================================ */
@@ -129,7 +129,7 @@ function Main({ mobile }: { mobile: boolean }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: mobile ? 'flex-start' : 'center', flexDirection: mobile ? 'column' : 'row', gap: 12, marginBottom: 22 }}>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', margin: '0 0 4px' }}>Overview</h1>
-          <p style={{ fontSize: 13, color: C.dim, margin: 0 }}>Welcome back — here's your store today.</p>
+          <p style={{ fontSize: 13, color: C.dim, margin: 0 }}>Welcome back - here's your store today.</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <div style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${C.line}`, borderRadius: 8, padding: '8px 12px', fontSize: 13, color: C.mut }}>Last 30 days</div>

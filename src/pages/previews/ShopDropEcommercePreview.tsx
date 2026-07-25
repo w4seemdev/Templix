@@ -1,5 +1,5 @@
 /* ============================================================
-   SHOPDROP — Streetwear Ecommerce Template
+   SHOPDROP - Streetwear Ecommerce Template
    Dark charcoal with orange accent. Fully responsive.
    ============================================================ */
 
@@ -192,7 +192,7 @@ function Reviews() {
   const m = useIsMobile();
   const data = [
     { text: 'The most comfortable hoodie I own. Quality is insane for the price and it washed perfectly.', author: 'Jordan K.', item: 'Arch Logo Hoodie' },
-    { text: 'Fast shipping, perfect fit. The cargos are fire — everyone asks me where they are from.', author: 'Mia T.', item: 'Street Cargo Pants' },
+    { text: 'Fast shipping, perfect fit. The cargos are fire - everyone asks me where they are from.', author: 'Mia T.', item: 'Street Cargo Pants' },
     { text: 'ShopDrop replaced all my old brands. The runners are the best sneakers I have bought online.', author: 'Alex R.', item: 'Air Runner 2.0' },
   ];
   return (

@@ -3,7 +3,7 @@
  *
  * These are the facts the store is sold on: 61 templates, 9 of them free, every
  * paid one actually priced, and every "Live preview" link pointing at a route
- * that exists. Drift here is not a rendering bug — it is a free template being
+ * that exists. Drift here is not a rendering bug - it is a free template being
  * charged for, a paid one being given away, or a dead demo link on a product
  * page. Cheap to keep, and it catches the next person adding template 62.
  *

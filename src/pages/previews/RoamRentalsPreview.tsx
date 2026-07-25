@@ -1,5 +1,5 @@
 /* ============================================================
-   ROAM — Vacation Rental Marketplace Template
+   ROAM - Vacation Rental Marketplace Template
    Light ocean-teal with warm sand accents. Fully responsive.
    ============================================================ */
 
@@ -101,7 +101,7 @@ function Hero() {
       <div style={{ ...container, padding: m ? '52px 20px 44px' : '92px 20px 64px', position: 'relative', textAlign: 'center' }}>
         <span style={{ display: 'inline-block', background: 'rgba(14,143,130,0.1)', color: C.teal, borderRadius: '999px', padding: '6px 14px', fontSize: '12px', fontWeight: 700, marginBottom: '20px' }}>28,000+ homes in 92 countries</span>
         <h1 style={{ fontSize: m ? '2.7rem' : '4.4rem', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 auto 18px', maxWidth: '740px' }}>Find a place you'll never want to leave.</h1>
-        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.6, maxWidth: '480px', margin: '0 auto 30px' }}>Hand-picked homes from hosts we trust — from beach houses to mountain cabins, booked in a couple of taps.</p>
+        <p style={{ fontSize: m ? '1rem' : '1.15rem', color: C.muted, lineHeight: 1.6, maxWidth: '480px', margin: '0 auto 30px' }}>Hand-picked homes from hosts we trust - from beach houses to mountain cabins, booked in a couple of taps.</p>
         <form onSubmit={(e) => e.preventDefault()} style={{ background: C.surface, border: `1px solid ${C.line}`, borderRadius: m ? '16px' : '999px', boxShadow: '0 16px 44px rgba(18,33,31,0.1)', padding: m ? '14px' : '8px 8px 8px 24px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1.4fr 1fr 1fr auto', gap: m ? '10px' : '0', alignItems: 'center', maxWidth: '820px', margin: '0 auto', textAlign: 'left' }}>
           <label style={{ borderRight: m ? 'none' : `1px solid ${C.line}`, paddingRight: '16px' }}><div style={{ fontSize: '11px', fontWeight: 700, color: C.faint, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Where</div><input placeholder="Anywhere" style={field} /></label>
           <label style={{ borderRight: m ? 'none' : `1px solid ${C.line}`, padding: m ? '0' : '0 16px' }}><div style={{ fontSize: '11px', fontWeight: 700, color: C.faint, textTransform: 'uppercase', letterSpacing: '0.05em' }}>When</div><input placeholder="Any week" style={field} /></label>
@@ -182,7 +182,7 @@ function HostCta() {
       <div style={{ borderRadius: '24px', overflow: 'hidden', background: 'linear-gradient(135deg,#0e8f82,#0a5f57)', color: '#fff', padding: m ? '36px 24px' : '56px', display: 'grid', gridTemplateColumns: m ? '1fr' : '1.3fr 1fr', gap: '28px', alignItems: 'center' }}>
         <div>
           <h2 style={{ fontSize: m ? '1.9rem' : '2.6rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 14px' }}>Open your door. Earn on your terms.</h2>
-          <p style={{ fontSize: m ? '1rem' : '1.1rem', opacity: 0.9, lineHeight: 1.6, margin: '0 0 26px', maxWidth: '420px' }}>Hosts on Roam earn an average of $1,240 a month. We handle payments, insurance and support — you set the rules.</p>
+          <p style={{ fontSize: m ? '1rem' : '1.1rem', opacity: 0.9, lineHeight: 1.6, margin: '0 0 26px', maxWidth: '420px' }}>Hosts on Roam earn an average of $1,240 a month. We handle payments, insurance and support - you set the rules.</p>
           <a href="#host" style={{ background: '#fff', color: C.teal, borderRadius: '999px', padding: '14px 28px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>Start hosting</a>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>

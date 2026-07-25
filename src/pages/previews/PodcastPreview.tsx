@@ -1,5 +1,5 @@
 /* ============================================================
-   THE LONG TABLE — Podcast
+   THE LONG TABLE - Podcast
    Warm espresso canvas, amber accent, cream type
    Styled (non-functional) player with inline-SVG controls
    Self-contained, responsive single-page site

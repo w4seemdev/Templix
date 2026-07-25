@@ -1,5 +1,5 @@
 /* ============================================================
-   THE DISPATCH — Personal newsletter landing
+   THE DISPATCH - Personal newsletter landing
    Deep ink canvas, marigold accent, editorial serif
    Self-contained, responsive single-page site
    ============================================================ */
@@ -77,7 +77,7 @@ export default function NewsletterPreview() {
       <section id="inside" style={{ maxWidth: '1040px', margin: '0 auto', padding: mobile ? '1rem 1.25rem 3.5rem' : '2rem 2rem 5rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '1.25rem' }}>
           {[
-            { t: 'One clear idea', d: 'A single, well-argued essay — never a link dump or a listicle.' },
+            { t: 'One clear idea', d: 'A single, well-argued essay - never a link dump or a listicle.' },
             { t: 'Under 7 minutes', d: 'Respect for your time. Tight writing, no padding, no fluff.' },
             { t: 'Genuinely yours', d: 'Written by one person, for real readers. Reply and I read it.' },
           ].map(f => (
@@ -113,7 +113,7 @@ export default function NewsletterPreview() {
           <p style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: mobile ? '1.5rem' : '2rem', lineHeight: 1.45, margin: '0 0 1.5rem' }}>
             &ldquo;The one newsletter I actually open every week. Short, sharp, and it always leaves me thinking.&rdquo;
           </p>
-          <p style={{ fontSize: '13px', color: MUTE, margin: '0 0 3rem' }}>— Alicia Vaughn, product lead</p>
+          <p style={{ fontSize: '13px', color: MUTE, margin: '0 0 3rem' }}>- Alicia Vaughn, product lead</p>
           <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 500, margin: '0 0 1rem' }}>Start reading Sunday</h2>
           <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', gap: '0.6rem', maxWidth: '440px', margin: '0 auto', flexDirection: mobile ? 'column' : 'row' }}>
             <input type="email" placeholder="you@email.com" style={{ flex: 1, padding: '14px 16px', borderRadius: '10px', border: `1px solid ${LINE}`, background: CARD, color: FG, fontSize: '15px', outline: 'none' }} />

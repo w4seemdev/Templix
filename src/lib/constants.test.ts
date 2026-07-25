@@ -1,6 +1,6 @@
 /**
  * `isSupabaseConfigured` is the only logic in constants.ts, and it decides
- * whether LoginPage offers auth at all — get it wrong in the optimistic
+ * whether LoginPage offers auth at all - get it wrong in the optimistic
  * direction and a visitor is handed a sign-up form that can never succeed.
  *
  * CONTACT_EMAIL and MIN_PASSWORD_LENGTH are plain values: any assertion about

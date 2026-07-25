@@ -1,5 +1,5 @@
 /* ============================================================
-   FOLIO — Portfolio template for designers & developers
+   FOLIO - Portfolio template for designers & developers
    Minimal charcoal canvas, warm off-white accent
    Self-contained, responsive single-page site
    ============================================================ */
@@ -68,13 +68,13 @@ export default function FolioPortfolioPreview() {
       <section id="top" style={{ maxWidth: '1120px', margin: '0 auto', padding: mobile ? '4rem 1.25rem 3rem' : '7rem 2rem 5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.75rem' }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#7cc47c' }} />
-          <span style={{ fontSize: '13px', color: MUTE }}>Available for freelance — Spring 2026</span>
+          <span style={{ fontSize: '13px', color: MUTE }}>Available for freelance - Spring 2026</span>
         </div>
         <h1 style={{ fontSize: mobile ? '2.6rem' : 'clamp(3rem,7vw,5.4rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.04, margin: '0 0 1.5rem', maxWidth: '820px' }}>
           I design &amp; build <span style={{ color: MUTE }}>digital products</span> people love to use.
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.125rem', color: MUTE, lineHeight: 1.7, maxWidth: '520px', margin: '0 0 2.5rem' }}>
-          Product designer and front-end engineer helping startups ship clean, fast, considered interfaces — from first sketch to production.
+          Product designer and front-end engineer helping startups ship clean, fast, considered interfaces - from first sketch to production.
         </p>
         <div style={{ display: 'flex', gap: '0.9rem', flexWrap: 'wrap' }}>
           <a href="#work" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: PAPER, borderRadius: '10px', padding: '12px 22px', fontSize: '14px', fontWeight: 700, color: INK, textDecoration: 'none' }}>View my work <ArrowDown /></a>
@@ -85,7 +85,7 @@ export default function FolioPortfolioPreview() {
       <section id="work" style={{ maxWidth: '1120px', margin: '0 auto', padding: mobile ? '1rem 1.25rem 4rem' : '2rem 2rem 6rem' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '2.25rem' }}>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>Selected work</h2>
-          <span style={{ fontSize: '13px', color: MUTE }}>2023 — 2026</span>
+          <span style={{ fontSize: '13px', color: MUTE }}>2023 - 2026</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(2,1fr)', gap: '1.4rem' }}>
           {[
@@ -139,7 +139,7 @@ export default function FolioPortfolioPreview() {
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '2.25rem' }}>Kind words</h2>
           <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '1.2rem' }}>
             {[
-              { q: 'Alex delivered our product redesign in three weeks — the craft was far beyond what we hoped for.', n: 'Rachel Kim', r: 'CEO, Lumify' },
+              { q: 'Alex delivered our product redesign in three weeks - the craft was far beyond what we hoped for.', n: 'Rachel Kim', r: 'CEO, Lumify' },
               { q: 'Clean code, sharp instincts, and a rare eye for detail. Easily one of the best I have worked with.', n: 'Tom Hendricks', r: 'CTO, Cadence' },
               { q: 'Turned our vague brief into a product that just feels right. I would hire again in a heartbeat.', n: 'Priya Shah', r: 'Founder, Meridian' },
             ].map(t => (
@@ -163,7 +163,7 @@ export default function FolioPortfolioPreview() {
           <div>
             <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: MUTE }}>About me</span>
             <h2 style={{ fontSize: mobile ? '1.8rem' : 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0.75rem 0 1.25rem' }}>Building with intent since 2018</h2>
-            <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.8, margin: '0 0 1rem' }}>I&rsquo;m a designer-engineer based in Lisbon. I care about the whole arc of a product — how it looks, how it feels, and how it holds up under real use.</p>
+            <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.8, margin: '0 0 1rem' }}>I&rsquo;m a designer-engineer based in Lisbon. I care about the whole arc of a product - how it looks, how it feels, and how it holds up under real use.</p>
             <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.8, margin: 0 }}>Off the clock you&rsquo;ll find me sketching type, trail-running, or restoring an old film camera.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>

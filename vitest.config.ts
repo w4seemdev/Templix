@@ -33,7 +33,7 @@ export default defineConfig({
       // Ratchet, not a target. Each number sits just under what the suite
       // actually reaches today (53.30 / 57.06 / 46.68 / 55.42), so deleting or
       // gutting a test turns the build red instead of silently lowering the
-      // bar. Raise them as coverage grows — never lower them to make a build
+      // bar. Raise them as coverage grows - never lower them to make a build
       // pass. The 80% house standard is still the destination.
       thresholds: {
         statements: 53,

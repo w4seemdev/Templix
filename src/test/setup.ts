@@ -1,11 +1,11 @@
 /**
- * Global test setup — runs once per test file before any test.
+ * Global test setup - runs once per test file before any test.
  *
  * Adds the jest-dom matchers (toBeInTheDocument, toHaveAccessibleName, …) and
  * fills the gaps jsdom leaves in the browser APIs this app actually calls.
  * localStorage is NOT stubbed: jsdom implements it, so useWishlist works as-is.
  *
- * `cleanup()` is not called here either — with `globals: true` React Testing
+ * `cleanup()` is not called here either - with `globals: true` React Testing
  * Library registers its own afterEach automatically.
  */
 import '@testing-library/jest-dom/vitest';

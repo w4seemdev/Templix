@@ -17,7 +17,7 @@ const topics = [
 export default function SupportPage() {
   useSEO({
     title: 'Support',
-    description: 'Get help with Templix — contact support, ask a pre-sale question, or report a download issue.',
+    description: 'Get help with Templix - contact support, ask a pre-sale question, or report a download issue.',
   });
 
   const [name, setName]       = useState('');
@@ -39,7 +39,7 @@ export default function SupportPage() {
     // No backend inbox exists yet, so hand off to the user's mail client with a
     // prefilled message rather than silently discarding the request.
     const subject = `[${topic}] Support request from ${name.trim()}`;
-    const body = `${message.trim()}\n\n— ${name.trim()} (${email.trim()})`;
+    const body = `${message.trim()}\n\n- ${name.trim()} (${email.trim()})`;
     const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
@@ -150,7 +150,7 @@ export default function SupportPage() {
               </div>
               <h2 className="m-0 mb-1.5 text-[15px] font-semibold text-text-primary">Response time</h2>
               <p className="m-0 text-[14px] leading-[1.6] text-text-secondary">
-                We reply within 1–2 business days, Monday to Friday.
+                We reply within 1-2 business days, Monday to Friday.
               </p>
             </div>
 

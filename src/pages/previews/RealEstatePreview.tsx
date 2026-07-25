@@ -1,5 +1,5 @@
 /* ============================================================
-   NESTFIND — Property-search marketplace template
+   NESTFIND - Property-search marketplace template
    Confident indigo · listing portal layout
    Self-contained, fully responsive, no external assets.
    ============================================================ */

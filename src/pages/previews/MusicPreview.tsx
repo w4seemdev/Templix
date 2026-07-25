@@ -1,5 +1,5 @@
 /* ============================================================
-   NOVA SKY — Music artist / album
+   NOVA SKY - Music artist / album
    Near-black canvas, crimson→amber sunset gradient
    Styled (non-functional) player with inline-SVG controls
    Self-contained, responsive single-page site
@@ -84,7 +84,7 @@ export default function MusicPreview() {
             SLOW<br /><span style={{ background: SUNSET, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>DISSOLVE</span>
           </h1>
           <p style={{ fontSize: mobile ? '1rem' : '1.1rem', color: MUTE, lineHeight: 1.7, maxWidth: '420px', margin: '0 0 2rem' }}>
-            The third record from Nova Sky — ten tracks of neon-soaked dream-pop written on the road between Reykjavík and Lisbon.
+            The third record from Nova Sky - ten tracks of neon-soaked dream-pop written on the road between Reykjavík and Lisbon.
           </p>
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
             <a href="#music" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: SUNSET, color: BG, borderRadius: '999px', padding: '12px 24px', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}><Icon d={PLAY} size={16} /> Listen now</a>
@@ -104,7 +104,7 @@ export default function MusicPreview() {
             <div style={{ width: mobile ? '52px' : '60px', height: mobile ? '52px' : '60px', borderRadius: '10px', background: SUNSET, flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: '15px', fontWeight: 700 }}>Coastline (feat. Rú)</div>
-              <div style={{ fontSize: '13px', color: MUTE }}>Nova Sky — Slow Dissolve</div>
+              <div style={{ fontSize: '13px', color: MUTE }}>Nova Sky - Slow Dissolve</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: mobile ? '0.5rem' : '0.9rem' }}>
               <button aria-label="Previous" style={{ background: 'none', border: 'none', color: MUTE, cursor: 'pointer', padding: 0, display: 'flex' }}><Icon d={PREV} /></button>
@@ -157,7 +157,7 @@ export default function MusicPreview() {
       <section id="about" style={{ borderTop: `1px solid ${LINE}`, padding: mobile ? '4rem 1.25rem' : '6rem 2rem' }}>
         <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 1rem' }}>Never miss a drop</h2>
-          <p style={{ color: MUTE, fontSize: '1.05rem', lineHeight: 1.7, margin: '0 0 2rem' }}>New singles, tour dates, and the occasional demo — straight to your inbox.</p>
+          <p style={{ color: MUTE, fontSize: '1.05rem', lineHeight: 1.7, margin: '0 0 2rem' }}>New singles, tour dates, and the occasional demo - straight to your inbox.</p>
           <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', gap: '0.6rem', maxWidth: '420px', margin: '0 auto', flexDirection: mobile ? 'column' : 'row' }}>
             <input type="email" placeholder="you@email.com" style={{ flex: 1, padding: '14px 16px', borderRadius: '999px', border: `1px solid ${LINE}`, background: CARD, color: FG, fontSize: '15px', outline: 'none' }} />
             <button type="submit" style={{ background: SUNSET, color: BG, border: 'none', borderRadius: '999px', padding: '14px 26px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>Sign up</button>

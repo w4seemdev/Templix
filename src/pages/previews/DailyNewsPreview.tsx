@@ -1,5 +1,5 @@
 /* ============================================================
-   THE MERIDIAN — Daily news
+   THE MERIDIAN - Daily news
    Classic broadsheet: white, ink black, editorial red accent
    Self-contained, responsive single-page site
    ============================================================ */
@@ -85,9 +85,9 @@ export default function DailyNewsPreview() {
               A fragile ceasefire holds as diplomats push for a lasting accord
             </h1>
             <div style={{ aspectRatio: '16/9', borderRadius: '6px', background: 'linear-gradient(150deg,#37506b,#8ba0b5)', margin: '0 0 0.75rem' }} />
-            <p style={{ fontSize: '12px', color: MUTE, margin: '0 0 1.25rem', fontStyle: 'italic' }}>Delegations gather ahead of the third round of talks. — Meridian staff</p>
+            <p style={{ fontSize: '12px', color: MUTE, margin: '0 0 1.25rem', fontStyle: 'italic' }}>Delegations gather ahead of the third round of talks. - Meridian staff</p>
             <p style={{ fontSize: mobile ? '1.02rem' : '1.1rem', color: '#33322f', lineHeight: 1.8, margin: '0 0 1rem' }}>
-              After forty days of negotiation, envoys emerged cautiously optimistic that a framework agreement could be reached within the week. Observers warn that the hardest questions — borders, reconstruction, and the return of the displaced — remain unresolved.
+              After forty days of negotiation, envoys emerged cautiously optimistic that a framework agreement could be reached within the week. Observers warn that the hardest questions - borders, reconstruction, and the return of the displaced - remain unresolved.
             </p>
             <p style={{ fontSize: '1rem', color: '#33322f', lineHeight: 1.8, margin: 0 }}>
               &ldquo;This is a beginning, not an ending,&rdquo; said one senior mediator, speaking on condition of anonymity. Aid convoys resumed for the first time in six weeks as the guns fell silent along the northern corridor.

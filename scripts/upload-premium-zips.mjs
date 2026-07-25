@@ -3,7 +3,7 @@
  * Re-runnable: upload every PAID template zip from dist-zips/<id>.zip into the
  * PRIVATE Supabase Storage bucket 'templates', so premium downloads are gated by
  * the verify-download edge function instead of being world-readable in the web
- * root. Run `node scripts/generate-zips.mjs` first — it writes dist-zips/.
+ * root. Run `node scripts/generate-zips.mjs` first - it writes dist-zips/.
  *
  * Free templates are written to public/templates/ by the generator and are
  * intentionally NOT uploaded.

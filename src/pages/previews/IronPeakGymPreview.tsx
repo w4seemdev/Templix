@@ -1,5 +1,5 @@
 /* ============================================================
-   IRONPEAK — Gym & fitness template
+   IRONPEAK - Gym & fitness template
    Near-black theme · electric lime accent · bold condensed display
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -87,12 +87,12 @@ const schedule: Record<Day, { time: string; name: string; coach: string; intensi
 const trainers = [
   { name: 'Marcus Vale', role: 'Head of Strength', specialties: ['Powerlifting', 'Olympic lifting', 'Programming'], record: '14 yrs coaching · 3× national meet podium', c1: '#1a2a0a', c2: '#65a30d' },
   { name: 'Tasha Okoro', role: 'Conditioning Lead', specialties: ['HIIT', 'Sprint mechanics', 'Fat loss'], record: 'Former 400m sprinter · 2,100+ classes led', c1: '#0a1a1a', c2: '#0d9488' },
-  { name: 'Dani Reyes', role: 'Combat Coach', specialties: ['Boxing', 'Kickboxing', 'Footwork'], record: '11–2 amateur record · Golden Gloves regional', c1: '#2a0a0a', c2: '#dc2626' },
+  { name: 'Dani Reyes', role: 'Combat Coach', specialties: ['Boxing', 'Kickboxing', 'Footwork'], record: '11-2 amateur record · Golden Gloves regional', c1: '#2a0a0a', c2: '#dc2626' },
   { name: 'June Park', role: 'Mobility & Recovery', specialties: ['Mobility', 'Yoga for lifters', 'Rehab prep'], record: 'DPT-certified · keeps 12,500 members moving', c1: '#1a1030', c2: '#7c3aed' },
 ];
 
 const plans = [
-  { name: 'Base Camp', price: '$39', period: '/month', desc: 'Full gym floor access at your home location. Train on your own terms.', features: ['One home location', 'Open gym 05:00–23:00', 'Locker room & sauna', 'Free intro assessment', 'IronPeak app tracking'], cta: 'Start at Base Camp', highlight: false },
+  { name: 'Base Camp', price: '$39', period: '/month', desc: 'Full gym floor access at your home location. Train on your own terms.', features: ['One home location', 'Open gym 05:00-23:00', 'Locker room & sauna', 'Free intro assessment', 'IronPeak app tracking'], cta: 'Start at Base Camp', highlight: false },
   { name: 'Ascent', price: '$69', period: '/month', desc: 'Every class, every location. The plan 8 out of 10 members choose.', features: ['All 6 locations', 'Unlimited classes (240/wk)', 'Class booking priority', '2 guest passes monthly', 'Quarterly progress testing', 'Recovery zone access'], cta: 'Claim free week', highlight: true },
   { name: 'Summit', price: '$129', period: '/month', desc: 'Personal programming and a coach in your corner, every week.', features: ['Everything in Ascent', '2 PT sessions monthly', 'Custom training program', 'Nutrition check-ins', '24/7 keycard access', 'Comp prep support'], cta: 'Go Summit', highlight: false },
 ];
@@ -104,12 +104,12 @@ const transformations = [
 ];
 
 const locations = [
-  { name: 'Downtown', tag: 'Flagship', address: '440 Granite Ave', hours: '05:00 – 23:00', sqft: '24,000 sq ft' },
+  { name: 'Downtown', tag: 'Flagship', address: '440 Granite Ave', hours: '05:00 - 23:00', sqft: '24,000 sq ft' },
   { name: 'Riverside', tag: '24/7', address: '88 Mill River Rd', hours: 'Always open', sqft: '15,500 sq ft' },
-  { name: 'Northgate', tag: 'New', address: '12 Summit Pkwy', hours: '05:00 – 23:00', sqft: '19,200 sq ft' },
-  { name: 'Eastfield', tag: 'Combat hub', address: '301 Anvil St', hours: '06:00 – 22:00', sqft: '11,800 sq ft' },
+  { name: 'Northgate', tag: 'New', address: '12 Summit Pkwy', hours: '05:00 - 23:00', sqft: '19,200 sq ft' },
+  { name: 'Eastfield', tag: 'Combat hub', address: '301 Anvil St', hours: '06:00 - 22:00', sqft: '11,800 sq ft' },
   { name: 'Westbrook', tag: '24/7', address: '67 Ridgeline Blvd', hours: 'Always open', sqft: '13,400 sq ft' },
-  { name: 'Harbor Point', tag: 'Pool + gym', address: '5 Quayside Walk', hours: '05:30 – 22:30', sqft: '21,000 sq ft' },
+  { name: 'Harbor Point', tag: 'Pool + gym', address: '5 Quayside Walk', hours: '05:30 - 22:30', sqft: '21,000 sq ft' },
 ];
 
 const footerCols = [
@@ -246,7 +246,7 @@ export default function IronPeakGymPreview() {
           <div style={{ marginBottom: m ? '2rem' : '2.8rem' }}>
             <span style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: LIME }}>Trainers</span>
             <h2 style={{ fontFamily: display, fontSize: m ? '2.2rem' : 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 900, letterSpacing: '-0.01em', textTransform: 'uppercase', margin: '0.6rem 0 0.9rem', lineHeight: 1 }}>Coaches who count your last rep</h2>
-            <p style={{ fontSize: '1.05rem', color: MUTED, maxWidth: '560px', lineHeight: 1.7, margin: 0 }}>Every IronPeak coach is nationally certified and re-tested every year. They program, they spot, they remember your knee — and they will notice if you skip Tuesday.</p>
+            <p style={{ fontSize: '1.05rem', color: MUTED, maxWidth: '560px', lineHeight: 1.7, margin: 0 }}>Every IronPeak coach is nationally certified and re-tested every year. They program, they spot, they remember your knee - and they will notice if you skip Tuesday.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr 1fr' : 'repeat(4, 1fr)', gap: m ? '0.9rem' : '1.2rem' }}>
             {trainers.map(t => (
@@ -361,7 +361,7 @@ export default function IronPeakGymPreview() {
           <div style={{ maxWidth: '1100px', margin: '0 auto', padding: pad, transform: 'skewY(1.5deg)', display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 1fr', gap: m ? '2rem' : '3rem', alignItems: 'center' }}>
             <div>
               <h2 style={{ fontFamily: display, fontSize: m ? '2.4rem' : 'clamp(2.4rem, 6vw, 4.2rem)', fontWeight: 900, letterSpacing: '-0.01em', textTransform: 'uppercase', lineHeight: 0.98, color: BLACK, margin: 0 }}>Book your first session. Free.</h2>
-              <p style={{ fontSize: '1.05rem', color: 'rgba(10,10,10,0.75)', lineHeight: 1.7, margin: '1.3rem 0 0', maxWidth: '460px', fontWeight: 500 }}>Seven days, every class, any location — and a 1-on-1 assessment with a coach to map your first eight weeks. No card required. The only thing we hold is your spot.</p>
+              <p style={{ fontSize: '1.05rem', color: 'rgba(10,10,10,0.75)', lineHeight: 1.7, margin: '1.3rem 0 0', maxWidth: '460px', fontWeight: 500 }}>Seven days, every class, any location - and a 1-on-1 assessment with a coach to map your first eight weeks. No card required. The only thing we hold is your spot.</p>
             </div>
             <div style={{ background: BLACK, padding: '2rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
               <span style={{ fontSize: '12px', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', color: LIME }}>Start here</span>
@@ -386,7 +386,7 @@ export default function IronPeakGymPreview() {
                 </div>
                 <span style={{ fontFamily: display, fontSize: '18px', fontWeight: 900, textTransform: 'uppercase' }}>Iron<span style={{ color: LIME }}>Peak</span></span>
               </div>
-              <p style={{ fontSize: '13.5px', color: FAINT, lineHeight: 1.7, margin: 0 }}>Six gyms, 38 coaches, zero excuses. Training this city harder since 2012 — one earned rep at a time.</p>
+              <p style={{ fontSize: '13.5px', color: FAINT, lineHeight: 1.7, margin: 0 }}>Six gyms, 38 coaches, zero excuses. Training this city harder since 2012 - one earned rep at a time.</p>
             </div>
             {footerCols.map(col => (
               <div key={col.title}>

@@ -1,5 +1,5 @@
 /* ============================================================
-   OVERFLOW — Engineering blog
+   OVERFLOW - Engineering blog
    Near-black dev aesthetic, cyan + indigo accents, mono labels
    Self-contained, responsive single-page site
    ============================================================ */
@@ -68,7 +68,7 @@ export default function TechBlogPreview() {
           Deep-dives on the systems behind fast, reliable products.
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: MUTE, lineHeight: 1.7, maxWidth: '560px' }}>
-          Practical engineering essays from a small team shipping to millions of users — architecture, performance, and the trade-offs nobody warns you about.
+          Practical engineering essays from a small team shipping to millions of users - architecture, performance, and the trade-offs nobody warns you about.
         </p>
       </section>
 
@@ -80,7 +80,7 @@ export default function TechBlogPreview() {
           <div>
             <span style={{ fontFamily: MONO, fontSize: '12px', color: CYAN }}>FEATURED · Distributed Systems · 18 min</span>
             <h2 style={{ fontSize: mobile ? '1.7rem' : '2.1rem', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0.75rem 0 0.9rem' }}>How we cut p99 latency by 60% with a boring cache</h2>
-            <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.7, margin: '0 0 1.25rem' }}>No new database, no rewrite — just careful measurement, one request-coalescing layer, and a very stubborn refusal to guess.</p>
+            <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.7, margin: '0 0 1.25rem' }}>No new database, no rewrite - just careful measurement, one request-coalescing layer, and a very stubborn refusal to guess.</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ width: '32px', height: '32px', borderRadius: '50%', background: INDIGO, color: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700 }}>DM</span>
               <span style={{ fontSize: '13px', color: MUTE }}>Dan Meyer · 2026-05-16</span>

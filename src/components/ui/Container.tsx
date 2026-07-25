@@ -7,7 +7,7 @@ interface Props {
 }
 
 /**
- * Shared page container — 1240px max width, 24px gutters (16px on
+ * Shared page container - 1240px max width, 24px gutters (16px on
  * small viewports via clamp). Callers may override anything through
  * `style` (spread last so caller wins).
  */

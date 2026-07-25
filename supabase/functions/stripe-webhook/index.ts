@@ -1,9 +1,9 @@
-// Supabase Edge Function — Stripe Webhook
+// Supabase Edge Function - Stripe Webhook
 // Deploy with: supabase functions deploy stripe-webhook --no-verify-jwt
 // Set webhook endpoint in Stripe dashboard → Developers → Webhooks
 //
 // This is the ONLY place a `purchases` row may be written. The browser must
-// never insert purchases — ownership is granted here after Stripe confirms the
+// never insert purchases - ownership is granted here after Stripe confirms the
 // session was actually paid, and only after the signature is verified.
 
 import Stripe from 'https://esm.sh/stripe@14?target=deno';
@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
         return new Response('Session metadata incomplete', { status: 500 });
       }
 
-      // Idempotent on the Stripe session id — webhook retries must not create
+      // Idempotent on the Stripe session id - webhook retries must not create
       // duplicate rows. This relies on the UNIQUE constraint added in
       // supabase/migrations/20260724120000_enable_rls_purchases_profiles.sql:
       // a check-then-insert would still race two concurrent retries, whereas
@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
         );
 
       // Never swallow this. A 200 tells Stripe delivery succeeded and it stops
-      // retrying — the buyer would be charged and never granted the download,
+      // retrying - the buyer would be charged and never granted the download,
       // with nothing left to replay. A 500 hands the problem to Stripe's own
       // retry schedule, which is the only safety net we have here.
       if (upsertErr) {

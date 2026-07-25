@@ -1,5 +1,5 @@
 /* ============================================================
-   VAULT — Fintech Landing Template
+   VAULT - Fintech Landing Template
    Deep navy with emerald accent. Self-contained, inline styles
    only, fully responsive (375px → 1280px). App-card hero mock.
    ============================================================ */
@@ -74,7 +74,7 @@ function Hero({ mobile }: { mobile: boolean }) {
             Banking that grows<br />your money <span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>automatically</span>
           </h1>
           <p style={{ fontSize: mobile ? '1rem' : '1.12rem', color: T.mut, lineHeight: 1.7, margin: '18px 0 0', maxWidth: 460 }}>
-            A checking account with 4.5% APY, instant transfers, and smart round-ups that invest your spare change — no fees, ever.
+            A checking account with 4.5% APY, instant transfers, and smart round-ups that invest your spare change - no fees, ever.
           </p>
           <div style={{ display: 'flex', gap: 12, marginTop: 26, flexWrap: 'wrap' }}>
             <a href="#pricing" style={{ background: grad, borderRadius: 12, padding: '13px 24px', fontSize: 15, fontWeight: 700, color: '#022c1e', textDecoration: 'none' }}>Open free account</a>
@@ -125,11 +125,11 @@ function VIcon({ name }: { name: string }) { return <svg width="20" height="20" 
 function Features({ mobile }: { mobile: boolean }) {
   const items = [
     ['percent', '4.5% APY, paid daily', 'Earn one of the highest yields in the country on every dollar in your account.'],
-    ['bolt', 'Instant transfers', 'Move money in seconds to any bank or Vault user — no waiting, no wire fees.'],
+    ['bolt', 'Instant transfers', 'Move money in seconds to any bank or Vault user - no waiting, no wire fees.'],
     ['coins', 'Automatic round-ups', 'Round up purchases to the nearest dollar and invest the change on autopilot.'],
     ['pie', 'Smart budgeting', 'Vault categorizes spending and nudges you before you overshoot a budget.'],
     ['card', 'Metal debit card', 'A card with 2% cashback on everything and no foreign transaction fees.'],
-    ['bell', 'Real-time alerts', 'Every transaction, instantly — with one tap to freeze your card if needed.'],
+    ['bell', 'Real-time alerts', 'Every transaction, instantly - with one tap to freeze your card if needed.'],
   ];
   return (
     <Section id="features" mobile={mobile} tag="Features" title="A bank account that works for you" sub="Everything you expect from a bank, plus the parts they forgot.">

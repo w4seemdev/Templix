@@ -1,6 +1,6 @@
 /**
  * useWishlist is a single module-scoped store read through useSyncExternalStore,
- * so its state outlives any one component — and any one test. Every test below
+ * so its state outlives any one component - and any one test. Every test below
  * therefore re-imports the module after clearing localStorage, which is also the
  * only way to exercise the hydrate-on-load path (`snapshot = readStored()` runs
  * at import time, not on render).
@@ -112,7 +112,7 @@ describe('useWishlist', () => {
     const { result } = renderHook(() => useWishlist());
 
     expect(result.current.wishlist).toEqual([]);
-    // Still usable — a corrupt key must not brick the heart on every card.
+    // Still usable - a corrupt key must not brick the heart on every card.
     act(() => result.current.toggle('3'));
     expect(result.current.wishlist).toEqual(['3']);
   });
@@ -162,7 +162,7 @@ describe('useWishlist', () => {
     act(() => result.current.toggle('3'));
 
     // A supabase session write, say. The key we own has not changed, so neither
-    // should the wishlist — even though this value would parse to something else.
+    // should the wishlist - even though this value would parse to something else.
     localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
     act(() => {
       window.dispatchEvent(new StorageEvent('storage', { key: 'sb-templix-auth-token' }));

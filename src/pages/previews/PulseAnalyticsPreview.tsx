@@ -1,5 +1,5 @@
 /* ============================================================
-   PULSE — Product Analytics Dashboard Template
+   PULSE - Product Analytics Dashboard Template
    Dark app shell, magenta/violet accent. Responsive:
    topbar + sidebar + metrics + SVG line chart + funnel + cohort.
    ============================================================ */
@@ -103,7 +103,7 @@ function Main({ mobile }: { mobile: boolean }) {
         <div style={{ borderRadius: 12, border: `1px solid ${C.line}`, background: C.panel, padding: 18 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
             <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>Daily active users</h3>
-            <div style={{ display: 'flex', gap: 14, fontSize: 11, color: C.mut }}><span><b style={{ color: C.a }}>—</b> This period</span><span><b style={{ color: C.dim }}>—</b> Previous</span></div>
+            <div style={{ display: 'flex', gap: 14, fontSize: 11, color: C.mut }}><span><b style={{ color: C.a }}>-</b> This period</span><span><b style={{ color: C.dim }}>-</b> Previous</span></div>
           </div>
           <TwoLine mobile={mobile} />
         </div>

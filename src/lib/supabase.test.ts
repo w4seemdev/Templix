@@ -20,7 +20,7 @@ beforeEach(() => {
   vi.resetModules();
   createClient.mockReset();
   createClient.mockImplementation((url: unknown, key: unknown) => {
-    // Same guard supabase-js applies — see SupabaseClient's constructor.
+    // Same guard supabase-js applies - see SupabaseClient's constructor.
     if (typeof url !== 'string' || url.trim() === '') throw new Error('supabaseUrl is required.');
     if (typeof key !== 'string' || key === '') throw new Error('supabaseKey is required.');
     return { url, key };
@@ -57,7 +57,7 @@ describe('the Supabase client module', () => {
 
   it('boots with placeholder credentials when the env vars are defined but blank', async () => {
     // A blank variable in the Vercel dashboard reaches the bundle as "", which
-    // is defined — so a `??` fallback keeps it and supabase-js throws at import,
+    // is defined - so a `??` fallback keeps it and supabase-js throws at import,
     // taking the entire site down before the first render.
     vi.stubEnv('VITE_SUPABASE_URL', '');
     vi.stubEnv('VITE_SUPABASE_ANON_KEY', '');

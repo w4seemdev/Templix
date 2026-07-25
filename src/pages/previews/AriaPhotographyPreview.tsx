@@ -1,5 +1,5 @@
 /* ============================================================
-   ARIA — Fine-art & wedding photography
+   ARIA - Fine-art & wedding photography
    Ivory editorial, serif display, muted terracotta accent
    Self-contained, responsive single-page site
    ============================================================ */
@@ -66,7 +66,7 @@ export default function AriaPhotographyPreview() {
           Timeless images of<br /><span style={{ fontStyle: 'italic', color: CLAY }}>the love you live.</span>
         </h1>
         <p style={{ fontSize: mobile ? '1rem' : '1.15rem', color: MUTE, lineHeight: 1.8, maxWidth: '560px', margin: '0 auto' }}>
-          I&rsquo;m Elena — a photographer capturing warm, unhurried, film-inspired portraits for couples who want to remember exactly how it felt.
+          I&rsquo;m Elena - a photographer capturing warm, unhurried, film-inspired portraits for couples who want to remember exactly how it felt.
         </p>
       </section>
 
@@ -85,7 +85,7 @@ export default function AriaPhotographyPreview() {
             <span style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: CLAY }}>The experience</span>
             <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2.2rem' : '2.9rem', fontWeight: 500, letterSpacing: '-0.01em', margin: '0.75rem 0 1.25rem' }}>A calm, guided day from start to last dance</h2>
             <p style={{ fontSize: '15px', color: MUTE, lineHeight: 1.85, margin: '0 0 1.75rem' }}>
-              We begin months before with a plan built around your story. On the day I stay quietly present — gently guiding when it helps, and stepping back when the real moments arrive on their own.
+              We begin months before with a plan built around your story. On the day I stay quietly present - gently guiding when it helps, and stepping back when the real moments arrive on their own.
             </p>
             <div style={{ display: 'grid', gap: '0.9rem' }}>
               {['Pre-wedding consultation & timeline', 'Two photographers, up to 10 hours', 'Hand-edited gallery within 4 weeks', 'Heirloom album, designed with you'].map(f => (
@@ -104,7 +104,7 @@ export default function AriaPhotographyPreview() {
           <p style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: mobile ? '1.5rem' : '2rem', lineHeight: 1.5, color: INK, margin: '0 0 1.5rem' }}>
             &ldquo;Elena felt less like a photographer and more like a friend who happened to make the most beautiful pictures we&rsquo;ve ever seen of ourselves.&rdquo;
           </p>
-          <p style={{ fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase', color: MUTE }}>Sofia &amp; Marco — Val d&rsquo;Orcia</p>
+          <p style={{ fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase', color: MUTE }}>Sofia &amp; Marco - Val d&rsquo;Orcia</p>
         </div>
       </section>
 

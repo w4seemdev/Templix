@@ -1,5 +1,5 @@
 /* ============================================================
-   MOMENTUM — Boutique group-fitness studio template
+   MOMENTUM - Boutique group-fitness studio template
    Warm coral · bright, energetic, welcoming
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -250,7 +250,7 @@ export default function FitnessPreview() {
       <footer style={{ borderTop: `1px solid ${BORDER}`, padding: m ? '2.25rem 0 1.75rem' : '2.75rem 0 2rem' }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto', padding: pad, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <span style={{ fontSize: '15px', fontWeight: 800 }}>Momentum</span>
-          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>88 Garden Street · Open daily 6am–9pm</p>
+          <p style={{ fontSize: '13px', color: MUTED, margin: 0 }}>88 Garden Street · Open daily 6am-9pm</p>
           <p style={{ fontSize: '13px', color: '#b6a0a6', margin: 0 }}>© 2026 Momentum Studio</p>
         </div>
       </footer>

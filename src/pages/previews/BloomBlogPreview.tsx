@@ -1,5 +1,5 @@
 /* ============================================================
-   BLOOM — Lifestyle blog & magazine
+   BLOOM - Lifestyle blog & magazine
    Warm cream, serif display, blush + sage accents
    Self-contained, responsive single-page site
    ============================================================ */
@@ -105,7 +105,7 @@ export default function BloomBlogPreview() {
           <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: SAGE }}>About Bloom</span>
           <h2 style={{ fontFamily: SERIF, fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 500, lineHeight: 1.2, margin: '0.75rem 0 1.25rem' }}>A quiet corner of the internet for a life made by hand</h2>
           <p style={{ fontSize: '1.05rem', color: MUTE, lineHeight: 1.85 }}>
-            Bloom is a small independent magazine about living well and slowly — from the food on the table to the miles between here and somewhere new. Three writers, one shared belief: the ordinary is worth paying attention to.
+            Bloom is a small independent magazine about living well and slowly - from the food on the table to the miles between here and somewhere new. Three writers, one shared belief: the ordinary is worth paying attention to.
           </p>
         </div>
       </section>

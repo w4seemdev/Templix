@@ -29,7 +29,7 @@ export default function PurchaseSuccessPage() {
   useSEO({ title: 'Payment successful' });
 
   /* Poll for the purchase row written server-side by the Stripe webhook.
-     Ownership is NEVER granted from the client — we only read. */
+     Ownership is NEVER granted from the client - we only read. */
   useEffect(() => {
     if (authLoading) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- resolve the poll status once auth settles
@@ -104,7 +104,7 @@ export default function PurchaseSuccessPage() {
                 Confirming your purchase…
               </h1>
               <p className="m-0 mb-8 text-[15px] leading-[1.6] text-text-secondary">
-                Hang tight — we're verifying your payment on our secure server. This usually takes just a few seconds.
+                Hang tight - we're verifying your payment on our secure server. This usually takes just a few seconds.
               </p>
             </>
           )}
@@ -139,7 +139,7 @@ export default function PurchaseSuccessPage() {
                 This is taking longer than expected
               </h1>
               <p className="m-0 mb-8 text-[15px] leading-[1.6] text-text-secondary">
-                Your payment may still be processing. Confirmation can take a moment to arrive — your
+                Your payment may still be processing. Confirmation can take a moment to arrive - your
                 template will appear in your dashboard automatically once it does.
               </p>
             </>

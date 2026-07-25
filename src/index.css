@@ -2,7 +2,7 @@
 @import "./App.css";
 
 /* ============================================================
-   TEMPLIX — "Obsidian Gallery" design tokens (Tailwind v4 @theme)
+   TEMPLIX - "Obsidian Gallery" design tokens (Tailwind v4 @theme)
    Canvas ramp -> surfaces -> borders -> text -> accents.
    Utilities: bg-canvas, bg-surface-1, border-border-subtle,
    text-text-secondary, text-accent, shadow-glow-cta, etc.
@@ -29,18 +29,18 @@
   --color-text-primary: #F7F8F8;
   --color-text-secondary: #A6ADBB;
   /* Tertiary lightened from #697077 (~4.0:1) to meet WCAG AA 4.5:1 on canvas
-     and surfaces — it labels real 13–15px text (placeholders, meta, helper). */
+     and surfaces - it labels real 13-15px text (placeholders, meta, helper). */
   --color-text-tertiary: #8A929E;
   --color-text-disabled: #494E56;
 
-  /* Accent — Templix Violet (chrome only, never on merchandise imagery) */
+  /* Accent - Templix Violet (chrome only, never on merchandise imagery) */
   --color-accent: #7C5CFC;
   --color-accent-hover: #8D70FF;
   --color-accent-pressed: #6A4BE8;
   --color-accent-soft: rgba(124, 92, 252, 0.12);
   --color-accent-soft-border: rgba(124, 92, 252, 0.30);
   --color-accent-text: #C4B5FD;
-  /* Signal Cyan — gradients, charts, live/new indicators ONLY */
+  /* Signal Cyan - gradients, charts, live/new indicators ONLY */
   --color-accent-2: #38BDF8;
 
   /* Semantic (each pairs with a -soft 12% fill + -soft-border 30% tint) */
@@ -95,7 +95,7 @@
 }
 
 /* ── Base ─────────────────────────────────────────────────────
-   NOTE: no universal margin/padding reset here — Tailwind v4
+   NOTE: no universal margin/padding reset here - Tailwind v4
    preflight already provides it inside @layer base. An unlayered
    reset would override every margin/padding utility on the site. */
 
@@ -120,14 +120,14 @@ body {
   color: #FFFFFF;
 }
 
-/* A11y focus ring — never removed */
+/* A11y focus ring - never removed */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 /* The <main> landmark is focused programmatically on route change (see
-   ScrollToTop) purely to move the a11y focus point — suppress its outline so
+   ScrollToTop) purely to move the a11y focus point - suppress its outline so
    the whole content region doesn't get ringed. Interactive controls keep the
    :focus-visible ring above. */
 main[tabindex="-1"]:focus {
@@ -162,7 +162,7 @@ main[tabindex="-1"]:focus {
   background-clip: content-box;
 }
 
-/* Global spinner keyframe — inline-styled spinners in
+/* Global spinner keyframe - inline-styled spinners in
    TemplateDetailPage / DashboardPage / PurchaseSuccessPage depend on it. */
 @keyframes spin {
   from { transform: rotate(0deg); }

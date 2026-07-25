@@ -34,7 +34,7 @@ function trackSpotlight(e: PointerEvent<HTMLElement>) {
 export default function CategoriesPage() {
   useSEO({
     title: 'Categories',
-    description: 'Browse Templix templates by category — SaaS, portfolio, e-commerce, dashboards and more.',
+    description: 'Browse Templix templates by category - SaaS, portfolio, e-commerce, dashboards and more.',
   });
 
   const browsable = categories.filter(c => c.id !== 'all');
@@ -57,7 +57,7 @@ export default function CategoriesPage() {
             <span className="font-mono font-medium text-text-primary" style={TNUM}>{templates.length}</span>
             {' '}templates across{' '}
             <span className="font-mono font-medium text-text-primary" style={TNUM}>{browsable.length}</span>
-            {' '}categories — every one production-ready.
+            {' '}categories - every one production-ready.
           </p>
         </header>
 
@@ -97,7 +97,7 @@ export default function CategoriesPage() {
                   </div>
                 </div>
 
-                {/* Mini preview strip — thumbnails on a lighter well, 1px inset frame */}
+                {/* Mini preview strip - thumbnails on a lighter well, 1px inset frame */}
                 <div className="flex gap-2">
                   {previews.length > 0 ? previews.map(t => (
                     <div

@@ -10,11 +10,11 @@ const sections = [
   },
   {
     title: '2. License & Usage',
-    body: 'Every template — free or paid — is covered by the single Templix Standard License. The purchaser may use the template in unlimited personal and commercial end-products and may modify it freely. You may not resell, redistribute, sublicense, or offer the template itself for download. Free templates carry the same usage terms with no purchase required. The full terms are set out on the License page.',
+    body: 'Every template - free or paid - is covered by the single Templix Standard License. The purchaser may use the template in unlimited personal and commercial end-products and may modify it freely. You may not resell, redistribute, sublicense, or offer the template itself for download. Free templates carry the same usage terms with no purchase required. The full terms are set out on the License page.',
   },
   {
     title: '3. Intellectual Property',
-    body: 'All templates, designs, and code on Templix are the intellectual property of their respective creators. Purchasing a template grants you a license to use it — it does not transfer ownership. You may not claim the original design as your own or resell it on other marketplaces.',
+    body: 'All templates, designs, and code on Templix are the intellectual property of their respective creators. Purchasing a template grants you a license to use it - it does not transfer ownership. You may not claim the original design as your own or resell it on other marketplaces.',
   },
   {
     title: '4. Payments & Refunds',

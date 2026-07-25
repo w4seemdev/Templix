@@ -1,5 +1,5 @@
 /* ============================================================
-   VERDE — Eco & sustainability brand template
+   VERDE - Eco & sustainability brand template
    Warm cream · deep forest green · soft sage · serif display
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -30,8 +30,8 @@ function useIsMobile() {
 const navLinks = ['Mission', 'Products', 'Impact', 'Contact'];
 
 const missionPillars = [
-  { icon: 'leaf', title: 'Regenerative by design', desc: 'Every Verde product is made from materials that give back — organic cotton from regenerative farms, fast-regrowing bamboo, and ocean-bound plastic intercepted before it reaches the sea.' },
-  { icon: 'loop', title: 'Circular, not disposable', desc: 'We design for the second and third life. Send any worn-out Verde product back and we will repair it, remake it, or compost it — and plant a tree for your trouble.' },
+  { icon: 'leaf', title: 'Regenerative by design', desc: 'Every Verde product is made from materials that give back - organic cotton from regenerative farms, fast-regrowing bamboo, and ocean-bound plastic intercepted before it reaches the sea.' },
+  { icon: 'loop', title: 'Circular, not disposable', desc: 'We design for the second and third life. Send any worn-out Verde product back and we will repair it, remake it, or compost it - and plant a tree for your trouble.' },
   { icon: 'hands', title: 'People before margins', desc: 'Our 14 partner workshops across Portugal, Kenya, and Vietnam are audited twice a year, pay 2.3× the local living wage, and co-own 10% of the company.' },
 ];
 
@@ -55,8 +55,8 @@ const impactMetrics = [
 
 const timeline = [
   { year: '2017', title: 'A bottle and a promise', desc: 'Verde starts at a Lisbon farmers market with one product and a promise to plant a tree for every sale.' },
-  { year: '2021', title: 'B Corp, first try', desc: 'We certify as a B Corporation with a score of 124.3 — the top 5% of certified consumer-goods companies.' },
-  { year: '2025', title: 'Carbon negative', desc: 'Verde removes 2.4× more carbon than the entire business emits — every courier mile and office kettle included.' },
+  { year: '2021', title: 'B Corp, first try', desc: 'We certify as a B Corporation with a score of 124.3 - the top 5% of certified consumer-goods companies.' },
+  { year: '2025', title: 'Carbon negative', desc: 'Verde removes 2.4× more carbon than the entire business emits - every courier mile and office kettle included.' },
   { year: '2026', title: 'The regenerative decade', desc: 'We commit 5% of all revenue to converting 10,000 hectares of farmland to regenerative agriculture by 2030.' },
 ];
 
@@ -140,13 +140,13 @@ export default function VerdeEcoPreview() {
         </svg>
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: m ? '3.5rem 1.25rem' : '5.5rem 1.5rem', position: 'relative' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(250,248,243,0.14)', border: '1px solid rgba(250,248,243,0.35)', borderRadius: '9999px', padding: '7px 18px', fontSize: '13px', fontWeight: 600, color: '#e9f3e4', marginBottom: '1.5rem' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#a7d8b3' }} />Carbon negative since 2025 — and counting
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#a7d8b3' }} />Carbon negative since 2025 - and counting
           </span>
           <h1 style={{ fontFamily: SERIF, fontSize: m ? '2.5rem' : 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.08, color: '#fdfcf8', maxWidth: '640px', margin: 0 }}>
             Everyday goods that leave the Earth better than they found it
           </h1>
           <p style={{ fontSize: m ? '1rem' : '1.125rem', color: 'rgba(250,248,243,0.85)', lineHeight: 1.75, maxWidth: '520px', margin: '1.5rem 0 0' }}>
-            Verde makes reusable kitchen, bath, and travel essentials from regenerative materials — and plants a tree for every order. 1.2 million planted so far. Yours is next.
+            Verde makes reusable kitchen, bath, and travel essentials from regenerative materials - and plants a tree for every order. 1.2 million planted so far. Yours is next.
           </p>
           <div style={{ display: 'flex', gap: '0.875rem', marginTop: '2.25rem', flexWrap: 'wrap' }}>
             <a href="#Products" style={{ background: '#fdfcf8', color: FOREST_DARK, borderRadius: '9999px', padding: '14px 32px', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Shop the collection</a>
@@ -166,7 +166,7 @@ export default function VerdeEcoPreview() {
           <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3rem' }}>
             <span style={{ display: 'inline-block', background: SAGE, color: FOREST, borderRadius: '9999px', padding: '6px 18px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.25rem' }}>Our mission</span>
             <h2 style={{ fontFamily: SERIF, fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.8rem)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.2, margin: '0 0 1.25rem' }}>The most sustainable product is the one you never throw away</h2>
-            <p style={{ color: MUTED, fontSize: '1.05rem', lineHeight: 1.8, margin: 0 }}>Since 2017 we have made exactly 23 products — and discontinued 6 that did not meet our repairability bar. Slow catalogue, fast impact. That is the whole strategy.</p>
+            <p style={{ color: MUTED, fontSize: '1.05rem', lineHeight: 1.8, margin: 0 }}>Since 2017 we have made exactly 23 products - and discontinued 6 that did not meet our repairability bar. Slow catalogue, fast impact. That is the whole strategy.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: '1.5rem' }}>
             {missionPillars.map(p => (
@@ -224,7 +224,7 @@ export default function VerdeEcoPreview() {
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <span style={{ display: 'inline-block', background: 'rgba(250,248,243,0.1)', border: '1px solid rgba(250,248,243,0.25)', color: '#bbe3c4', borderRadius: '9999px', padding: '6px 18px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.25rem' }}>Impact, audited</span>
             <h2 style={{ fontFamily: SERIF, fontSize: m ? '1.8rem' : 'clamp(1.9rem, 4vw, 2.8rem)', fontWeight: 600, letterSpacing: '-0.02em', margin: '0 0 1rem' }}>Numbers we publish whether they flatter us or not</h2>
-            <p style={{ color: 'rgba(250,248,243,0.7)', fontSize: '1.05rem', maxWidth: '560px', margin: '0 auto', lineHeight: 1.75 }}>Independently verified every quarter and published in full — methodology, mistakes, and all.</p>
+            <p style={{ color: 'rgba(250,248,243,0.7)', fontSize: '1.05rem', maxWidth: '560px', margin: '0 auto', lineHeight: 1.75 }}>Independently verified every quarter and published in full - methodology, mistakes, and all.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr 1fr' : 'repeat(4, 1fr)', gap: m ? '1rem' : '1.25rem' }}>
             {impactMetrics.map(mm => (
@@ -279,7 +279,7 @@ export default function VerdeEcoPreview() {
         <div style={{ maxWidth: '1160px', margin: '0 auto', padding: pad }}>
           <div style={{ position: 'relative', borderRadius: '32px', overflow: 'hidden', padding: m ? '3rem 1.5rem' : '4.25rem 2.5rem', textAlign: 'center', background: `linear-gradient(135deg, ${FOREST_DARK}, ${FOREST})` }}>
             <div style={{ position: 'relative', maxWidth: '560px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: SERIF, fontSize: m ? '1.8rem' : 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 600, letterSpacing: '-0.02em', color: '#fdfcf8', margin: '0 0 1rem' }}>The Undergrowth — our monthly letter</h2>
+              <h2 style={{ fontFamily: SERIF, fontSize: m ? '1.8rem' : 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 600, letterSpacing: '-0.02em', color: '#fdfcf8', margin: '0 0 1rem' }}>The Undergrowth - our monthly letter</h2>
               <p style={{ color: 'rgba(250,248,243,0.8)', fontSize: '1rem', lineHeight: 1.75, margin: '0 0 2rem' }}>One email a month: what we planted, what broke, what we fixed, and one genuinely useful low-waste habit. Read by 96,000 people.</p>
               {subscribed ? (
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(167,216,179,0.18)', border: '1px solid rgba(167,216,179,0.5)', borderRadius: '9999px', padding: '14px 28px', color: '#cdebd5', fontSize: '15px', fontWeight: 600 }}>You are in! Your welcome tree gets planted this Friday.</div>
@@ -320,7 +320,7 @@ export default function VerdeEcoPreview() {
             ))}
           </div>
           <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-            <p style={{ fontSize: '13px', color: '#8a9a8b', margin: 0 }}>© 2026 Verde Goods B.V. — printed on 100% recycled pixels.</p>
+            <p style={{ fontSize: '13px', color: '#8a9a8b', margin: 0 }}>© 2026 Verde Goods B.V. - printed on 100% recycled pixels.</p>
             <div style={{ display: 'flex', gap: '1.5rem' }}>{['Instagram', 'Pinterest', 'YouTube'].map(s => <a key={s} href="#" style={{ fontSize: '13px', color: '#8a9a8b', textDecoration: 'none' }}>{s}</a>)}</div>
           </div>
         </div>

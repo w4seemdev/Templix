@@ -1,5 +1,5 @@
 /* ============================================================
-   FORGE — Developer Tools Landing Template
+   FORGE - Developer Tools Landing Template
    Charcoal/zinc theme with amber accent + terminal aesthetic.
    Self-contained, inline styles only, fully responsive.
    ============================================================ */
@@ -84,7 +84,7 @@ function Hero({ mobile }: { mobile: boolean }) {
       <div style={{ maxWidth: 760, margin: `${mobile ? 34 : 48}px auto 0`, borderRadius: 12, border: `1px solid ${T.line}`, background: '#0c0c0f', overflow: 'hidden', textAlign: 'left', fontFamily: mono, boxShadow: '0 30px 80px rgba(0,0,0,0.6)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 14px', borderBottom: `1px solid ${T.line}` }}>
           {['#ff5f57', '#febc2e', '#28c840'].map(c => <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c }} />)}
-          <span style={{ marginLeft: 10, fontSize: 11, color: T.dim }}>~/app — forge deploy</span>
+          <span style={{ marginLeft: 10, fontSize: 11, color: T.dim }}>~/app - forge deploy</span>
         </div>
         <div style={{ padding: 18, fontSize: 12.5, lineHeight: 1.9 }}>
           <div><span style={{ color: T.a }}>$</span> <span style={{ color: T.ink }}>forge deploy --prod</span></div>
@@ -113,7 +113,7 @@ function Features({ mobile }: { mobile: boolean }) {
   const items = [
     ['bolt', 'Sub-10s builds', 'Incremental compilation and a global build cache turn cold builds into instant ones.'],
     ['branch', 'Preview per branch', 'Every push gets a shareable preview URL with its own isolated database.'],
-    ['rollback', 'Instant rollbacks', 'Bad deploy? Roll back to any previous build in one click — no rebuild needed.'],
+    ['rollback', 'Instant rollbacks', 'Bad deploy? Roll back to any previous build in one click - no rebuild needed.'],
     ['cache', 'Smart caching', 'Content-addressed artifacts are shared across your whole team automatically.'],
     ['globe', 'Edge deploys', 'Ship to 41 regions at once. Static assets and functions run close to users.'],
     ['shield', 'Secure by default', 'Signed artifacts, secret scanning, and SOC 2 Type II compliance built in.'],

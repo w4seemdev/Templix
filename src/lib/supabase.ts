@@ -17,7 +17,7 @@ export { isSupabaseConfigured };
 if (!isSupabaseConfigured && import.meta.env.DEV) {
   // Deliberate: dev-only misconfiguration warning, stripped from production builds.
   console.warn(
-    '[Templix] Supabase is not configured — set VITE_SUPABASE_URL and ' +
+    '[Templix] Supabase is not configured - set VITE_SUPABASE_URL and ' +
       'VITE_SUPABASE_ANON_KEY. Auth, purchases, and downloads are disabled until then.',
   );
 }
@@ -27,7 +27,7 @@ if (!isSupabaseConfigured && import.meta.env.DEV) {
 // is the Content-Security-Policy shipped in vercel.json, which is what keeps an
 // injected script from reading the tokens. Don't re-litigate one without the other.
 //
-// Falls back on falsiness — the same predicate as isSupabaseConfigured — not on
+// Falls back on falsiness - the same predicate as isSupabaseConfigured - not on
 // `?? `: a blank env var in the hosting dashboard reaches the bundle as '',
 // which `??` keeps, and createClient throws "supabaseUrl is required." at
 // import, white-screening the site before React mounts.
@@ -41,7 +41,7 @@ export const supabase =
 // generated: run `supabase gen types typescript --project-id <id>` (Supabase
 // CLI, no npm dependency), commit the result, and pass it as
 // `createClient<Database>(...)` so `.from()` is typed end to end. Until then,
-// type each query at the call site with `.returns<...>()` — never re-declare a
+// type each query at the call site with `.returns<...>()` - never re-declare a
 // row shape locally.
 export interface Profile {
   id: string;

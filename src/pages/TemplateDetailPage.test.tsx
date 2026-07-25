@@ -1,5 +1,5 @@
 /**
- * TemplateDetailPage — the page that decides whether a visitor is asked to pay.
+ * TemplateDetailPage - the page that decides whether a visitor is asked to pay.
  *
  * Everything here guards money: the CTA must quote the catalog price, must never
  * appear while ownership is unknown (that window is how an existing owner gets
@@ -7,8 +7,8 @@
  * the buyer is shown.
  *
  * Boundaries mocked: the Supabase client (auth session + the `purchases` query +
- * edge-function invocations) and the shared download helper. Everything else —
- * AuthProvider, usePurchases, the page itself — runs for real.
+ * edge-function invocations) and the shared download helper. Everything else -
+ * AuthProvider, usePurchases, the page itself - runs for real.
  */
 import { Route, Routes } from 'react-router-dom';
 import { configure, renderWithProviders, screen, userEvent, waitFor } from '../test/utils';
@@ -33,7 +33,7 @@ const mocks = vi.hoisted(() => {
 
   const state = {
     session: null as { user: { id: string; email: string } } | null,
-    /** Resolves the `purchases` query — swapped per test: empty, owned, failed, or pending. */
+    /** Resolves the `purchases` query - swapped per test: empty, owned, failed, or pending. */
     purchases: (): Promise<Result> => Promise.resolve({ data: [], error: null }),
   };
 
@@ -93,7 +93,7 @@ function productStructuredData(): { offers: { price: number } } | undefined {
   return nodes.find(n => n['@type'] === 'Product') as { offers: { price: number } } | undefined;
 }
 
-/** The dollar figure inside an element, e.g. "Buy now — $59" -> 59. */
+/** The dollar figure inside an element, e.g. "Buy now - $59" -> 59. */
 function dollarsIn(el: HTMLElement): number {
   const match = /\$(\d+)/.exec(el.textContent ?? '');
   return match ? Number(match[1]) : NaN;
@@ -195,7 +195,7 @@ describe('TemplateDetailPage', () => {
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/verify your library/i);
     expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
-    // A failed lookup is not "you don't own this" — charging here bills an owner twice.
+    // A failed lookup is not "you don't own this" - charging here bills an owner twice.
     expect(screen.queryByRole('button', { name: /buy now/i })).not.toBeInTheDocument();
     expect(mocks.invoke).not.toHaveBeenCalled();
   });

@@ -1,5 +1,5 @@
 /* ============================================================
-   PAWS — Pet care & vet clinic template
+   PAWS - Pet care & vet clinic template
    Soft light theme · sky blue + warm yellow · friendly rounded
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -30,10 +30,10 @@ const trustBadges = ['Fear-Free Certified', '24/7 Emergency', 'AAHA Accredited',
 
 const services = [
   { icon: 'steth', title: 'Wellness checkups', price: 'from $49', desc: 'Nose-to-tail exams, vaccinations, and a health plan tailored to your pet’s age and breed.' },
-  { icon: 'tooth', title: 'Dental care', price: 'from $129', desc: 'Cleanings, digital dental X-rays, and extractions — with anesthesia monitoring throughout.' },
+  { icon: 'tooth', title: 'Dental care', price: 'from $129', desc: 'Cleanings, digital dental X-rays, and extractions - with anesthesia monitoring throughout.' },
   { icon: 'scissors', title: 'Grooming & spa', price: 'from $39', desc: 'Baths, trims, nail care, and de-shedding from groomers your dog will be excited to see.' },
   { icon: 'cross', title: 'Surgery', price: 'quote', desc: 'Spay/neuter to soft-tissue procedures in our on-site surgical suite with full aftercare.' },
-  { icon: 'syringe', title: 'Vaccinations', price: 'from $25', desc: 'Core and lifestyle vaccines on a schedule we track for you — reminders included.' },
+  { icon: 'syringe', title: 'Vaccinations', price: 'from $25', desc: 'Core and lifestyle vaccines on a schedule we track for you - reminders included.' },
   { icon: 'pulse', title: 'Emergency care', price: '24/7', desc: 'A vet answers our emergency line around the clock, every day of the year. No machines.' },
 ];
 
@@ -44,7 +44,7 @@ const vets = [
 ];
 
 const visitSteps = [
-  { num: '1', title: 'Book online', desc: 'Pick a time that works — same-day slots held for sick visits every morning.' },
+  { num: '1', title: 'Book online', desc: 'Pick a time that works - same-day slots held for sick visits every morning.' },
   { num: '2', title: 'Meet your vet', desc: 'Unhurried 30-minute appointments in fear-free exam rooms with treats on tap.' },
   { num: '3', title: 'Care plan + recap', desc: 'Walk out with a clear plan, costs up front, and visit notes in your inbox.' },
 ];
@@ -56,15 +56,15 @@ const plans = [
 ];
 
 const testimonials = [
-  { quote: 'Biscuit used to shake in the car on vet days. Now he drags me through the front door — the treats and patience here are unreal.', name: 'Hannah & Biscuit', detail: 'Golden Retriever, age 4', c1: '#f59e0b', c2: '#fcd34d' },
+  { quote: 'Biscuit used to shake in the car on vet days. Now he drags me through the front door - the treats and patience here are unreal.', name: 'Hannah & Biscuit', detail: 'Golden Retriever, age 4', c1: '#f59e0b', c2: '#fcd34d' },
   { quote: 'They caught Mochi’s kidney issue early on a routine senior panel. Two years later she is still ruling the house.', name: 'Priya & Mochi', detail: 'Tabby, age 13', c1: '#8b5cf6', c2: '#c4b5fd' },
 ];
 
 const faqs = [
   { q: 'Do you take walk-ins?', a: 'We hold same-day sick slots every morning at 8am, and true emergencies are always seen immediately. For routine care, booking online gets you the best times.' },
   { q: 'Which pets do you treat?', a: 'Dogs, cats, rabbits, and pocket pets (hamsters, guinea pigs, rats). For birds and reptiles we will happily refer you to our exotic-specialist partners next door.' },
-  { q: 'How do wellness plans work?', a: 'A monthly subscription spreads the cost of preventive care across the year — exams, vaccines, and bloodwork are included, and everything else is 10–20% off. Cancel anytime after 6 months.' },
-  { q: 'What happens in an after-hours emergency?', a: 'Call our main number any time — a veterinarian (not a recording) answers 24/7, triages by phone, and meets you at the clinic if your pet needs to be seen.' },
+  { q: 'How do wellness plans work?', a: 'A monthly subscription spreads the cost of preventive care across the year - exams, vaccines, and bloodwork are included, and everything else is 10-20% off. Cancel anytime after 6 months.' },
+  { q: 'What happens in an after-hours emergency?', a: 'Call our main number any time - a veterinarian (not a recording) answers 24/7, triages by phone, and meets you at the clinic if your pet needs to be seen.' },
 ];
 
 const footerCols = [
@@ -113,7 +113,7 @@ export default function PawsPetCarePreview() {
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#fff', color: INK, minHeight: '100vh' }}>
       {/* Emergency banner */}
-      <div style={{ background: YELLOW, color: '#451a03', textAlign: 'center', padding: '9px 1rem', fontSize: '13px', fontWeight: 700 }}>Pet emergency? Call (415) 555-PAWS — a vet answers 24/7</div>
+      <div style={{ background: YELLOW, color: '#451a03', textAlign: 'center', padding: '9px 1rem', fontSize: '13px', fontWeight: 700 }}>Pet emergency? Call (415) 555-PAWS - a vet answers 24/7</div>
 
       {/* Nav */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${BORDER}` }}>
@@ -330,7 +330,7 @@ export default function PawsPetCarePreview() {
                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: SKY, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Paw size={16} fill="#fff" /></div>
                 <span style={{ fontSize: '18px', fontWeight: 800 }}>Paws</span>
               </div>
-              <p style={{ fontSize: '13.5px', color: GREY, lineHeight: 1.7, margin: 0 }}>212 Harbor Lane, San Francisco · Mon–Sat 8a–7p · (415) 555-PAWS</p>
+              <p style={{ fontSize: '13.5px', color: GREY, lineHeight: 1.7, margin: 0 }}>212 Harbor Lane, San Francisco · Mon-Sat 8a-7p · (415) 555-PAWS</p>
             </div>
             {footerCols.map(col => (
               <div key={col.title}>

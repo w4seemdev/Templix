@@ -10,7 +10,7 @@ const UNAVAILABLE = 'Download is not available for this template.';
  * - Paid templates go through the `verify-download` edge function, which
  *   confirms the caller owns the template and returns a short-lived signed URL
  *   from the private `templates` bucket. If the caller does not own it (or is
- *   not signed in), the function responds non-2xx and this throws — callers
+ *   not signed in), the function responds non-2xx and this throws - callers
  *   should catch and route the user to buy.
  *
  * Prefer `downloadTemplateZip` below; this is exported for callers that need the
@@ -32,7 +32,7 @@ export async function getTemplateDownloadUrl(
     throw new Error(error.message ?? UNAVAILABLE);
   }
 
-  // `data` is whatever the function sent — narrow it, don't assert it, or a
+  // `data` is whatever the function sent - narrow it, don't assert it, or a
   // non-string escapes a signature that promises a string.
   const url = data?.url;
   if (typeof url !== 'string' || url.length === 0) {
@@ -44,7 +44,7 @@ export async function getTemplateDownloadUrl(
 
 /**
  * Resolves the URL and triggers the browser download. Taking the template object
- * (rather than an id + isFree pair) is what keeps the two from disagreeing —
+ * (rather than an id + isFree pair) is what keeps the two from disagreeing -
  * asking for a paid template's public path only ever yields a dead link.
  */
 export async function downloadTemplateZip(

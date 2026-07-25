@@ -7,7 +7,7 @@ import { useReveal } from '../hooks/useReveal';
 const values = [
   {
     title: 'Quality first',
-    desc: 'Every template is designed, coded, and tested end to end — layout, responsiveness, and code quality — before it goes on sale.',
+    desc: 'Every template is designed, coded, and tested end to end - layout, responsiveness, and code quality - before it goes on sale.',
     icon: (
       <svg width="20" height="20" fill="none" stroke="var(--color-accent)" strokeWidth="1.75" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -16,7 +16,7 @@ const values = [
   },
   {
     title: 'Developer experience',
-    desc: 'Clean, well-documented code so you spend time building features — not deciphering someone else\'s spaghetti.',
+    desc: 'Clean, well-documented code so you spend time building features - not deciphering someone else\'s spaghetti.',
     icon: (
       <svg width="20" height="20" fill="none" stroke="var(--color-accent)" strokeWidth="1.75" viewBox="0 0 24 24" aria-hidden="true">
         <polyline points="16 18 22 12 16 6" />
@@ -26,7 +26,7 @@ const values = [
   },
   {
     title: 'Fair pricing',
-    desc: 'Buy once, use forever. No subscriptions, no seat limits — just honest one-time pricing.',
+    desc: 'Buy once, use forever. No subscriptions, no seat limits - just honest one-time pricing.',
     icon: (
       <svg width="20" height="20" fill="none" stroke="var(--color-accent)" strokeWidth="1.75" viewBox="0 0 24 24" aria-hidden="true">
         <line x1="12" y1="1" x2="12" y2="23" />
@@ -47,7 +47,7 @@ const templateCount = templates.length;
 const freeCount = templates.filter(t => t.isFree).length;
 
 export default function AboutPage() {
-  useSEO({ title: 'About', description: 'Learn about Templix — the mission, the principles, and the maker behind the templates.' });
+  useSEO({ title: 'About', description: 'Learn about Templix - the mission, the principles, and the maker behind the templates.' });
 
   const [valuesGridRef, valuesGridCls] = useReveal<HTMLDivElement>();
   const [makerRowRef, makerRowCls] = useReveal<HTMLDivElement>();
@@ -65,7 +65,7 @@ export default function AboutPage() {
             We build templates so you can build products
           </h1>
           <p className="m-0 text-[17px] leading-relaxed text-text-secondary">
-            Templix started with a simple frustration — spending days on boilerplate instead of shipping features.
+            Templix started with a simple frustration - spending days on boilerplate instead of shipping features.
             We build high-quality, production-ready templates so developers and founders can skip the setup and get straight to building.
           </p>
         </Container>
@@ -73,7 +73,7 @@ export default function AboutPage() {
 
       <div className="hairline" />
 
-      {/* Values — bento */}
+      {/* Values - bento */}
       <section>
         <Container style={{ paddingTop: '6rem', paddingBottom: '6rem' }}>
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Our principles</p>
@@ -154,7 +154,7 @@ export default function AboutPage() {
               </div>
             </div>
             <p className="m-0 max-w-[62ch] text-[15px] leading-relaxed text-text-secondary">
-              Every template here is designed, coded, and supported by one person — no outsourced work, no stock
+              Every template here is designed, coded, and supported by one person - no outsourced work, no stock
               designs. When you email support, you reach the person who built the template.
             </p>
           </div>

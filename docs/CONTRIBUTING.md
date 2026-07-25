@@ -7,7 +7,7 @@ change is higher than "it renders". Everything below is enforced by CI
 
 ## Prerequisites
 
-- **Node 22** (Node 20.19+ also satisfies every dependency, but CI runs 22 — match it to avoid surprises)
+- **Node 22** (Node 20.19+ also satisfies every dependency, but CI runs 22 - match it to avoid surprises)
 - **npm** (the repo ships a `package-lock.json`; do not switch package managers)
 
 ## Running the app
@@ -40,7 +40,7 @@ gitignored; `.env.example` is committed and must only ever contain placeholders.
 Anything prefixed `VITE_` is compiled into the client bundle and is therefore
 **public**. Never put a secret behind that prefix.
 
-### Edge function secrets — not in this repo, not in `.env`
+### Edge function secrets - not in this repo, not in `.env`
 
 `create-checkout`, `stripe-webhook`, and `verify-download` run on Supabase and
 read their secrets from the platform, set once with the CLI:
@@ -53,13 +53,13 @@ supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...
 
 `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are injected
 by the platform automatically. `SITE_URL` must match the deployed origin exactly,
-with no trailing slash — the functions allow only it (plus `http://localhost:5173`)
+with no trailing slash - the functions allow only it (plus `http://localhost:5173`)
 for CORS and for the post-payment redirect.
 
 ## Quality gates
 
 CI runs these five as separate steps so a failure names itself. Run them locally
-before opening a PR — in this order, cheapest first:
+before opening a PR - in this order, cheapest first:
 
 | Gate | Command | What it protects |
 |---|---|---|
@@ -83,14 +83,14 @@ red exactly like a failing test.
 
 Those numbers are a ratchet, not a target: each sits just under what the suite
 actually reaches today (53.30 / 57.06 / 46.68 / 55.42), so deleting or gutting a
-test fails loudly instead of quietly lowering the bar. The headroom is thin —
+test fails loudly instead of quietly lowering the bar. The headroom is thin -
 branches has about 0.06pp of slack, which is a single uncovered `if`. New code
 that is not covered must arrive with tests, or the build goes red. Raise the
 thresholds as coverage grows, toward the 80% house standard; never lower one to
 make a build pass.
 
 `supabase/functions/**` is outside both the `include` globs, so the three edge
-functions have no automated coverage at all — the ownership check in
+functions have no automated coverage at all - the ownership check in
 `verify-download` and the signature check in `stripe-webhook` are verified only
 by the manual smoke test in [docs/DEPLOYMENT.md](DEPLOYMENT.md#10-post-deploy-smoke-test).
 Treat a change there as untested until you have run it.
@@ -116,7 +116,7 @@ is not, and does not go in.
 
 The buyer sees what is in `src/data/templates.ts`. Stripe charges what is in the
 `CATALOG` in `supabase/functions/create-checkout/index.ts`. Nothing in the type
-system links them, and they have already drifted apart once — 34 of the 52 paid
+system links them, and they have already drifted apart once - 34 of the 52 paid
 templates disagreed, 21 of them overcharging the customer against the advertised
 price.
 
@@ -132,7 +132,7 @@ The free ids are **2, 6, 14, 19, 23, 28, 45, 51, 59**. Their zips live in
 The other 52 are paid. Their zips live in a **private** Supabase storage bucket and
 are released only by `verify-download`, which authenticates the caller, checks
 ownership, and returns a signed URL that expires in 60 seconds. A paid zip under
-`public/` is a product giveaway — never add one, and never widen the free list
+`public/` is a product giveaway - never add one, and never widen the free list
 without also updating `isFree` in `src/data/templates.ts` and the `CATALOG`.
 
 `scripts/generate-zips.mjs` enforces the split at the source: free zips go to
@@ -152,7 +152,7 @@ placeholders only. If something leaks, rotate it before anything else.
 The design language is a premium dark editorial look driven by CSS custom
 properties defined in `src/index.css` (`--color-canvas`, `--color-surface-*`,
 `--color-accent`, `--color-border-strong`, `--color-danger*`, ...), consumed
-through Tailwind utility classes. Never hardcode a hex colour in app code — a
+through Tailwind utility classes. Never hardcode a hex colour in app code - a
 literal breaks theming and drifts from the rest of the catalog.
 
 ## Pull requests

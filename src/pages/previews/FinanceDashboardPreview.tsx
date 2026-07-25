@@ -1,5 +1,5 @@
 /* ============================================================
-   LEDGER — Finance Dashboard Template
+   LEDGER - Finance Dashboard Template
    Dark app shell, emerald accent. Responsive:
    topbar + sidebar + balance cards + inline-SVG chart + txns.
    ============================================================ */
@@ -89,7 +89,7 @@ function Main({ mobile }: { mobile: boolean }) {
     ['Stripe payout', 'Income', '+$4,200.00', '#22c55e', 'Jun 24'],
     ['AWS', 'Infrastructure', '−$318.40', '#ef4444', 'Jun 23'],
     ['Figma', 'Software', '−$45.00', '#ef4444', 'Jun 22'],
-    ['Client — Northwind', 'Income', '+$9,000.00', '#22c55e', 'Jun 21'],
+    ['Client - Northwind', 'Income', '+$9,000.00', '#22c55e', 'Jun 21'],
     ['Payroll', 'Team', '−$6,100.00', '#ef4444', 'Jun 20'],
   ] as const;
   return (

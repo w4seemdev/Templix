@@ -3,14 +3,14 @@
  *
  * 52 of the 61 templates are paid and live in a private bucket. This file covers
  * the CLIENT half of the gate: that `getTemplateDownloadUrl` never short-circuits
- * to a `/templates/<id>.zip` path for a paid template — that public directory is
- * exactly where the 52 paid zips used to sit — and that it asks `verify-download`
+ * to a `/templates/<id>.zip` path for a paid template - that public directory is
+ * exactly where the 52 paid zips used to sit - and that it asks `verify-download`
  * instead. Every test below is written so that a regression which re-opens that
  * hole, or which turns a 403 into a silently broken download, fails loudly here.
  *
  * What it does NOT cover: whether the server says no. Ownership is enforced in
  * `supabase/functions/verify-download/index.ts`, and mocking `./supabase` stubs
- * the boundary at precisely that point — these tests prove the client asks, not
+ * the boundary at precisely that point - these tests prove the client asks, not
  * that the answer is correct. That function has no automated test (vitest only
  * collects `src/**`); the smoke test in docs/DEPLOYMENT.md section 10 is the
  * only check on it.
@@ -114,7 +114,7 @@ describe('getTemplateDownloadUrl', () => {
 
 describe('downloadTemplateZip', () => {
   it('downloads a free template from its public path under a slugified file name', async () => {
-    await downloadTemplateZip({ id: '2', title: 'Folio — Portfolio', isFree: true });
+    await downloadTemplateZip({ id: '2', title: 'Folio - Portfolio', isFree: true });
 
     expect(clicks).toHaveLength(1);
     expect(clicks[0].getAttribute('href')).toBe('/templates/2.zip');
@@ -124,7 +124,7 @@ describe('downloadTemplateZip', () => {
   it('downloads a paid template from the signed URL, never from /templates/', async () => {
     invoke.mockResolvedValue({ data: { url: SIGNED_URL }, error: null });
 
-    await downloadTemplateZip({ id: '1', title: 'Luminary — SaaS', isFree: false });
+    await downloadTemplateZip({ id: '1', title: 'Luminary - SaaS', isFree: false });
 
     expect(clicks).toHaveLength(1);
     expect(clicks[0].getAttribute('href')).toBe(SIGNED_URL);
@@ -132,7 +132,7 @@ describe('downloadTemplateZip', () => {
   });
 
   it('leaves no anchor behind in the document once the download is triggered', async () => {
-    await downloadTemplateZip({ id: '2', title: 'Folio — Portfolio', isFree: true });
+    await downloadTemplateZip({ id: '2', title: 'Folio - Portfolio', isFree: true });
 
     expect(document.querySelector('a[download]')).toBeNull();
   });
@@ -141,7 +141,7 @@ describe('downloadTemplateZip', () => {
     invoke.mockResolvedValue({ data: null, error: new Error('Unauthorized') });
 
     await expect(
-      downloadTemplateZip({ id: '1', title: 'Luminary — SaaS', isFree: false }),
+      downloadTemplateZip({ id: '1', title: 'Luminary - SaaS', isFree: false }),
     ).rejects.toThrow('Unauthorized');
     expect(clicks).toHaveLength(0);
     expect(document.querySelector('a[download]')).toBeNull();

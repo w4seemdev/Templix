@@ -19,13 +19,13 @@ import Container from '../components/ui/Container';
 import { useReveal } from '../hooks/useReveal';
 import { useSEO } from '../hooks/useSEO';
 
-/* Section rhythm — 96px desktop collapsing to 64px mobile (spec) */
+/* Section rhythm - 96px desktop collapsing to 64px mobile (spec) */
 const sectionPad: CSSProperties = {
   paddingTop: 'clamp(64px, 9vw, 96px)',
   paddingBottom: 'clamp(64px, 9vw, 96px)',
 };
 
-/* Derived, data-driven numbers — update automatically as templates.ts grows */
+/* Derived, data-driven numbers - update automatically as templates.ts grows */
 const freeCount     = templates.filter(t => t.isFree).length;
 const categoryCount = categories.filter(c => c.id !== 'all').length;
 const countFor      = (id: string) =>
@@ -36,20 +36,20 @@ const featured = templates.filter(t => t.isFeatured);
 /* tnum for every price/stat numeral */
 const tnum: CSSProperties = { fontFeatureSettings: '"tnum"' };
 
-/* Hero entrance helper — tmx-rise keyframe lives in App.css */
+/* Hero entrance helper - tmx-rise keyframe lives in App.css */
 const rise = (delay: number): CSSProperties => ({
   animation: 'tmx-rise 600ms var(--ease-out-quint) both',
   animationDelay: `${delay}ms`,
 });
 
-/* LCP-safe entrance — same travel, no opacity ramp and no delay, so the
+/* LCP-safe entrance - same travel, no opacity ramp and no delay, so the
    headline and the showcase image are painted in the first frame instead of
    fading in up to a second later. Keyframe is defined in HeroSection. */
 const riseVisible: CSSProperties = {
   animation: 'tmx-rise-visible 600ms var(--ease-out-quint) both',
 };
 
-/* Bento cursor spotlight — .bento-tile::after reads --spot-x / --spot-y */
+/* Bento cursor spotlight - .bento-tile::after reads --spot-x / --spot-y */
 function spotlight(e: ReactPointerEvent<HTMLDivElement>) {
   const rect = e.currentTarget.getBoundingClientRect();
   e.currentTarget.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
@@ -74,7 +74,7 @@ export default function HomePage() {
 }
 
 /* ─────────────────────────────────────────────
-   MEGA HERO — aurora + grain, white-fade headline,
+   MEGA HERO - aurora + grain, white-fade headline,
    browser-frame showcase with floor reflection
 ───────────────────────────────────────────── */
 const trustBadges = [
@@ -103,7 +103,7 @@ function HeroSection() {
 
       <Container className="flex flex-col items-center text-center" style={{ paddingTop: 'clamp(96px, 14vw, 128px)', paddingBottom: '64px' }}>
 
-        {/* Eyebrow — glass pill with pulsing cyan live dot */}
+        {/* Eyebrow - glass pill with pulsing cyan live dot */}
         <div
           data-rise
           style={rise(0)}
@@ -115,7 +115,7 @@ function HeroSection() {
           </span>
         </div>
 
-        {/* Headline — white fade with one gradient moment */}
+        {/* Headline - white fade with one gradient moment */}
         <h1
           data-rise-lcp
           style={riseVisible}
@@ -132,7 +132,7 @@ function HeroSection() {
           className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-text-secondary"
         >
           Browse a curated library of production-ready website templates.
-          Preview live, download instantly, and ship in minutes — not weeks.
+          Preview live, download instantly, and ship in minutes - not weeks.
         </p>
 
         {/* CTA row */}
@@ -147,7 +147,7 @@ function HeroSection() {
           </Link>
         </div>
 
-        {/* Trust pills — honest, catalog-derived facts only */}
+        {/* Trust pills - honest, catalog-derived facts only */}
         <div data-rise style={rise(350)} className="mt-10 flex flex-wrap justify-center gap-3">
           {trustBadges.map(b => (
             <span
@@ -161,7 +161,7 @@ function HeroSection() {
           ))}
         </div>
 
-        {/* Product showcase — browser frame + masked floor reflection */}
+        {/* Product showcase - browser frame + masked floor reflection */}
         <div data-rise-lcp style={riseVisible} className="relative mt-16 w-full max-w-[1080px]">
           <ShowcaseFrame shots={shots} priority />
           <div
@@ -185,7 +185,7 @@ function HeroSection() {
   );
 }
 
-/* `priority` marks the real (non-reflected) frame — its center shot is the
+/* `priority` marks the real (non-reflected) frame - its center shot is the
    desktop LCP candidate, so it loads eagerly at high priority. */
 function ShowcaseFrame({ shots, priority = false }: { shots: Template[]; priority?: boolean }) {
   return (
@@ -199,7 +199,7 @@ function ShowcaseFrame({ shots, priority = false }: { shots: Template[]; priorit
           templix
         </span>
       </div>
-      {/* 3-up staggered collage — center card larger + glowing */}
+      {/* 3-up staggered collage - center card larger + glowing */}
       <div className="flex items-end justify-center gap-3 p-4 sm:gap-5 sm:p-7">
         {shots.map((t, i) => {
           const isCenter = i === 1;
@@ -232,7 +232,7 @@ function ShowcaseFrame({ shots, priority = false }: { shots: Template[]; priorit
 }
 
 /* ─────────────────────────────────────────────
-   BENTO FEATURES — 12-col grid, cursor spotlight
+   BENTO FEATURES - 12-col grid, cursor spotlight
 ───────────────────────────────────────────── */
 function BentoSection() {
   const heroShot = (featured.length > 0 ? featured : templates)[0];
@@ -249,13 +249,13 @@ function BentoSection() {
             Everything you need to ship faster
           </h2>
           <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
-            No subscriptions, no lock-in. Pay once, own it forever — with the source, the license, and real support to back it up.
+            No subscriptions, no lock-in. Pay once, own it forever - with the source, the license, and real support to back it up.
           </p>
         </div>
 
         <div ref={gridRef} className={`reveal-group grid gap-6 lg:grid-cols-12 ${gridCls}`}>
 
-          {/* Hero tile — live preview (8 cols) */}
+          {/* Hero tile - live preview (8 cols) */}
           <div className="bento-tile p-7 lg:col-span-8" onPointerMove={spotlight}>
             <div className="grid items-center gap-8 sm:grid-cols-2">
               <div>
@@ -296,13 +296,13 @@ function BentoSection() {
             </div>
           </div>
 
-          {/* Stat tile — real library counts (4 cols) */}
+          {/* Stat tile - real library counts (4 cols) */}
           <div className="bento-tile flex flex-col justify-between p-7 lg:col-span-4" onPointerMove={spotlight}>
             <div>
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">The library</p>
               <p className="text-gradient-brand font-mono text-[64px] font-semibold leading-none" style={tnum}>{templates.length}</p>
               <p className="mt-3 text-[15px] leading-[1.6] text-text-secondary">
-                Production-ready templates — and counting.
+                Production-ready templates - and counting.
               </p>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-4 border-t border-border-subtle pt-5">
@@ -344,7 +344,7 @@ function BentoSection() {
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">No subscriptions</p>
             <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">Buy once, keep it forever</h3>
             <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
-              One flat price per template. No renewals, no seats, no recurring fees — download it and it is yours.
+              One flat price per template. No renewals, no seats, no recurring fees - download it and it is yours.
             </p>
             <div className="mt-5 space-y-2">
               {['One-time payment', 'No subscription', 'Yours to keep'].map(item => (
@@ -364,7 +364,7 @@ function BentoSection() {
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-text">Clean by default</p>
             <h3 className="text-lg font-semibold tracking-[-0.01em] text-text-primary">React &amp; TypeScript</h3>
             <p className="mt-2 text-[15px] leading-[1.6] text-text-secondary">
-              Every template is one responsive single-page site in modern React and TypeScript, bundled with Vite — easy to read, easy to extend.
+              Every template is one responsive single-page site in modern React and TypeScript, bundled with Vite - easy to read, easy to extend.
             </p>
             <div className="mt-5 grid grid-cols-3 gap-2">
               {['React', 'TypeScript', 'Vite'].map(tech => (
@@ -413,7 +413,7 @@ function FeaturedSection() {
         </div>
 
         <div ref={gridRef} className={`reveal-group grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${gridCls}`}>
-          {/* wrapper divs take the reveal transition — TemplateCard keeps its own inline hover transitions */}
+          {/* wrapper divs take the reveal transition - TemplateCard keeps its own inline hover transitions */}
           {featured.map(t => (
             <div key={t.id} className="[&>a]:h-full">
               <TemplateCard template={t} />
@@ -427,7 +427,7 @@ function FeaturedSection() {
 }
 
 /* ─────────────────────────────────────────────
-   HOW IT WORKS — slim 3-step strip
+   HOW IT WORKS - slim 3-step strip
 ───────────────────────────────────────────── */
 const steps = [
   {
@@ -486,7 +486,7 @@ function HowItWorksSection() {
 }
 
 /* ─────────────────────────────────────────────
-   CATEGORY SHOWCASE — chip row
+   CATEGORY SHOWCASE - chip row
 ───────────────────────────────────────────── */
 function CategorySection() {
   const [blockRef, blockCls] = useReveal<HTMLDivElement>();
@@ -534,7 +534,7 @@ function CategorySection() {
 
 /* ─────────────────────────────────────────────
    CLOSING CTA BAND
-   No email capture until a real subscriber list exists — a success message
+   No email capture until a real subscriber list exists - a success message
    for a form that discards the address would be a false claim.
 ───────────────────────────────────────────── */
 function ClosingCtaSection() {
@@ -553,7 +553,7 @@ function ClosingCtaSection() {
             The library keeps growing
           </h2>
           <p className="mx-auto mt-3 max-w-[440px] text-[15px] leading-[1.6] text-text-secondary">
-            New templates land regularly — every one with a live preview before you spend anything.
+            New templates land regularly - every one with a live preview before you spend anything.
           </p>
 
           <div className="mt-10">

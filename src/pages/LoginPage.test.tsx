@@ -1,5 +1,5 @@
 /**
- * LoginPage — the gate a buyer has to pass before they can pay or re-download.
+ * LoginPage - the gate a buyer has to pass before they can pay or re-download.
  *
  * The failure that matters most is the silent one: a submit button that never
  * leaves "Please wait..." and never says why. Every path through the form has to
@@ -16,12 +16,12 @@ import { MIN_PASSWORD_LENGTH } from '../lib/constants';
 
 // Every auth call reaches the client through a dynamic import, so the banner
 // lands a few turns after the click. RTL's 1s default is tight under a parallel
-// suite — and a flaky auth test is one nobody trusts when it does catch something.
+// suite - and a flaky auth test is one nobody trusts when it does catch something.
 configure({ asyncUtilTimeout: 5_000 });
 
 // Every userEvent session below passes `delay: null`. The default awaits a tick
 // per keystroke, and these forms are the only ones in the suite that get typed
-// into character by character — enough to blow the 5s test timeout under load.
+// into character by character - enough to blow the 5s test timeout under load.
 
 const auth = vi.hoisted(() => ({
   signInWithPassword: vi.fn(),
@@ -112,7 +112,7 @@ describe('LoginPage', () => {
   });
 
   it('leaves the loading state and explains itself when the auth service is unreachable', async () => {
-    // The auth client rejecting outright — a stale cached index.html after a
+    // The auth client rejecting outright - a stale cached index.html after a
     // deploy, or a blocked chunk. There is no Supabase message to relay.
     auth.signInWithPassword.mockRejectedValue(new Error('Failed to fetch dynamically imported module'));
     const user = userEvent.setup({ delay: null });

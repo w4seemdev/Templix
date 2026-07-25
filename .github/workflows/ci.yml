@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 # Verification only. This pipeline never publishes, never deploys, and never
-# needs a secret — deployment belongs to Vercel and is deliberately out of scope.
+# needs a secret - deployment belongs to Vercel and is deliberately out of scope.
 permissions:
   contents: read
 
@@ -68,7 +68,7 @@ jobs:
       # src/data/templates.ts is the price the buyer is SHOWN (cards, detail page,
       # Product JSON-LD). The CATALOG in supabase/functions/create-checkout/index.ts
       # is the price Stripe actually CHARGES. Nothing in the type system connects
-      # the two files, so they drift silently — and they did: 34 of the 52 paid
+      # the two files, so they drift silently - and they did: 34 of the 52 paid
       # templates disagreed, 21 of them overcharging the customer relative to the
       # advertised price. A human remembering to run this is not a control. This is.
       - name: Price sync (advertised price === charged price)

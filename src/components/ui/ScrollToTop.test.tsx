@@ -1,7 +1,7 @@
 /**
  * ScrollToTop renders nothing, but it owns two behaviours a visitor notices:
  * a route change starts at the top of the page, and it announces itself to
- * keyboard and screen-reader users by moving focus to the <main> landmark —
+ * keyboard and screen-reader users by moving focus to the <main> landmark -
  * without stealing focus on the very first paint.
  */
 import { Link } from 'react-router-dom';

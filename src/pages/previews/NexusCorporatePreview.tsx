@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS — Corporate / Enterprise Template
+   NEXUS - Corporate / Enterprise Template
    Light, professional theme with navy/blue accent.
    Self-contained, inline styles only, fully responsive.
    ============================================================ */
@@ -74,7 +74,7 @@ function Hero({ mobile }: { mobile: boolean }) {
             Enterprise consulting that <span style={{ color: T.a }}>delivers</span>
           </h1>
           <p style={{ fontSize: mobile ? '1.05rem' : '1.18rem', color: T.mut, lineHeight: 1.7, margin: '18px 0 0', maxWidth: 480 }}>
-            We help large organizations modernize operations, adopt cloud, and unlock growth — with measurable results in months, not years.
+            We help large organizations modernize operations, adopt cloud, and unlock growth - with measurable results in months, not years.
           </p>
           <div style={{ display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
             <a href="#cta" style={{ background: T.a, borderRadius: 8, padding: '13px 26px', fontSize: 15, fontWeight: 600, color: '#fff', textDecoration: 'none' }}>Schedule a consultation</a>
@@ -91,7 +91,7 @@ function Hero({ mobile }: { mobile: boolean }) {
             ))}
           </div>
           <div style={{ marginTop: 16, background: T.bg, border: `1px solid ${T.line}`, borderRadius: 12, padding: 16 }}>
-            <div style={{ fontSize: 12, color: T.dim, marginBottom: 10 }}>Client value delivered · 2020–2025</div>
+            <div style={{ fontSize: 12, color: T.dim, marginBottom: 10 }}>Client value delivered · 2020-2025</div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 60 }}>
               {[40, 55, 48, 70, 82, 95].map((h, i) => <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: '4px 4px 0 0', background: i === 5 ? T.a : '#c7d5f0' }} />)}
             </div>

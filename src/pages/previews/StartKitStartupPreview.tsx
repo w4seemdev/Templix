@@ -1,5 +1,5 @@
 /* ============================================================
-   STARTKIT — SaaS starter kit / boilerplate (landing)
+   STARTKIT - SaaS starter kit / boilerplate (landing)
    Dark slate, electric blue primary, coral secondary, mono code
    Self-contained, responsive single-page site
    ============================================================ */
@@ -58,16 +58,16 @@ export default function StartKitStartupPreview() {
       <section id="top" style={{ maxWidth: '1140px', margin: '0 auto', padding: mobile ? '3.5rem 1.25rem' : '5.5rem 2rem', display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1.05fr 1fr', gap: mobile ? '2.5rem' : '3.5rem', alignItems: 'center' }}>
         <div>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: MONO, fontSize: '12px', color: CORAL, border: `1px solid ${LINE}`, borderRadius: '999px', padding: '5px 14px', marginBottom: '1.5rem' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: CORAL }} /> v3.0 — now with billing built in
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: CORAL }} /> v3.0 - now with billing built in
           </span>
           <h1 style={{ fontSize: mobile ? '2.7rem' : 'clamp(2.8rem,6.5vw,4.6rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.03, margin: '0 0 1.25rem' }}>
             Ship your SaaS in a <span style={{ color: BLUE }}>weekend</span>, not a quarter.
           </h1>
           <p style={{ fontSize: mobile ? '1.05rem' : '1.2rem', color: MUTE, lineHeight: 1.65, margin: '0 0 2rem', maxWidth: '480px' }}>
-            The production-ready starter kit with auth, payments, teams, and emails already wired up — so you can build the part that&rsquo;s actually yours.
+            The production-ready starter kit with auth, payments, teams, and emails already wired up - so you can build the part that&rsquo;s actually yours.
           </p>
           <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-            <a href="#pricing" style={{ background: BLUE, color: BG, borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 800, textDecoration: 'none' }}>Get the kit — $199</a>
+            <a href="#pricing" style={{ background: BLUE, color: BG, borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 800, textDecoration: 'none' }}>Get the kit - $199</a>
             <a href="#features" style={{ border: `1px solid ${LINE}`, color: FG, borderRadius: '10px', padding: '14px 26px', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}>See what&rsquo;s inside</a>
           </div>
           <p style={{ fontSize: '13px', color: MUTE }}>One-time purchase · Lifetime updates · 3,400+ founders shipping</p>
@@ -76,7 +76,7 @@ export default function StartKitStartupPreview() {
         <div style={{ background: CARD, border: `1px solid ${LINE}`, borderRadius: '14px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.4)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '11px 14px', borderBottom: `1px solid ${LINE}` }}>
             {['#ff5f57', '#febc2e', '#28c840'].map(c => <span key={c} style={{ width: '11px', height: '11px', borderRadius: '50%', background: c }} />)}
-            <span style={{ marginLeft: '10px', fontFamily: MONO, fontSize: '12px', color: MUTE }}>zsh — startkit</span>
+            <span style={{ marginLeft: '10px', fontFamily: MONO, fontSize: '12px', color: MUTE }}>zsh - startkit</span>
           </div>
           <div style={{ fontFamily: MONO, fontSize: mobile ? '12px' : '13px', lineHeight: 1.9, padding: '1.25rem 1.4rem' }}>
             <div style={{ color: MUTE }}><span style={{ color: CORAL }}>$</span> npx create-startkit my-saas</div>
@@ -102,7 +102,7 @@ export default function StartKitStartupPreview() {
       <section id="features" style={{ maxWidth: '1140px', margin: '0 auto', padding: mobile ? '3.5rem 1.25rem' : '5rem 2rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
           <h2 style={{ fontSize: mobile ? '2rem' : '2.6rem', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 0.75rem' }}>The boring parts, already done</h2>
-          <p style={{ fontSize: '1.05rem', color: MUTE, maxWidth: '460px', margin: '0 auto' }}>Everything a SaaS needs on day one — batteries included.</p>
+          <p style={{ fontSize: '1.05rem', color: MUTE, maxWidth: '460px', margin: '0 auto' }}>Everything a SaaS needs on day one - batteries included.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3,1fr)', gap: '1.25rem' }}>
           {[
@@ -166,7 +166,7 @@ export default function StartKitStartupPreview() {
           <p style={{ fontSize: mobile ? '1.3rem' : '1.6rem', fontWeight: 600, lineHeight: 1.5, letterSpacing: '-0.01em', margin: '0 0 1.25rem' }}>
             &ldquo;I launched my MVP in a weekend and had my first paying customer by Monday. StartKit paid for itself ten times over.&rdquo;
           </p>
-          <p style={{ fontSize: '13px', color: MUTE, margin: 0 }}>— Dana Whitfield, founder of Trackly</p>
+          <p style={{ fontSize: '13px', color: MUTE, margin: 0 }}>- Dana Whitfield, founder of Trackly</p>
         </div>
       </section>
 

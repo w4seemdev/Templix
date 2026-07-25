@@ -1,5 +1,5 @@
 /* ============================================================
-   SCOUT — Talent & modeling agency template
+   SCOUT - Talent & modeling agency template
    Editorial white/black · gold accent · serif display
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -37,7 +37,7 @@ const talent = [
 ];
 
 const services = [
-  { num: '01', title: 'Campaigns', desc: 'Global casting and talent management for fashion, beauty, and lifestyle campaigns — from concept to contract.' },
+  { num: '01', title: 'Campaigns', desc: 'Global casting and talent management for fashion, beauty, and lifestyle campaigns - from concept to contract.' },
   { num: '02', title: 'Runway', desc: 'Seasonal show packages across Paris, Milan, London, and New York with full itinerary and chaperone support.' },
   { num: '03', title: 'E-commerce', desc: 'Reliable, repeatable e-comm casting with day-rate transparency and same-week availability windows.' },
 ];
@@ -54,7 +54,7 @@ const formFields = [
   { label: 'Full name', placeholder: 'Jane Doe' },
   { label: 'Email', placeholder: 'jane@studio.com' },
   { label: 'Company / Brand', placeholder: 'Studio or brand name' },
-  { label: 'Booking dates', placeholder: 'June 24–28, 2026' },
+  { label: 'Booking dates', placeholder: 'June 24-28, 2026' },
 ];
 
 const footerCols = [
@@ -111,7 +111,7 @@ export default function ScoutTalentPreview() {
             <h1 style={{ fontFamily: SERIF, fontSize: m ? '3rem' : 'clamp(3rem, 7vw, 5.2rem)', fontWeight: 700, lineHeight: 1.02, letterSpacing: '-0.01em', margin: 0 }}>
               Faces that<br />carry the<br /><em style={{ color: GOLD }}>collection.</em>
             </h1>
-            <p style={{ fontSize: '1.05rem', color: GREY, lineHeight: 1.8, maxWidth: '440px', margin: '1.75rem 0 2.25rem' }}>Scout represents a deliberately small board of models and muses across four continents — managed personally, booked globally.</p>
+            <p style={{ fontSize: '1.05rem', color: GREY, lineHeight: 1.8, maxWidth: '440px', margin: '1.75rem 0 2.25rem' }}>Scout represents a deliberately small board of models and muses across four continents - managed personally, booked globally.</p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <a href="#Talent" style={{ background: INK, color: '#fff', padding: '14px 30px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.14em' }}>View the board</a>
               <a href="#Contact" style={{ borderBottom: `1px solid ${INK}`, color: INK, padding: '14px 4px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Become talent →</a>
@@ -169,7 +169,7 @@ export default function ScoutTalentPreview() {
           <div>
             <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: GOLD, margin: '0 0 1rem' }}>Featured · Women</p>
             <h2 style={{ fontFamily: SERIF, fontSize: m ? '2rem' : 'clamp(2rem, 4.5vw, 3.2rem)', fontWeight: 700, margin: '0 0 1.25rem' }}>Imani Okafor</h2>
-            <p style={{ fontSize: '1rem', color: '#bdbdbd', lineHeight: 1.85, margin: '0 0 1.75rem', maxWidth: '460px' }}>From our 2021 Lagos open call to opening couture week in Paris — Imani&apos;s board spans nine countries, four fragrance campaigns, and two magazine covers this season alone.</p>
+            <p style={{ fontSize: '1rem', color: '#bdbdbd', lineHeight: 1.85, margin: '0 0 1.75rem', maxWidth: '460px' }}>From our 2021 Lagos open call to opening couture week in Paris - Imani&apos;s board spans nine countries, four fragrance campaigns, and two magazine covers this season alone.</p>
             <div style={{ display: 'flex', gap: m ? '1.75rem' : '2.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
               {[['32', 'Shows SS27'], ['4', 'Global campaigns'], ['2', 'Covers 2026']].map(([v, l]) => (
                 <div key={l}><p style={{ fontFamily: SERIF, fontSize: '26px', fontWeight: 700, margin: 0, color: GOLD }}>{v}</p><p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#8a8a8a', margin: '4px 0 0' }}>{l}</p></div>

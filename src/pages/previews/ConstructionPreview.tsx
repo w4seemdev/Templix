@@ -1,5 +1,5 @@
 /* ============================================================
-   BRIX — Commercial construction & contracting template
+   BRIX - Commercial construction & contracting template
    Industrial slate + safety amber
    Self-contained, fully responsive, no external assets.
    ============================================================ */

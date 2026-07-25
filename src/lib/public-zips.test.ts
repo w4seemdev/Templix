@@ -6,7 +6,7 @@
  * no auth in front of it. Nine templates are free and belong there; the other 52
  * are the inventory, and a single stray `<paid id>.zip` under public/templates/
  * hands one of them to anyone who guesses the URL. That has happened once
- * already — 52 paid zips were publicly served until commit 97542c6 deleted them.
+ * already - 52 paid zips were publicly served until commit 97542c6 deleted them.
  *
  * Nothing else in the pipeline notices: lint, tsc, the price guard and the build
  * all pass with a paid zip sitting in the web root. This is the check that

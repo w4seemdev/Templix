@@ -1,5 +1,5 @@
 /* ============================================================
-   FORMA STUDIO — Architecture practice template
+   FORMA STUDIO - Architecture practice template
    Minimal editorial · warm stone + off-white
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -40,14 +40,14 @@ const stats = [
 ];
 
 const process = [
-  { n: '01', t: 'Listen', d: 'Every commission begins with the people, the site, and the light — never a template.' },
+  { n: '01', t: 'Listen', d: 'Every commission begins with the people, the site, and the light - never a template.' },
   { n: '02', t: 'Draw', d: 'We test hundreds of options in model and section before a single line is fixed.' },
   { n: '03', t: 'Build', d: 'We stay on site through construction so the built work matches the drawn intent.' },
 ];
 
 const awards = [
   { name: 'RIBA International Prize', year: '2024', proj: 'Casa Minerva' },
-  { name: 'Dezeen Award — Cultural', year: '2023', proj: 'Maritime Cultural Centre' },
+  { name: 'Dezeen Award - Cultural', year: '2023', proj: 'Maritime Cultural Centre' },
   { name: 'AIA Honor Award', year: '2022', proj: 'The Ridge Retreat' },
   { name: 'Architizer A+ Award', year: '2021', proj: 'Nexus Office Tower' },
 ];

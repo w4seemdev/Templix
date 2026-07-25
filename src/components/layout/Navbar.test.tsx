@@ -13,8 +13,8 @@ const WISHLIST_KEY = 'templix_wishlist';
 const MOBILE_BREAKPOINT = '(max-width: 860px)';
 
 vi.mock('../../lib/supabase', () => ({
-  // A session that never settles leaves Navbar in its signed-out state — the
-  // one these tests are about — and keeps AuthProvider from updating state
+  // A session that never settles leaves Navbar in its signed-out state - the
+  // one these tests are about - and keeps AuthProvider from updating state
   // after the test has finished.
   supabase: {
     auth: {
@@ -43,7 +43,7 @@ function setViewport(kind: 'mobile' | 'desktop') {
   })) as unknown as typeof window.matchMedia;
 }
 
-/** See the same note in TemplateCard.test.tsx — the store is module-scoped. */
+/** See the same note in TemplateCard.test.tsx - the store is module-scoped. */
 function resetSharedWishlist() {
   act(() => {
     localStorage.clear();

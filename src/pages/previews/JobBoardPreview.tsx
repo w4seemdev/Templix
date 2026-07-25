@@ -1,5 +1,5 @@
 /* ============================================================
-   REMOTEBASE — Remote tech job board template
+   REMOTEBASE - Remote tech job board template
    Cyan · search-forward listing layout
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -29,11 +29,11 @@ const nav = ['Find jobs', 'Companies', 'Salaries', 'Resources'];
 const filters = ['All', 'Engineering', 'Design', 'Marketing', 'Data', 'Product'];
 
 const jobs = [
-  { title: 'Senior Product Designer', company: 'Stripe', mono: 'St', color: '#635bff', loc: 'Remote · Global', salary: '$140–180K', type: 'Full-time', tags: ['Figma', 'Design Systems', 'B2B'], posted: '2d ago' },
-  { title: 'Staff Engineer, Platform', company: 'Linear', mono: 'Li', color: '#5e6ad2', loc: 'Remote · US / EU', salary: '$200–250K', type: 'Full-time', tags: ['Go', 'TypeScript', 'Infra'], posted: '3d ago' },
-  { title: 'Head of Marketing', company: 'Notion', mono: 'No', color: '#0f172a', loc: 'Remote · Americas', salary: '$160–200K', type: 'Full-time', tags: ['B2B SaaS', 'Growth', 'Brand'], posted: '5d ago' },
-  { title: 'iOS Engineer', company: 'Vercel', mono: 'Ve', color: '#111', loc: 'Remote · Global', salary: '$130–160K', type: 'Full-time', tags: ['Swift', 'SwiftUI'], posted: '1w ago' },
-  { title: 'Data Scientist', company: 'Cohere', mono: 'Co', color: '#39594d', loc: 'Remote · EU', salary: '$120–155K', type: 'Full-time', tags: ['Python', 'ML', 'NLP'], posted: '1w ago' },
+  { title: 'Senior Product Designer', company: 'Stripe', mono: 'St', color: '#635bff', loc: 'Remote · Global', salary: '$140-180K', type: 'Full-time', tags: ['Figma', 'Design Systems', 'B2B'], posted: '2d ago' },
+  { title: 'Staff Engineer, Platform', company: 'Linear', mono: 'Li', color: '#5e6ad2', loc: 'Remote · US / EU', salary: '$200-250K', type: 'Full-time', tags: ['Go', 'TypeScript', 'Infra'], posted: '3d ago' },
+  { title: 'Head of Marketing', company: 'Notion', mono: 'No', color: '#0f172a', loc: 'Remote · Americas', salary: '$160-200K', type: 'Full-time', tags: ['B2B SaaS', 'Growth', 'Brand'], posted: '5d ago' },
+  { title: 'iOS Engineer', company: 'Vercel', mono: 'Ve', color: '#111', loc: 'Remote · Global', salary: '$130-160K', type: 'Full-time', tags: ['Swift', 'SwiftUI'], posted: '1w ago' },
+  { title: 'Data Scientist', company: 'Cohere', mono: 'Co', color: '#39594d', loc: 'Remote · EU', salary: '$120-155K', type: 'Full-time', tags: ['Python', 'ML', 'NLP'], posted: '1w ago' },
 ];
 
 const companies = [

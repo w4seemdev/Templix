@@ -1,5 +1,5 @@
 /* ============================================================
-   FORM& — Creative Studio Template
+   FORM& - Creative Studio Template
    Off-black with coral & lime pops. Fully responsive.
    ============================================================ */
 
@@ -78,7 +78,7 @@ function Hero() {
   const m = useIsMobile();
   return (
     <section id="top" style={{ ...container, padding: m ? '56px 20px 48px' : '104px 20px 88px' }}>
-      <span style={{ display: 'inline-block', border: `1px solid ${C.line}`, color: C.muted, borderRadius: '999px', padding: '6px 16px', fontSize: '13px', marginBottom: '28px' }}>Branding · Digital · Motion — since 2016</span>
+      <span style={{ display: 'inline-block', border: `1px solid ${C.line}`, color: C.muted, borderRadius: '999px', padding: '6px 16px', fontSize: '13px', marginBottom: '28px' }}>Branding · Digital · Motion - since 2016</span>
       <h1 style={{ fontSize: m ? '2.9rem' : '6rem', fontWeight: 900, letterSpacing: '-0.045em', lineHeight: 0.98, margin: '0 0 24px', maxWidth: '900px' }}>
         We build brands people <span style={{ color: C.coral }}>remember</span>.
       </h1>
@@ -153,7 +153,7 @@ function Process() {
   const steps = [
     { n: '01', t: 'Discover', d: 'We dig into your market, audience and ambitions until it clicks.' },
     { n: '02', t: 'Define', d: 'Strategy and direction, agreed before a single pixel is drawn.' },
-    { n: '03', t: 'Design', d: 'Concepts, iteration and craft — the part we love the most.' },
+    { n: '03', t: 'Design', d: 'Concepts, iteration and craft - the part we love the most.' },
     { n: '04', t: 'Deliver', d: 'Roll-out, guidelines and support so it lands and lasts.' },
   ];
   return (

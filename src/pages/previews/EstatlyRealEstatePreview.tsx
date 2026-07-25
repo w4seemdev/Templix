@@ -1,5 +1,5 @@
 /* ============================================================
-   ESTATLY — Luxury real-estate brokerage template
+   ESTATLY - Luxury real-estate brokerage template
    Sophisticated light theme · navy & brass · serif display
    Self-contained, fully responsive, no external assets.
    ============================================================ */
@@ -73,16 +73,16 @@ const stats = [
 ];
 
 const whyUs = [
-  { icon: 'home', title: 'Hyper-Local Expertise', desc: 'Our agents live in the neighborhoods they sell. Street-level knowledge, school-district nuance, and off-market whispers — all working for you.' },
+  { icon: 'home', title: 'Hyper-Local Expertise', desc: 'Our agents live in the neighborhoods they sell. Street-level knowledge, school-district nuance, and off-market whispers - all working for you.' },
   { icon: 'star', title: 'White-Glove Service', desc: 'From staging consultations to closing-day champagne, every detail is handled by a dedicated team of three per listing.' },
-  { icon: 'chart', title: 'Data-Driven Pricing', desc: 'Proprietary comparable analysis across 14 years of transaction data means your home is priced to move — and to maximize.' },
+  { icon: 'chart', title: 'Data-Driven Pricing', desc: 'Proprietary comparable analysis across 14 years of transaction data means your home is priced to move - and to maximize.' },
   { icon: 'globe', title: 'Global Buyer Network', desc: 'Listings are syndicated to 40+ international portals and a private registry of 12,000 qualified buyers.' },
 ];
 
 const searchFields = [
   { label: 'Location', value: 'The Heights, Carraway' },
   { label: 'Property Type', value: 'Single-Family Home' },
-  { label: 'Price Range', value: '$800K – $3.5M' },
+  { label: 'Price Range', value: '$800K - $3.5M' },
 ];
 
 const tabs: ListingTab[] = ['Buy', 'Rent', 'Sold'];
@@ -222,7 +222,7 @@ export default function EstatlyRealEstatePreview() {
           <div style={{ textAlign: 'center', marginBottom: m ? '2.25rem' : '3.5rem' }}>
             <p style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: gold, marginBottom: '0.75rem' }}>Where to Live</p>
             <h2 style={{ fontFamily: serif, fontSize: m ? '1.9rem' : 'clamp(2rem, 4vw, 2.85rem)', fontWeight: 400, margin: '0 0 1rem', color: navy }}>Neighborhoods we know by heart</h2>
-            <p style={{ fontSize: '15px', color: ink, maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>Four distinct districts, one promise — an agent who can tell you where the morning light falls on every street.</p>
+            <p style={{ fontSize: '15px', color: ink, maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>Four distinct districts, one promise - an agent who can tell you where the morning light falls on every street.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr 1fr' : 'repeat(4, 1fr)', gap: m ? '0.9rem' : '1.5rem' }}>
             {neighborhoods.map(n => (
@@ -245,7 +245,7 @@ export default function EstatlyRealEstatePreview() {
           <div>
             <p style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: gold, marginBottom: '0.75rem' }}>Why Estatly</p>
             <h2 style={{ fontFamily: serif, fontSize: m ? '1.7rem' : 'clamp(1.9rem, 3.5vw, 2.6rem)', fontWeight: 400, margin: '0 0 1.25rem', color: navy, lineHeight: 1.2 }}>A brokerage built on patience, not pressure</h2>
-            <p style={{ fontSize: '15px', color: ink, lineHeight: 1.75, margin: 0 }}>The average Estatly client works with us for 11 years across multiple homes. That doesn&apos;t happen by closing fast — it happens by closing right.</p>
+            <p style={{ fontSize: '15px', color: ink, lineHeight: 1.75, margin: 0 }}>The average Estatly client works with us for 11 years across multiple homes. That doesn&apos;t happen by closing fast - it happens by closing right.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(2, 1fr)', gap: '1.5rem' }}>
             {whyUs.map(w => (
@@ -284,7 +284,7 @@ export default function EstatlyRealEstatePreview() {
         <div style={{ maxWidth: '840px', margin: '0 auto', padding: m ? '3.5rem 1.25rem' : '6rem 2rem', textAlign: 'center' }}>
           <div style={{ fontFamily: serif, fontSize: '4.5rem', color: gold, lineHeight: 0.5, marginBottom: '1.5rem' }}>&ldquo;</div>
           <blockquote style={{ fontFamily: serif, fontSize: m ? '1.35rem' : 'clamp(1.4rem, 2.8vw, 1.9rem)', fontWeight: 400, color: navy, lineHeight: 1.55, margin: '0 0 2.25rem', fontStyle: 'italic' }}>
-            We toured 31 homes over eight months and Victoria never once rushed us. When the right one finally appeared, she negotiated $140K under asking. Estatly isn&apos;t a brokerage — it&apos;s an unfair advantage.
+            We toured 31 homes over eight months and Victoria never once rushed us. When the right one finally appeared, she negotiated $140K under asking. Estatly isn&apos;t a brokerage - it&apos;s an unfair advantage.
           </blockquote>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: `linear-gradient(150deg, #3f3222, ${gold})`, border: `2px solid ${gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: serif, fontSize: '18px' }}>AW</div>
