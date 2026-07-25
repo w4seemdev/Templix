@@ -1,0 +1,60 @@
+Templix — Proprietary License
+Copyright (c) 2026 Waseem Abu Fares (w4seemdev). All rights reserved.
+
+
+SCOPE
+
+This file covers the source code of the Templix marketplace application in this
+repository — the React front-end, the Supabase edge functions, the build and
+maintenance scripts, and the accompanying documentation.
+
+It does NOT cover the website templates sold through the marketplace. Each
+template is distributed under the Templix Standard License, a separate document
+included as LICENSE.txt inside every template download and published at
+https://templix-peach.vercel.app/license. Nothing in this file grants, limits,
+or alters the rights a customer receives with a template they downloaded or
+bought.
+
+
+GRANT OF RIGHTS
+
+None. All rights are reserved.
+
+This source is published so that it can be read — for evaluation, for review,
+and as a portfolio work sample. Publication on a public code host is not an
+offer of a license. You may view the source and make the copies GitHub's Terms
+of Service create incidentally when you browse or fork the repository.
+
+Without prior written permission from the copyright holder you may NOT:
+
+  - use this source, in whole or in part, in any product or service, commercial
+    or otherwise;
+  - copy, modify, merge, publish, distribute, sublicense, or sell copies of it;
+  - operate it as a hosted or public service;
+  - redistribute it under a different license.
+
+Absent an explicit license, copyright law already reserves these rights by
+default. This file states that default plainly rather than leaving readers to
+infer it.
+
+
+THIRD-PARTY COMPONENTS
+
+Dependencies installed from npm and any other third-party material referenced by
+this project remain governed by their own licenses. Those licenses apply to
+those components, not to the code in this repository.
+
+
+NO WARRANTY
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION
+WITH THIS SOFTWARE OR THE USE OR OTHER DEALINGS IN THIS SOFTWARE.
+
+
+LICENSING ENQUIRIES
+
+waseemabufares@gmail.com
