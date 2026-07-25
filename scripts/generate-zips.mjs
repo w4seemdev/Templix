@@ -7,8 +7,15 @@
  * self-contained (they import only from 'react' and style themselves with inline
  * style objects), so `npm install && npm run build` succeeds with no extra deps.
  *
- * Output: public/templates/<id>.zip
+ * Output: the 9 FREE templates -> public/templates/<id>.zip (served by Vercel)
+ *         the 52 PAID templates -> dist-zips/<id>.zip (gitignored build output,
+ *         uploaded to the private Supabase bucket by upload-premium-zips.mjs)
  * Run:    node scripts/generate-zips.mjs
+ *
+ * The split is the point: everything under public/ is copied verbatim into
+ * dist/ and served to anyone who guesses the URL. A paid zip written there is
+ * the entire product given away for free, which has already happened once in
+ * this repository. Paid zips therefore never touch the web root at all.
  */
 
 import AdmZip from 'adm-zip';
@@ -19,9 +26,14 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
 const PREVIEWS  = join(ROOT, 'src', 'pages', 'previews');
-const OUT_DIR   = join(ROOT, 'public', 'templates');
+// Free zips are public by design. Paid zips are build output, never committed
+// and never served — see .gitignore.
+const PUBLIC_DIR  = join(ROOT, 'public', 'templates');
+const PRIVATE_DIR = join(ROOT, 'dist-zips');
 
-if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
+for (const dir of [PUBLIC_DIR, PRIVATE_DIR]) {
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+}
 
 // ─── Route slug → preview filename mapping ───────────────────────────────────
 const SLUG_TO_FILE = {
@@ -103,13 +115,20 @@ const SLUG_TO_FILE = {
 // of sections, not a multi-route app.
 const DATA_FILE = join(ROOT, 'src', 'data', 'templates.ts');
 const EXPECTED_TEMPLATE_COUNT = 61;
+// 2, 6, 14, 19, 23, 28, 45, 51, 59. Parsed from the catalog rather than listed
+// here, but the count is asserted: if the parser ever stops seeing `isFree`,
+// every template would look paid (or worse, free) and the split below would be
+// wrong in silence.
+const EXPECTED_FREE_COUNT = 9;
 
 // A single-quoted TypeScript string literal, escape sequences included.
 const TS_STRING = String.raw`'((?:[^'\\]|\\.)*)'`;
 // One catalog entry. `[^{}]` cannot run past the end of an entry (no entry
-// contains a nested object literal), so demoUrl always belongs to this entry.
+// contains a nested object literal), so isFree and demoUrl always belong to
+// this entry.
 const ENTRY_RE = new RegExp(
-  `\\{\\s*id: ${TS_STRING},\\s*title: ${TS_STRING},\\s*description: ${TS_STRING},[^{}]*?demoUrl: ${TS_STRING},`,
+  `\\{\\s*id: ${TS_STRING},\\s*title: ${TS_STRING},\\s*description: ${TS_STRING},` +
+  `[^{}]*?isFree: (true|false),[^{}]*?demoUrl: ${TS_STRING},`,
   'g',
 );
 
@@ -126,7 +145,8 @@ function readTemplates() {
       id:          unescapeTsString(m[1]),
       title:       unescapeTsString(m[2]),
       description: unescapeTsString(m[3]),
-      demoUrl:     unescapeTsString(m[4]),
+      isFree:      m[4] === 'true',
+      demoUrl:     unescapeTsString(m[5]),
     });
   }
 
@@ -134,6 +154,14 @@ function readTemplates() {
     throw new Error(
       `Parsed ${templates.length} templates from src/data/templates.ts, expected ${EXPECTED_TEMPLATE_COUNT}. ` +
       `The catalog's shape changed — fix this parser before regenerating, or buyers get mislabelled downloads.`,
+    );
+  }
+
+  const freeCount = templates.filter(t => t.isFree).length;
+  if (freeCount !== EXPECTED_FREE_COUNT) {
+    throw new Error(
+      `Parsed ${freeCount} free templates from src/data/templates.ts, expected ${EXPECTED_FREE_COUNT}. ` +
+      `Refusing to generate: this number decides which zips are written to the public web root.`,
     );
   }
 
@@ -153,10 +181,74 @@ const INCLUDED = [
   'Templix Standard License',
 ];
 
-// Templix Standard License — identical for every template (free or paid).
-const LICENSE_TEXT = `Templix Standard License
+// ─── Templix Standard License ────────────────────────────────────────────────
+// SOURCE OF TRUTH: src/pages/LicensePage.tsx (mirrored in section 2 of
+// src/pages/TermsPage.tsx). The buyer agrees to that page, so the LICENSE.txt
+// shipped in the zip is derived from it verbatim in substance — a bundled file
+// that contradicted the page would be worse than no file at all.
+// The page draws NO free/paid distinction ("Free templates are covered by the
+// exact same usage terms as paid ones — the only difference is that no purchase
+// is required to download them"), so there is ONE licence and every zip,
+// free or paid, receives the identical file.
+const SITE_URL = 'https://templix-peach.vercel.app';
 
-The purchaser may use this template in unlimited personal and commercial end-products and may modify it freely. You may NOT resell, redistribute, sublicense, or offer the template itself for download. Free templates carry the same usage terms with no purchase required.
+// The canonical grant, hard-wrapped so it reads correctly in the plain-text
+// LICENSE.txt. Markdown re-flows the soft breaks, so the README quotes the same
+// constant rather than keeping a second copy that could drift.
+const LICENSE_GRANT = `The purchaser may use this template in unlimited personal and commercial
+end-products and may modify it freely. You may NOT resell, redistribute,
+sublicense, or offer the template itself for download. Free templates carry
+the same usage terms with no purchase required.`;
+
+const LICENSE_TEXT = `Templix Standard License
+Last updated: July 2026
+
+Every template on Templix — free or paid — is covered by the single Templix
+Standard License below. There are no separate personal and commercial tiers:
+one license covers both. By downloading a template you agree to these terms.
+
+
+THE GRANT
+
+${LICENSE_GRANT}
+
+
+WHAT YOU CAN DO
+
+  - Use the template in unlimited personal and commercial end-products
+  - Modify, customize, and extend it freely
+  - Use it in paid client and freelance work — no attribution required
+
+
+WHAT YOU CANNOT DO
+
+  - Resell or redistribute the template itself
+  - Sublicense the template to another party
+  - Offer the template (or a lightly-modified copy) for download or as a
+    competing product
+
+
+FREE TEMPLATES
+
+Free templates are covered by the exact same usage terms as paid ones — the
+only difference is that no purchase is required to download them. The
+restriction on reselling or redistributing the template itself still applies.
+
+
+OWNERSHIP
+
+A license grants you the right to use the template — it does not transfer
+ownership of the underlying design or source code. You may not claim the
+original template as your own work.
+
+
+This license forms part of the Templix Terms of Service.
+
+  License terms     ${SITE_URL}/license
+  Terms of Service  ${SITE_URL}/terms
+  Support           ${SITE_URL}/support
+
+© Templix. All rights reserved except as granted above.
 `;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -376,7 +468,13 @@ file — edit the copy, colors, and images there. Base page styles (font and res
 
 ## License
 
-${LICENSE_TEXT.trim()}
+Covered by the Templix Standard License — the same terms for free and paid
+templates alike.
+
+${LICENSE_GRANT}
+
+The full terms are in \`LICENSE.txt\` next to this file, and online at
+${SITE_URL}/license.
 
 ---
 © Templix
@@ -385,8 +483,9 @@ ${LICENSE_TEXT.trim()}
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
-let generated = 0;
-let skipped   = 0;
+let free    = 0;
+let paid    = 0;
+let skipped = 0;
 
 for (const tpl of TEMPLATES) {
   const slug = tpl.demoUrl.replace('/preview/', '');
@@ -416,7 +515,7 @@ for (const tpl of TEMPLATES) {
   const dir = `${slugify(tpl.title) || 'templix-template'}/`;
 
   zip.addFile(`${dir}README.md`,          Buffer.from(makeReadme(tpl.title, tpl.description)));
-  zip.addFile(`${dir}LICENSE`,            Buffer.from(LICENSE_TEXT));
+  zip.addFile(`${dir}LICENSE.txt`,        Buffer.from(LICENSE_TEXT));
   zip.addFile(`${dir}package.json`,       Buffer.from(makePackageJson(tpl.title)));
   zip.addFile(`${dir}index.html`,         Buffer.from(makeIndexHtml(tpl.title)));
   zip.addFile(`${dir}vite.config.ts`,     Buffer.from(makeViteConfig()));
@@ -429,12 +528,15 @@ for (const tpl of TEMPLATES) {
   zip.addFile(`${dir}src/vite-env.d.ts`,  Buffer.from(makeViteEnv()));
   zip.addFile(`${dir}src/App.tsx`,        Buffer.from(appSource));
 
-  const outPath = join(OUT_DIR, `${tpl.id}.zip`);
-  zip.writeZip(outPath);
+  // The whole safety property of this script: paid zips are written outside
+  // public/, so no regenerate can republish them.
+  const outDir = tpl.isFree ? PUBLIC_DIR : PRIVATE_DIR;
+  zip.writeZip(join(outDir, `${tpl.id}.zip`));
 
-  console.log(`OK [${tpl.id.padStart(2)}] ${tpl.title}`);
-  generated++;
+  console.log(`OK [${tpl.id.padStart(2)}] ${tpl.isFree ? 'free' : 'paid'}  ${tpl.title}`);
+  if (tpl.isFree) free++; else paid++;
 }
 
-console.log(`\nDone. Generated ${generated} zips -> public/templates/`);
+console.log(`\nDone. ${free} free zips -> public/templates/, ${paid} paid zips -> dist-zips/`);
 if (skipped > 0) console.log(`   ! Skipped ${skipped} templates (missing preview files)`);
+console.log('Next: node scripts/upload-premium-zips.mjs   (uploads dist-zips/ to the private bucket)');
