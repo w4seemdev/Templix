@@ -4,7 +4,10 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client"],
+    /* vitest/globals types describe/it/expect for the test files under src/test.
+       tsc -b only type-checks (noEmit), and vite build bundles from main.tsx,
+       so tests are verified by the build without ever entering it. */
+    "types": ["vite/client", "vitest/globals"],
     "skipLibCheck": true,
 
     /* Bundler mode */

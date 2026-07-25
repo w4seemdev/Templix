@@ -23,6 +23,13 @@ dist
 dist-ssr
 *.local
 
+# Paid template zips written by scripts/generate-zips.mjs. Build output, and the
+# one thing that must never be committed or served — they are the product.
+dist-zips/
+
+# Test coverage reports
+coverage
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
