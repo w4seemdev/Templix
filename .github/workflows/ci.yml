@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Verification only. This pipeline never publishes, never deploys, and never
+# needs a secret — deployment belongs to Vercel and is deliberately out of scope.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node 22 is the lowest major that satisfies every engine range in the
+      # dependency tree at once:
+      #   vite    ^20.19.0 || >=22.12.0
+      #   eslint  ^20.19.0 || ^22.13.0 || >=24
+      #   vitest  ^20      || ^22      || >=24
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      # ci, not install: installs exactly the locked tree and fails if
+      # package.json and package-lock.json have drifted apart.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # `npm run build` already runs `tsc -b`, but doing it here as its own step
+      # means a type error is reported as "Typecheck" instead of hiding inside a
+      # build failure. --force ignores the incremental tsbuildinfo cache so a
+      # stale artifact can never make a broken tree look clean.
+      - name: Typecheck
+        run: npx tsc -b --force
+
+      # Same suite as `npm run test`, plus v8 instrumentation, so the coverage
+      # artifact below costs nothing extra instead of a second full run.
+      # This step fails on a failing test OR on a drop below the coverage
+      # thresholds in vitest.config.ts, which are pinned just under the current
+      # numbers so coverage can only ratchet upward.
+      - name: Tests
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # WHY THIS IS A GATE AND NOT A NICE-TO-HAVE:
+      # src/data/templates.ts is the price the buyer is SHOWN (cards, detail page,
+      # Product JSON-LD). The CATALOG in supabase/functions/create-checkout/index.ts
+      # is the price Stripe actually CHARGES. Nothing in the type system connects
+      # the two files, so they drift silently — and they did: 34 of the 52 paid
+      # templates disagreed, 21 of them overcharging the customer relative to the
+      # advertised price. A human remembering to run this is not a control. This is.
+      - name: Price sync (advertised price === charged price)
+        run: npm run check:prices
+
+      - name: Build
+        run: npm run build
